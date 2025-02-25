@@ -1,0 +1,63 @@
+﻿@model IEnumerable<MegwayParcel.Common.Data.ExporterDetail>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>List</h1>
+
+<p>
+    <a asp-action="Index">Create New</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ExporterDetailId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsCommercialShipmet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsExporterAddressAsCollectionAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExporterEorino)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExporterVatno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExporterDetailId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsCommercialShipmet)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsExporterAddressAsCollectionAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExporterEorino)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExporterVatno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderId)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {  id=item.ExporterDetailId  }) |
+                </td>
+        </tr>
+}
+    </tbody>
+</table>

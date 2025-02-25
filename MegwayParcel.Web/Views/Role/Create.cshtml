@@ -1,0 +1,154 @@
+﻿@using MegwayParcel.Common
+@using MegwayParcel.Common.Data
+@model Role
+@{
+    List<Menu> menu = (List<Menu>)ViewBag.Menu;
+}
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Role</h4>
+<a asp-action="List">Back to List</a>
+<form asp-action="Save">
+    <div class="row">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="RoleId" type="hidden" />
+
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="RoleName" class="control-label font-weight-bold"></label>
+                <input asp-for="RoleName" class="form-control" />
+                <span asp-validation-for="RoleName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+
+            </div>
+        </div>
+    </div>
+
+    <input type="button" class="btn btn-info" value="Add New" id="addNew" />
+    <div class="row">
+        <table class="table table-bordered" id="tblMenu">
+            <thead>
+                <tr>
+                    <th>Menu</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model == null)
+                {
+                    <tr>
+                        <td>
+                            <select id="MenuId" class="form-control">
+                                <option>--Select Menu--</option>
+                                @foreach (var item in menu)
+                                {
+                                    <option value="@item.MenuId">@item.MenuName</option>
+                                }
+
+                            </select>
+                        </td>
+                        <td><input type="button" class="btn btn-danger delete" value="Delete" /></td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model.RoleMenus)
+                    {
+                        <tr>
+                            <td>
+                                <select id="MenuId" class="form-control">
+                                    <option>--Select Menu--</option>
+                                    @foreach (var a in menu)
+                                    {
+                                        @if (item.MenuId == a.MenuId)
+                                        {
+                                            <option selected value="@a.MenuId">@a.MenuName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@a.MenuId">@a.MenuName</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td><input type="button" class="btn btn-danger delete" value="Delete" /></td>
+                        </tr>
+
+                    }
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+</form>
+
+<button type="submit" id="submit" class="btn btn-success">Save</button>
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+
+
+    //add row
+    $("#addNew").click(function () {
+        debugger;
+        var $tableBody = $('#tblMenu').find("tbody");
+        var $trLast = $tableBody.find("tr:last");
+        var $trNew = $trLast.clone();
+        $trLast.after($trNew);
+    });
+
+    $("body").on('click', '.delete', function () { //For Delete Row
+        debugger;
+        var thisRow = $(this).closest('tr'); //get clicked button colsest tr or clicked row
+        $(thisRow).remove(); //remove tr or row
+    });
+
+    $("#submit").click(function () {
+        debugger;
+        var a = {};
+        a.RoleId = $("#RoleId").val();
+        a.RoleName = $("#RoleName").val();
+
+        var lst = [];
+        for (var i = 0; i < $("#tblMenu tbody tr").length; i++) {
+            var obj = {};
+            var tr = $("#tblMenu tbody tr")[i];
+            obj.MenuId = $(tr).find("#MenuId").val();
+            lst.push(obj)
+        }
+        a.RoleMenu = lst;
+
+        $.ajax({
+            type: "POST",
+            url: "/Role/Save",
+            data: a,
+            dataType: "json",
+            success: function (data) {
+                alert("RoleSaveSuccessfully");
+                location.reload();
+            },
+            error: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+
+    });
+
+</script>

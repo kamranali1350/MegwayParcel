@@ -1,0 +1,486 @@
+﻿@using MegwayParcel.Common.Data
+@{
+    Layout = "/Views/Shared/_WebsiteLayout.cshtml";
+    ViewData["Title"] = "Cheap UK and International Delivery";
+    List<Country> countries = (List<Country>)ViewBag.contries;
+}
+
+<style>
+    .img-width {
+        width: 80%;
+        margin-bottom: 40px;
+        height: 39.5px;
+    }
+
+</style>
+<!-- Header Start -->
+<div class="jumbotron jumbotron-fluid mb-5">
+    <div class="container text-center py-5">
+
+        <div class="row align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-inline text-light">Sending From...</label>
+                            <select class="form-control rounded-pill" id="SendingFrom">
+                                @foreach (var item in countries)
+                                {
+                                    if (item.CountryID == 231)
+                                    {
+                                        <option selected="selected" value="@item.CountryID" data-code="@item.CountryCode">@item.Title</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.CountryID" data-code="@item.CountryCode">@item.Title</option>
+                                    }
+                                }
+                            </select>
+                            <input type="text" id="sendingPostCode" class="form-control rounded-pill" placeholder="Postcode" />
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-inline text-light">Sending To...</label>
+                            <select class="form-control rounded-pill" id="DeliverTo">
+                                <option value="0">Select Destination Country</option>
+                                @foreach (var item in countries)
+                                {
+                                    <option value="@item.CountryID" data-code="@item.CountryCode">@item.Title</option>
+                                }
+                            </select>
+                            <input type="text" id="deliveryPostCode" class="rounded-pill form-control" placeholder="Postcode" />
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="form-inline text-light">What are you sending?</label>
+                                <select id="no-of-item" class="no-of-item form-control rounded-pill">
+                                </select>
+
+                                <select id="ItemType" class="ItemType form-control rounded-pill">
+                                    <option value="Parcel">Parcel</option>
+                                    <option value="Pallet">Pallet</option>
+                                    <option value="Document">Document</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-hover table-striped text-dark bg-light table-borderless" style="border-radius:25px;" id="orderDetail">
+                            <thead>
+                                <tr>
+                                    <th>Weight</th>
+                                    <th>Length</th>
+                                    <th>Width</th>
+                                    <th>Height</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" class="rounded-pill form-control Weight" placeholder="kg" /></td>
+                                    <td><input type="text" class="rounded-pill form-control Length" placeholder="cm" /></td>
+                                    <td><input type="text" class="rounded-pill form-control Width" placeholder="cm" /></td>
+                                    <td><input type="text" class="rounded-pill form-control Height" placeholder="cm" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            @*<input id="btnGetQuote" type="button" class="btn btn-primary" value="Get a Quote" onclick="getQuotes();" />*@
+
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <input id="btnGetQuote" type="button" class="btn btn-primary btn-lg rounded-pill" value="Get a Quote" onclick="getQuotes();" />
+            </div>
+        </div>
+        <br />
+        <!-- TrustBox widget - Review Collector -->
+        <div class="trustpilot-widget" data-locale="en-GB" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="626792754cf4c67c4f46fa95" data-style-height="52px" data-style-width="100%">
+            <a href="https://uk.trustpilot.com/review/megwayparcels.co.uk" target="_blank" rel="noopener">Trustpilot</a>
+        </div>
+        <!-- End TrustBox widget -->
+        @*<h1 class="text-white mb-4">BOOK YOUR LETTERS AND PARCELS</h1>
+        <h1 class="text-primary display-3 mb-5">WITH MEGWAY</h1>
+        <div class="mx-auto" style="width: 100%; max-width: 600px;">
+        <div class="input-group">
+        <input type="text" class="form-control border-light" style="padding: 30px;" placeholder="Tracking Id">
+        <div class="input-group-append">
+        <button class="btn btn-primary px-3">GET QUOTE</button>
+        </div>
+        </div>
+        </div>*@
+    </div>
+</div>
+<!-- Header End -->
+<!-- Our Delivery Partner Start -->
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="text-center pb-2">
+            <h1 class="text-primary text-uppercase font-weight-bold">OUR DELIVERY PARTNERS</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <img class="img-fluid img-width" src="/image/partners/dhl.png" alt="">
+
+            </div>
+            <div class="col-md-2">
+                <img class="img-fluid img-width" src="/image/partners/dpd.png" alt="">
+
+            </div>
+            <div class="col-md-2">
+                <img class="img-fluid img-width" src="/image/partners/dtdc.png" alt="">
+
+            </div>
+            <div class="col-md-2">
+                <img class="img-fluid img-width" src="/image/partners/dx.png" alt="">
+            </div>
+
+            <div class="col-md-2">
+                <img class="img-fluid img-width" src="/image/partners/evri.png" alt="">
+
+            </div>
+            @*   <div class="col-md-2">
+            <img class="img-fluid img-width" src="/image/partners/fdl.png" alt="">
+
+            </div> *@
+        </div>
+        <div class="row">
+            @*
+            <div class="col-md-2">
+            <img class="img-fluid img-width" src="/image/partners/FedEx.png" alt="">
+            </div>
+            *@
+
+            <div class="col-md-2">
+                <img class="img-fluid img-width" src="/image/partners/landmark.png" alt="">
+
+            </div>
+
+            @*             <div class="col-md-2">
+            <img class="img-fluid img-width" src="/image/partners/tgglobal.png" alt="">
+
+            </div>
+            <div class="col-md-2">
+            <img class="img-fluid img-width" src="/image/partners/tgexpress.png" alt="">
+
+            </div>
+            <div class="col-md-2">
+            <img class="img-fluid img-width" src="/image/partners/tgint.png" alt=""> </div>*@
+
+
+            <div class="col-md-2">
+                <img class="img-fluid img-width" src="/image/partners/tnt.png" alt="">
+
+            </div>
+            <div class="col-md-2">
+                <img class="img-fluid img-width" src="/image/partners/ups.png" alt="">
+
+            </div>
+            <div class="col-md-2">
+                <img class="img-fluid img-width" src="/image/partners/usps.png" alt="">
+
+            </div>
+        </div>
+
+    </div>
+    <!-- Our Delivery Partner End -->
+    <!-- Services Start -->
+    <div class="container-fluid pt-5">
+        <div class="container">
+            <div class="text-center pb-2">
+                <h1 class="text-primary text-uppercase font-weight-bold">Our Services</h1>
+
+            </div>
+            <div class="row pb-3">
+                <div class="col-lg-3 col-md-6 mb-5">
+                    <div class="d-flex align-items-center justify-content-center bg-primary mb-4 p-4">
+                        <i class="fa fa-2x fa-plane text-dark pr-3"></i>
+                        <h6 class="text-white font-weight-medium m-0">Parcel Bookings</h6>
+                    </div>
+                    <ul>
+                        <li>Next Day Delivery</li>
+                        <li>2 Day Delivery</li>
+                        <li>Timed Delivery</li>
+                        <li>UK to UK Deliveries</li>
+                        <li>International Deliveries</li>
+                    </ul>
+                    @*<a class="border-bottom text-decoration-none" href="">Read More</a>*@
+                </div>
+                <div class="col-lg-3 col-md-6 mb-5">
+                    <div class="d-flex align-items-center justify-content-center bg-primary mb-4 p-4">
+                        <i class="fa fa-2x fa-truck text-dark pr-3"></i>
+                        <h6 class="text-white font-weight-medium m-0">Delivery</h6>
+                    </div>
+                    <ul>
+                        <li>Economical</li>
+                        <li>Fast Delivery</li>
+                        <li>Secure Delivery</li>
+                    </ul>
+                    @*<a class="border-bottom text-decoration-none" href="">Read More</a>*@
+                </div>
+                <div class="col-lg-3 col-md-6 mb-5">
+                    <div class="d-flex align-items-center justify-content-center bg-primary mb-4 p-4">
+                        <i class="fa fa-2x fa-truck text-dark pr-3"></i>
+                        <h6 class="text-white font-weight-medium m-0">Packing</h6>
+                    </div>
+                    <ul>
+                        <li>Professional Packaging</li>
+                        <li>Mail Box Services</li>
+                    </ul>
+                    @*<a class="border-bottom text-decoration-none" href="">Read More</a>*@
+                </div>
+                <div class="col-lg-3 col-md-6 mb-5">
+                    <div class="d-flex align-items-center justify-content-center bg-primary mb-4 p-4">
+                        <i class="fa fa-2x fa-print text-dark pr-3"></i>
+                        <h6 class="text-white font-weight-medium m-0">Printing</h6>
+                    </div>
+                    <ul>
+                        <li>Photocoying</li>
+                        <li>Scanning</li>
+                        <li>Fax</li>
+                    </ul>
+                    @*<a class="border-bottom text-decoration-none" href="">Read More</a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Services End -->
+    <!-- Features Start -->
+    <div class="container-fluid bg-secondary my-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4">
+                    <img class="img-fluid w-100" src="/image/feature.jpg" alt="">
+                </div>
+                <div class="col-lg-8 py-5 py-lg-0">
+                    <h1 class="text-primary text-uppercase font-weight-bold">Why Choose Us</h1>
+                    <p class="mb-4">Megway is the Faster, Safe and Trusted Logistics Services We have more than 8 years of Delivering Experience</p>
+                    <ul class="list-inline">
+                        <li><h6><i class="far fa-dot-circle text-primary mr-3"></i>Best In Industry</h6>
+                        <li><h6><i class="far fa-dot-circle text-primary mr-3"></i>Send Multiple Parcels</h6></li>
+                        <li><h6><i class="far fa-dot-circle text-primary mr-3"></i>Lowest Rates</h6></li>
+                    </ul>
+                    <a href="#" class="rounded-pill btn btn-primary mt-3 py-2 px-4">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Features End -->
+
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-xl">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title text-light">Quote</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" id="myModalBody">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary rounded-pill" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(function () {
+            var $select = $(".no-of-item");
+            for (i = 1; i <= 100; i++) {
+                $select.append($('<option></option>').val(i).html(i))
+            }
+        });
+        $("#SendingFrom").change(function () {
+            let _send = $("#SendingFrom").val();
+            if (_send == 231 || _send == 247 || _send == 272 || _send == 271) {
+                for (var i = 0; i < $("#DeliverTo > option").length; i++) {
+                    $($("#DeliverTo > option")[i]).show()
+                }
+            } else {
+                $("#DeliverTo").val(0);
+                for (var i = 0; i < $("#DeliverTo > option").length; i++) {
+                    let _val = $($("#DeliverTo > option")[i]).attr("value")
+                    if (_val == 231 || _val == 247 || _val == 272 || _val == 271 || _val == 0) {
+                        $($("#DeliverTo > option")[i]).show()
+                    } else {
+                        $($("#DeliverTo > option")[i]).hide()
+                    }
+                }
+            }
+
+        });
+
+
+
+        //$("#btnGetQuote").click(function() {
+        //    getQuotes();
+        //});
+
+        function getQuotes() {
+            let Consignment = {};
+            Consignment.ItemType = $("#ItemType").val()
+            Consignment.ItemsAreStackable = true;
+            Consignment.ConsignmentSummary = "";
+            Consignment.ConsignmentValue = "";
+            Consignment.Packages = [];
+            let _isValid = true;
+            let _errorMessage = "Kindly fill ";
+            for (var i = 0; i < $("#orderDetail tbody tr").length; i++) {
+                var package = {};
+                var tr = $("#orderDetail tbody tr")[i];
+                package.Weight = $(tr).find(".Weight").val();
+                package.Length = $(tr).find(".Length").val();
+                package.Width = $(tr).find(".Width").val();
+                package.Height = $(tr).find(".Height").val();
+
+                Consignment.Packages.push(package);
+            }
+            let collectionAddress = {};
+
+            collectionAddress.Postcode = $("#sendingPostCode").val();
+            // if (collectionAddress.Postcode == '') {
+            //     _isValid = false;
+            //     _errorMessage += "Sending From Postcode, ";
+            // }
+
+            collectionAddress.Country = {};
+
+            collectionAddress.Country.CountryID = $("#SendingFrom").val();
+            collectionAddress.Country.CountryCode = $("#SendingFrom option:selected").attr('data-code')
+            if (!(collectionAddress.Country.CountryID > 0)) {
+                _isValid = false;
+                _errorMessage += "Sending From, ";
+            }
+            let deliveryAddress = {};
+
+            deliveryAddress.Postcode = $("#deliveryPostCode").val();
+            // if (collectionAddress.Postcode == '') {
+            //     _isValid = false;
+            //     _errorMessage += "Sending To Postcode, ";
+            // }
+            deliveryAddress.Country = {};
+            deliveryAddress.Country.CountryID = $("#DeliverTo").val();
+            deliveryAddress.Country.CountryCode = $("#DeliverTo option:selected").attr('data-code')
+            if (!(deliveryAddress.Country.CountryID > 0)) {
+                _isValid = false;
+                _errorMessage += "Sending To, ";
+            }
+
+            let shipment = {};
+            shipment.Consignment = Consignment;
+            shipment.CollectionAddress = collectionAddress;
+            shipment.DeliveryAddress = deliveryAddress;
+            shipment.IsSameCountry = false;
+            if ($("#SendingFrom").val() == 231 || $("#SendingFrom").val() == 247 || $("#SendingFrom").val() == 272 || $("#SendingFrom").val() == 271) {
+                if ($("#DeliverTo").val() == 231 || $("#DeliverTo").val() == 247 || $("#DeliverTo").val() == 272 || $("#DeliverTo").val() == 271) {
+                    shipment.IsSameCountry = true;
+                }
+            }
+
+            console.log(JSON.stringify(shipment));
+
+            if (!_isValid) {
+                toastr.error(_errorMessage + ' filed(s)', 'Error')
+                return;
+            }
+            $.ajax({
+                url: "/Home/GetQuotes",
+                type: "POST",
+                datatype: "json",
+                data: shipment,
+                success: function (data) {
+                    if (data.status == "FAIL") {
+                        let _error = "";
+                        for (let i = 0; i < data.notifications.length; i++) {
+                            _error += data.notifications[i].message + ' \n \r';
+                        }
+                        toastr.error(_error, 'Error')
+                    } else {
+                        $("#myModalBody").html(data);
+                        $("#myModal").modal('show');
+                    }
+
+
+                    //window.location.href = "/Address/Invoice?orderId=" + $("#OrderId").val()
+                },
+                beforeSend: function () {
+                    $("#waitSpinnerId").show();
+                },
+                error: function (xhr) { // if error occured
+                    toastr.error('Something went wrong', 'Error')
+                },
+                complete: function () {
+                    $("#waitSpinnerId").hide();
+                },
+
+            });
+        }
+
+        $("#no-of-item").change(function () {
+            let _noOfItems = parseFloat($("#no-of-item").val());
+
+            var $tableBody = $('#orderDetail').find("tbody");
+            var $trLast = $tableBody.find("tr:last");
+
+            let _addRows = _noOfItems - $('#orderDetail tbody tr').length;
+            for (let i = 0; i < _addRows; i++) {
+                var $trNew = $trLast.clone();
+                $trNew.find("input[type=text], input[type=number], textarea").val("")
+                $trLast.after($trNew);
+            }
+            if (_addRows < 0) {
+                let remove = Math.abs(_addRows);
+                let _totalRows = $('#orderDetail tbody tr').length;
+
+                for (var i = _totalRows; i >= _noOfItems; i--) {
+                    let _tr = $('#orderDetail tbody tr')[i];
+                    $(_tr).remove();
+                }
+            }
+            //var $tableBody = $('#orderDetail').find("tbody");
+            //var $trLast = $tableBody.find("tr:last");
+            //var $trNew = $trLast.clone();
+            //$trNew.find("input[type=text], input[type=number], textarea").val("")
+            //$trLast.after($trNew);
+        });
+
+        function GetLoginObject() {
+            let _loginObject = null;
+            $.ajax({
+                url: "/Account/GetLoginObject",
+                type: "GET",
+                datatype: "json",
+                async: false,
+                success: function (data) {
+                    _loginObject = data;
+                    return _loginObject;
+                },
+                beforeSend: function () {
+                    $("#waitSpinnerId").show();
+                },
+                error: function (xhr) { // if error occured
+                    return _loginObject;
+                },
+                complete: function () {
+                    $("#waitSpinnerId").hide();
+                },
+
+            });
+            return _loginObject;
+        }
+    </script>

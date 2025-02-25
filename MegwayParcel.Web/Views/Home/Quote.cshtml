@@ -1,0 +1,204 @@
+﻿@using MegwayParcel.Common
+@using MegwayParcel.Common.Data
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@using System.IO;
+@model GetQuoteOutput_DTO
+@{
+    string str = Context.Session.GetString("Setting");
+    CompanySetting setting = null;
+    if (str != null)
+    {
+        setting = JsonConvert.DeserializeObject<CompanySetting>(str);
+    }
+
+    double isc = 0;
+    double rsc = 0;
+    double freight = 0;
+    double collCharges = 0;
+    if (setting != null)
+    {
+        isc = (double)(setting.SurchargePercent / 100);
+        rsc = (double)(setting.RemoteSurchargePercent / 100);
+        freight = (double)(setting.ShippingPercent / 100);
+        collCharges = (double)setting.CollectionAmount;
+    }
+
+
+    string folderName = ViewBag.LogoPath;
+    DirectoryInfo Folder;
+    FileInfo[] Images;
+    Folder = new DirectoryInfo(folderName);
+    Images = Folder.GetFiles();
+    List<String> imagesList = new List<String>();
+    string service = "Landmark Global".ToLower();
+
+
+    for (int i = 0; i < Images.Length; i++)
+    {
+        //Images[i].Name
+        imagesList.Add(String.Format(@"{0}/{1}", folderName, Images[i].Name));
+        string name = Images[i].Name.Replace(".png", "");
+        var result = service.Contains(name);
+        if (result)
+        {
+            Console.WriteLine(Images[i].Name + "    " + service);
+        }
+    }
+
+
+}
+<input type="hidden" value="@ViewBag.requestQuoteStr" id="requestQuoteStr" />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th colspan="2">Services</th>
+            <th>Estimated Transit Time</th>
+            <th>Chargeable Weight</th>
+            <th>Surcharges</th>
+            <th>Remote Surcharges</th>
+            <th>Subtotal</th>
+            <th>Collection</th>
+            <th>Insurance Cover</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ServiceResults)
+        {
+            string logoName = "";
+            for (int i = 0; i < Images.Length; i++)
+            {
+                string name = Images[i].Name.Replace(".png", "");
+                var result = item.ServiceName.ToLower().Contains(name);
+                if (result)
+                {
+                    logoName = name + ".png";
+                }
+            }
+            if (string.IsNullOrEmpty(logoName))
+            {
+                logoName = "TG Economy Direct.png";
+            }
+
+            <tr>
+                <td style="display:none;">@item.ServiceID</td>
+                <td style="display:none;" class="SelectedCompanyLogo">@logoName</td>
+                <td class="selectQuoteStr" style="display:none">@(JsonConvert.SerializeObject(item))</td>
+                <td>
+                    <img style="width:100px;" src="/image/shipment/@logoName" />
+                </td>
+                <td>@item.ServiceName</td>
+                <td>@item.TransitTimeEstimate</td>
+                <td>@item.ChargeableWeight</td>
+                <td>
+                    @{
+                        var surcharge = item.ServicePriceBreakdown?.Where(x => x.Code == "ISC").FirstOrDefault();
+                    }
+                    @if (surcharge != null)
+                    {
+                        <span class="itemSurcharge">@(String.Format("{0:0.00}", surcharge.Cost + (surcharge.Cost * isc)))</span>
+                    }
+                    else
+                    {
+                        <span class="itemSurcharge">0.00</span>
+                    }
+
+                </td>
+                <td>
+                    @{
+                        var remoteSurchage = item.ServicePriceBreakdown?.Where(x => x.Code == "RSC").FirstOrDefault();
+                    }
+                    @if (remoteSurchage != null)
+                    {
+                        <span class="remoteSurcharge">@(String.Format("{0:0.00}", remoteSurchage.Cost+(remoteSurchage.Cost*rsc)))</span>
+                    }
+                    else
+                    {
+                        <span class="remoteSurcharge">0.00</span>
+                    }
+                </td>
+                <td>
+                    @{
+                        var freightCharges = item.ServicePriceBreakdown?.Where(x => x.Code == "FRT").FirstOrDefault();
+                    }
+                    @if (freightCharges != null)
+                    {
+                        <span class="freightCharges">@(String.Format("{0:0.00}", freightCharges.Cost+(freightCharges.Cost*freight)))</span>
+                    }
+                    else
+                    {
+                        <span class="freightCharges">0.00</span>
+                    }
+                </td>
+                <td>
+                    @{
+                        var collection = item.ServicePriceBreakdown?.Where(x => x.Code == "COL").FirstOrDefault();
+                    }
+                    @if (collection != null)
+                    {
+                        <span>@(collection.Cost+collCharges)</span>
+                    }
+                    else
+                    {
+                        <span>0.00</span>
+                    }
+                </td>
+                <td>
+                    @{
+                        var insurance = item.OptionalExtras?.Where(x => x.Code == "INS").FirstOrDefault();
+                    }
+                    @if (insurance != null)
+                    {
+                        <span>@insurance.Cost</span>
+                    }
+                    else
+                    {
+                        <span>0.00</span>
+                    }
+                </td>
+                <td><input type="button" class="btn btn-primary btnSelectQuote" value="select" /></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $('body').on('click', '.btnSelectQuote', function () {
+        debugger;
+        let _thisRow = $(this).closest('tr');
+
+        let _order = {};
+        _order.RequestQuote = $("#requestQuoteStr").val();
+        _order.SelectQuote = $(_thisRow).find('.selectQuoteStr').text();
+
+        _order.Surcharges = $(_thisRow).find('.itemSurcharge').text();
+        _order.RemoteSurcharges = $(_thisRow).find('.remoteSurcharge').text();
+        _order.ShippingCharges = $(_thisRow).find('.freightCharges').text();
+        _order.SelectedCompanyLogo = $(_thisRow).find('.SelectedCompanyLogo').text();
+        $.ajax({
+            url: "/Home/SaveOrder",
+            type: "POST",
+            datatype: "json",
+            data: _order,
+            success: function (data) {
+                if (data == "login") {
+                    alert("Please login")
+                } else {
+                    window.location.href = "/Address/Index?orderId=" + data.orderId
+                }
+            },
+            beforeSend: function () {
+                $("#waitSpinnerId").show();
+            },
+            error: function (xhr) { // if error occured
+
+            },
+            complete: function () {
+                $("#waitSpinnerId").hide();
+            },
+
+        });
+    });
+</script>

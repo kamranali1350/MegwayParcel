@@ -1,0 +1,284 @@
+﻿@model MegwayParcel.Common.Data.Order
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+    //var collection = Model.Addresses.Where(x => x.TypeId == 1).FirstOrDefault();
+    //var delivery = Model.Addresses.Where(x => x.TypeId == 2).FirstOrDefault();
+    //var shipmentResult = JsonConvert.DeserializeObject<ServiceResult>(Model.SelectQuote);
+    //var subTotal = shipmentResult.ServicePriceBreakdown?.Where(x => x.Code == "FRT").FirstOrDefault();
+
+
+    //var remoteSurchage = shipmentResult.ServicePriceBreakdown?.Where(x => x.Code == "RSC").FirstOrDefault();
+    //var itemsurcharge = shipmentResult.ServicePriceBreakdown?.Where(x => x.Code == "ISC").FirstOrDefault();
+
+
+    //var surcharge = (itemsurcharge == null ? 0 : itemsurcharge.Cost) + (remoteSurchage == null ? 0 : remoteSurchage.Cost);
+
+    //double total = subTotal.Cost + surcharge;
+    //var vat = total * 0.20;
+
+    var surcharge = (Model.Surcharges) + (Model.RemoteSurcharges);
+    var devDetail = Model.DeliveryDetails.FirstOrDefault();
+
+}
+<style>
+    .switch-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+    input:checked + .slider {
+        background-color: #4caf50;
+    }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
+
+<section class="pt-3 bg-body-tertiary">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="fs-4 mb-0"><i class="bi bi-bookmark-heart fa-fw me-1"></i>Checkout</h1>
+
+            </div>
+        </div>
+        <input type="hidden" asp-for="OrderId" />
+
+        <div class="vstack gap-4">
+            <div class="card border">
+                <div class="card-header border-bottom"><h6>Summary of Charges</h6></div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <tr>
+                            <td>Shipping Price</td>
+                            <td>£ @Model.ShippingCharges</td>
+                        </tr>
+                        <tr>
+                            <td>Surcharges</td>
+                            <td>£ @surcharge</td>
+                        </tr>
+                        <tr>
+                            <td>Collection Charges</td>
+                            <td>£ @(String.Format("{0:0.00}", Model.CollectionCharges))</td>
+                        </tr>
+                        <tr>
+                            <td>Insurance Charges</td>
+                            <td>£ @(String.Format("{0:0.00}", Model.InsuranceCharges))</td>
+                        </tr>
+                        @if ((devDetail?.IsSignatureRequired ?? false))
+                        {
+                            <tr>
+                                <td>Signature Price</td>
+                                <td>£ @(String.Format("{0:0.00}", Model.SignaturePrice))</td>
+                            </tr>
+                        }
+                        @if ((devDetail?.IsResidentialAddress ?? false))
+                        {
+                            <tr>
+                                <td>Residential Price</td>
+                                <td>£ @(String.Format("{0:0.00}", Model.ResidentialSurcharge))</td>
+                            </tr>
+                        }
+                        <tfoot>
+                            <tr>
+                                <td>Total Price</td>
+                                <td>£ @(String.Format("{0:0.00}", Model.TotalCharges))</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+
+
+                </div>
+            </div>
+
+        </div>
+        <br />
+        <div class="vstack gap-4">
+            <div class="card border">
+                <div class="card-header border-bottom"><h6>Terms & Conditions</h6></div>
+                <div class="card-body">
+                    <label>
+                        <input class="checkBox" type="checkbox" />
+                        I have read and understood the terms and conditions, <a href="/Home/TermAndCondition" target="_blank">click here to view.</a>
+                    </label>
+                    <br />
+                    <label>
+                        <input class="checkBox" type="checkbox" />
+                        I accept that I will be charged should the weight or dimensions of my consignment differ from those stated.
+                    </label>
+                    <label>
+                        <input class="checkBox" type="checkbox" />
+                        I agree to use only the shipping documentation provided by Megway Parcels Ltd.
+                    </label>
+                    <label>
+                        <input class="checkBox" type="checkbox" />
+                        I acknowledge that all international shipments to and from the UK are subject to customs clearance and may incur fees (please see Customs Advice for more information). I have read and understood the following statements:
+
+                    </label>
+                    <ul>
+                        <li>
+                            DDU UK Exports – Customs duties, taxes and fees if
+                            applicable will be billed to the consignee but if
+                            refused will revert to the account holder.
+                        </li>
+                        <li>
+                            DDP UK Exports - Customs duties, taxes and fees if
+                            applicable will be billed to the account holder.
+                        </li>
+                        <li>
+                            UK Imports - Customs duties, taxes and fees if
+                            applicable will be billed to the consignee (normally
+                            one and the same) but if refused will revert to the
+                            account holder.
+                        </li>
+                    </ul>
+
+                    <label>
+                        <input class="checkBox" type="checkbox" />
+                        I accept that I will be responsible for any charges incurred
+                        should the shipment be returned.
+                    </label>
+                    <label>
+                        <input class="checkBox" type="checkbox" />
+                        I confirm that my parcels comply with restricted and prohibited list.
+                    </label>
+
+                </div>
+                <div class="card-footer">
+                    <div class="switch-container">
+                        <label class="switch">
+                            <input type="checkbox" id="chkSelectAll">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="/Address/Insurance?orderId=@Model.OrderId">
+                        <input type="button" class="btn btn-danger mb-0" value="Back" />
+                    </a>
+                </div>
+                <div class="col-md-6 text-end">
+                    <button type="submit" disabled id="btnPlaceOrder1" class="btn btn-primary mb-0">Place Order</button>
+                </div>
+            </div>
+
+            @* <button type="button" disabled id="btnPlaceOrder1" class="btn btn-primary btn-lg btn-block rounded-pill">Place Order</button> *@
+
+        </div>
+    </div>
+</section>
+<div class="modal" id="Proceed-To-Pay" tabindex="-1" role="dialog">
+</div>
+
+<script>
+
+    $("#btnPlaceOrder1").click(function () {
+        $.ajax({
+            url: "/Address/ProceedToPay?orderId=" + $("#OrderId").val(),
+            type: "Post",
+            datatype: "json",
+            success: function (data) {
+                if (data.status == "success") {
+                    window.location.href = "/Address/OrderDetail?orderId=" + data.orderId
+                } else {
+                    $("#Proceed-To-Pay").html(data);
+                    $("#Proceed-To-Pay").show();
+                }
+            },
+            beforeSend: function () {
+                $("#waitSpinnerId").show();
+            },
+            error: function (xhr) { // if error occured
+
+            },
+            complete: function () {
+                $("#waitSpinnerId").hide();
+            },
+
+        });
+    });
+    function closePaymentModal() {
+        $('#Proceed-To-Pay').modal('hide');
+    }
+
+    $(".checkBox").on('click', function () {
+        enableDisableSubmitButton();
+    });
+
+    function enableDisableSubmitButton() {
+        var count = 0;
+        $(".checkBox").each(function (index) {
+            if ($(this).is(':checked'))
+                return;
+            count += 1;
+        })
+        if (count == 0)
+            $('#btnPlaceOrder1').attr('disabled', false);
+        else
+            $('#btnPlaceOrder1').attr('disabled', true);
+    }
+    $('#chkSelectAll').change(function () {
+        if ($(this).is(':checked')) {
+            $(".checkBox").prop('checked', true);
+            enableDisableSubmitButton();
+        }
+    });
+
+
+
+</script>

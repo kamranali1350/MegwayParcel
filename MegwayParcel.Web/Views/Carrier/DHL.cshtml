@@ -1,0 +1,256 @@
+﻿@model MegwayParcel.Common.Data.Order
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+}
+<link href="/css/carries.css" rel="stylesheet" />
+<link href="/css/desktop.css" rel="stylesheet" />
+
+<div class="container" style="background-color: #f6f9fc;">
+    <div class="row">
+        <div class="col-md-8">
+            <h5 class="text-center text-primary"><span>DHL Express</span></h5>
+            <ul class="bullet brandDHL">
+                <li style="text-align: justify;"><a href="#saturdayCollections" class="scroll">Saturday Collections</a></li>
+                <li><a href="#saturdayDelivery" class="scroll">Saturday Delivery</a></li>
+                <li><a href="#packing" class="scroll">Packing Requirements</a></li>
+                <li><a href="#weightRestrictions" class="scroll">Size &amp; Weight Restrictions</a></li>
+                <li><a href="#volumetricWeight" class="scroll">Volumetric Weight</a></li>
+                <li><a href="#surcharges" class="scroll">Surcharges</a></li>
+                <li><a href="#prohibited" class="scroll">Prohibited Items</a></li>
+            </ul>
+            <br />
+            <h5 class="text-center text-primary"><span>General Information</span></h5>
+            <p>
+                <i>With a presence in over 220 countries and territories across the globe, DHL has one of the most extensive international networks in the world. The DHL Express division is a global market leader in door-to-door courier services. We are proud to offer three premium DHL Express services: DHL Express Worldwide, DHL Economy Select and DHL Domestic Express.</i>
+            </p>
+            <p>Please see the table below for an at-a-glance comparison of the DHL courier service we offer:</p>
+            <table class="standard responsive carrier-info full">
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>Suitable for:</th>
+                        <th>Information</th>
+                        <th>UK</th>
+                        <th>Europe</th>
+                        <th>Rest of World</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="/image/Carries/dhl-express-worldwide.png" alt="DHL Express Worldwide"></td>
+                        <td class="textLeft">
+                            <ul class="bullet">
+                                <li>Documents</li>
+                                <li>Parcels</li>
+                                <li>Pallets</li>
+                            </ul>
+                        </td>
+                        <td class="textLeft">Premium worldwide express service by air to more than 220 countries and territories</td>
+                        <td><img alt="N/A" src="/image/Carries/icon-cross-small.png" width="25" height="25"></td>
+                        <td>
+                            <div class="click hover left tick">
+                                @*<span class="notification">
+                                <span>
+                                <b>Estimated Transit Time (Europe)</b>
+                                <i>Next business day delivery to most European gateway cities*</i>
+                                </span>
+                                </span>*@
+                            </div>
+                        </td>
+                        <td>
+                            <div class="click hover left tick">
+                                <span class="notification">
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><img src="/image/Carries/dhl-economy-select.png" alt="DHL Economy Select"></td>
+                        <td class="textLeft">
+                            <ul class="bullet">
+                                <li>Documents</li>
+                                <li>Parcels</li>
+                                <li>Pallets</li>
+                            </ul>
+                        </td>
+                        <td class="textLeft">Highly economical road-based service to 30 European destinations and territories</td>
+                        <td><img alt="N/A" src="/image/Carries/icon-cross-small.png" width="25" height="25"></td>
+                        <td>
+                            <div class="click hover left tick">
+                            </div>
+                        </td>
+                        <td><img alt="N/A" src="/image/Carries/icon-cross-small.png" width="25" height="25"></td>
+                    </tr>
+                    <tr>
+                        <td><img src="/image/Carries/dhl-domestic-express.png" alt="DHL Domestic Express"></td>
+                        <td class="textLeft">
+                            <ul class="bullet">
+                                <li>Documents</li>
+                                <li>Parcels</li>
+                                <li>Pallets</li>
+                            </ul>
+                        </td>
+                        <td class="textLeft">UK delivery by the end of the next working day</td>
+                        <td>
+                            <div class="click hover left tick">
+                            </div>
+                        </td>
+                        <td><img alt="N/A" src="/image/Carries/icon-cross-small.png" width="25" height="25"></td>
+                        <td><img alt="N/A" src="/image/Carries/icon-cross-small.png" width="25" height="25"></td>
+                    </tr>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 12px;">*You can access more accurate transit time estimates by entering your collection and delivery postcodes <a href="https://dct.dhl.com/" target="_blank" class="link">here</a>.</p>
+            <p>DHL also publish an overview of transit times per country and service. You can access it <a href="/assets/downloads/DHL_Transit_Time_Guide.pdf" class="link">here</a>.</p>
+            <br />
+            <div class="div-section">
+                <p><a name="saturdayCollections" id="saturdayCollections"></a></p>
+                <h5 class="text-primary"><span>Saturday Collections</span></h5>
+                <p>Saturday collections are available for DHL courier services. You will be given this option during booking.</p>
+            </div>
+            <div class="">
+                <p><a name="saturdayCollections" id="saturdayCollections"></a></p>
+                <h5 class="text-primary"><span>Saturday Delivery</span></h5>
+                <p>Saturday delivery is available for DHL Domestic Express. Your parcel must be collected or dropped off at a <a class="link" target="_blank" href="/services/dhl-express/depot-locations/">DHL&nbsp;depot</a> on a Friday, before the <a class="link" target="_blank" href="/collectioncutoff/">cut-off time</a>.</p>
+            </div>
+            <div class="div-section">
+                <p><a name="packing" id="packing"></a></p>
+                <h5 class="text-primary"><span>Packing Requirements</span></h5>
+                <p>Lighter goods (weighing less than 30kg) can be boxed. Caution should be taken over structurally weak, long and narrow cardboard packaging (more than 120cm long), which you will need to reinforce.</p>
+                <p>Use <a class="link" target="_blank" href="/shop/products/cardboard-boxes/">double-walled boxes</a> and ensure a distance of 6cm between the contents and walls of the box. Fill all void space using cushioning material.</p>
+                <p>When sealing, use <a class="link" target="_blank" href="/shop/products/tape-and-accessories/">pressure-sensitive tape</a> of at least 28mm width. Use an H-taping method: tape both ends of the box as well as where the flaps close. Seal all edges and seams.</p>
+                <p>Apply your labels to the top face of your package. They must be applied to a single surface.</p>
+                <p>For goods 30kg-70kg in weight, DHL recommends using a pallet or <a class="link" target="_blank" href="/shop/crate/">crate</a>. If using a box, it must be capable of supporting the full weight of the  goods. For goods heavier than 70kg, you must use a pallet or crate. Use quality hard wood for crates and brace them diagonally to increase strength. The wood must be heat or chemically treated prior to use.</p>
+                <p>Items on a pallet must be secured in place, with a level and even surface on top. Boxes should not overhang the pallet's edge.</p>
+                <p>DHL Express may not pick up goods that are improperly packed.</p>
+            </div>
+            <div>
+                <p><a name="weightRestrictions" id="weightRestrictions"></a></p>
+                <h5 class="text-primary"><span>Size and Weight Restrictions</span></h5>
+                <p>Restrictions may vary depending on the destination of your shipment. The following information is provided as a general guide:</p>
+                <ul class="bullet">
+                    <li><strong style="font-weight: bold;">Maximum recommended weight for parcels:</strong> 70 kg (DHL are often flexible as to maximum weight, but please be prepared to assist drivers with parcels weighing more than 31.5kg). For the 9am service (or 10.30am to USA), the maximum weight is 30kg.</li>
+                    <li><strong style="font-weight: bold;">Maximum dimensions per piece:</strong>&nbsp;120 x 80 x 80 cm high</li>
+                    <li><strong>Maximum pieces per shipment:</strong> 10 (for time-definite services)</li>
+                    <li><strong style="font-weight: bold;">Maximum weight for palletised goods:</strong> DHL&nbsp;Express Worldwide:&nbsp;300kg; DHL&nbsp;Economy Select: 1,000kg</li>
+                    <li><strong>Maximum pallet dimensions:</strong> 300 x 200 x 160cm</li>
+                </ul>
+                <p>For multi-piece shipments, DHL calculates the actual weight or the volumetric weight of each parcel (whichever is greater) and then adds them all together, rather than calculating the total weight or volume of the whole consignment.</p>
+            </div>
+            <div class="div-section">
+                <p><a name="volumetricWeight" id="volumetricWeight"></a></p>
+                <h5 class="text-primary"><span>Volumetric Weight</span></h5>
+                <p>Your shipment will be charged by either <strong style="font-weight: bold;">actual weight</strong> or <strong style="font-weight: bold;">volumetric weight</strong> – whichever is greater.</p>
+                <p><strong style="font-weight: bold;">Volumetric weight</strong> is a value derived from the size rather than the weight of your parcel and may apply if your parcel is particularly large and contains relatively light items.</p>
+                <p><strong>DHL </strong>calculates volumetric weight by multiplying the three dimensions of your parcel together and dividing by <strong style="font-weight: bold;">5000</strong>.</p>
+                <p><strong style="font-weight: bold;">For example:</strong></p>
+                <table class="standard textLeft responsive volumetric">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Parcel Weight</th>
+                            <th>Actual Weight</th>
+                            <th>Dimensions</th>
+                            <th>Divisor</th>
+                            <th>Volumetric Weight</th>
+                            <th>Chargeable Weight</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><img src="/image/Carries/dhl-express-worldwide.png" alt="DHL Express Worldwide"></td>
+                            <td>10kg</td>
+                            <td>10kg</td>
+                            <td>50 x 30 x 20cm</td>
+                            <td>5000</td>
+                            <td>6kg</td>
+                            <td>10kg</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/image/Carries/dhl-express-worldwide.png" alt="DHL Express Worldwide"></td>
+                            <td>10kg</td>
+                            <td>10kg</td>
+                            <td>50 x 60 x 40cm</td>
+                            <td>5000</td>
+                            <td>24kg</td>
+                            <td>24kg</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 12px;">&nbsp;</p>
+            </div>
+            <div>
+                <p><a name="surcharges" id="surcharges"></a></p>
+                <h5 class="text-primary"><span>Surcharges</span></h5>
+                <table class="standard responsive carrier-surcharges">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Brexit Fee</td>
+                            <td>A fee levied on all dutiable shipments between Great Britain and European Union countries, both inbound and outbound. This fee is subject to change as the situation changes.</td>
+                            <td>£0.25 per kg with a minimum charged amount of £4.50 per shipment.</td>
+                        </tr>
+                        <tr>
+                            <td>Address Correction</td>
+                            <td>Administered if any part of the delivery address requires amendment.</td>
+                            <td>£9 per international shipment, £4.50 per domestic shipment</td>
+                        </tr>
+                        <tr>
+                            <td>Saturday Delivery</td>
+                            <td>For deliveries made on a Saturday.</td>
+                            <td>£30</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 12px;">*DHL&nbsp;Express Worldwide is an air service; DHL&nbsp;Economy Select and DHL&nbsp;Domestic Express are road services.</p>
+                <p style="margin-top: 12px;">Please note that surcharges on domestic (UK) deliveries are subject to VAT.</p>
+            </div>
+            <div class="div-section">
+                <p><a name="prohibited" id="prohibited"></a></p>
+                <h5 class="text-primary"><span>Prohibited Items</span></h5>
+                <ul class="bullet">
+                    <li>Our list of hazardous, prohibited and owner’s risk items is available <a class="link" href="/information/dangerous-and-hazardous/" target="_blank">here</a>.</li>
+                    <li>For up-to-date information specific to DHL, please check their <a href="http://www.dhl.co.uk/en/express/shipping/shipping_advice/prohibited_commodities.html" target="_blank" class="link">prohibited items page</a>. Please note that prohibited items are subject to vary depending on your delivery destination.</li>
+                    <li>Sending jewellery or watches? Refer to our&nbsp;<a target="_blank" href="/information/dangerous-and-hazardous/jewellery-and-watches/" class="link">Jewellery &amp; Watches</a>&nbsp;information page for carrier specific restrictions.</li>
+                    <li>If you’d like advice on whether or not your items are prohibited, please contact our Customer Services team via <a target="_blank" href="/contact-us/">Live Chat, email</a> or telephone (0345 145 1212 8:00am-6:30pm Mon-Fri, 9:00am-1:00pm Saturdays).</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="container-advertisement logoTop">
+                <div class="innerContainer">
+                    <h6 class="text-primary"><span>Book DHL Parcel Delivery with Megway Parcels</span></h6>
+
+                    <ul class="bullet">
+                        <li>Instant access to quote &amp; compare DHL prices online.</li>
+                        <li>Save up to 70% on DHL standard charges</li>
+                        <li>Book online 24 hours a day, 7 days a week.</li>
+                    </ul>
+                    <img src="/image/Carries/illustration-parcel-dhl.png" width="140" alt="DHL Courier Delivery">
+                    <div class="clear"></div>
+
+                    <div class="button-container">
+                        <a href="/Home" class="">
+                            <button class="btn btn-primary rounded-pill">
+                                Quote &amp; Book Parcel Delivery with DHL
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

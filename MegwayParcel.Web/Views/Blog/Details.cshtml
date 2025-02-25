@@ -1,0 +1,71 @@
+﻿@model MegwayParcel.Common.Data.Blog
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] ="Blog";
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+}
+
+
+<main>
+
+	<!-- =======================
+	Main banner START -->
+	<section class="py-0">
+		<div class="container">
+			<!-- Title -->
+			<div class="row g-4">
+				<!-- Image -->
+				<div class="col-12">
+					<img src="@Model.ImageUrl" class="rounded-3" alt="">
+				</div>
+				<!-- Title and content -->
+				<div class="col-11 col-lg-10 mx-auto position-relative mt-n5 mt-sm-n7 mt-md-n8">
+					<div class="bg-mode shadow rounded-3 p-4">
+						<!-- Badge -->
+						<div class="badge text-bg-success mb-2">Blog</div>
+						<!-- Title -->
+						<h1 class="fs-3">@Model.Title</h1>
+						<p class="mb-2">@Model.ShortDetail</p>
+
+						<!-- List -->
+						<ul class="nav nav-divider align-items-center">
+							<li class="nav-item">
+								<div class="nav-link">
+									<div class="d-flex align-items-center">
+										<!-- Avatar -->
+										<div class="avatar avatar-sm">
+											<img class="avatar-img rounded-circle" src="/new-theme/assets/images/avatar/09.jpg" alt="avatar">
+										</div>
+										<!-- Info -->
+										<div class="ms-2">
+											<h6 class="mb-0"><a href="#">@Model.AuthorName</a></h6>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="nav-item">@(Convert.ToDateTime(Model.CreatedDate).ToString("dd/MM/yyyy"))</li>
+							@* <li class="nav-item">5 min read</li> *@
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- =======================
+	Main banner END -->
+	<!-- =======================
+	Blog content START -->
+	<section>
+		<div class="container">
+			<div class="row">
+				@Html.Raw(Model.FullDetail)
+			</div>
+		</div>
+	</section>
+	<!-- =======================
+	Blog content END -->
+
+</main>
+<!-- **************** MAIN CONTENT END **************** -->

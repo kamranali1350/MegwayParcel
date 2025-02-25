@@ -1,0 +1,181 @@
+﻿
+ul.bullet.brandDPD, ul.bullet.brandUPS, ul.bullet.brandDHL, ul.bullet.brandDTDC, ul.bullet.brandUSPS, ul.bullet.brandusps, ul.bullet.brandTGInt, ul.bullet.brandFedEx, ul.bullet.brandTGExp, ul.bullet.brandTNTExport, ul.bullet.brandExpressWorldwide {
+    background-repeat: no-repeat;
+    background-size: 160px auto;
+    background-position: right top;
+    position: relative;
+}
+
+ul.bullet.brandDHL {
+    background-image: url('../image/partners/dhl.png');
+}
+
+ol.bullet, ul.bullet {
+    display: block;
+    padding: 12px 0px 0px;
+    list-style-type: none;
+    margin: auto 3%;
+}
+
+    ol.bullet li, ul.bullet li {
+        display: block;
+        font-size: 1em;
+        width: auto;
+        background-image: url('../image/carries/bullet-arrow-blue-small.png') !important;
+        background-position: left 2px;
+        background-repeat: no-repeat;
+        padding: 0px 0px 6px 19px;
+        margin: 0px 0px 7px;
+        line-height: 1.6em;
+        background-size: auto 12px;
+        font-family: "Roboto", Arial !important;
+        font-weight: normal !important;
+    }
+
+
+table.standard {
+    border-collapse: collapse;
+    color: #02548F;
+    width: auto;
+    margin: auto 0.5% 30px;
+}
+
+div.sectioned table.standard tr:nth-child(odd) {
+    background-color: #f6f9fc !important;
+}
+
+table.standard tr.even, table.standard tr:nth-child(odd), div.table.structure div.row:nth-child(odd) {
+    background: transparent;
+}
+
+table.standard tr th:first-of-type, table.standard tr td:first-of-type, table.form_table tr th:first-of-type, table.collectionCutOffTable tr th:first-of-type, table.collectionCutOffTable tr td:first-of-type {
+    -webkit-border-top-left-radius: 6px;
+    -webkit-border-bottom-left-radius: 6px;
+    -moz-border-radius-topleft: 6px;
+    -moz-border-radius-bottomleft: 6px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+table.standard td {
+    padding: 8px;
+    text-align: center;
+    color: #054f95;
+}
+
+table.standard tr th:first-of-type, table.standard tr td:first-of-type, table.form_table tr th:first-of-type, table.collectionCutOffTable tr th:first-of-type, table.collectionCutOffTable tr td:first-of-type {
+    -webkit-border-top-left-radius: 6px;
+    -webkit-border-bottom-left-radius: 6px;
+    -moz-border-radius-topleft: 6px;
+    -moz-border-radius-bottomleft: 6px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+table.standard th:first-of-type {
+    border-top-left-radius: 10px;
+}
+
+a.find, div.map, a.btn.blue, a.btnBlue, button.btn.blue, span.btn.blue, div.categories, div.services, div.process, div.process h3.title, div.process h4.title, table.standard th, a.btn.white:hover, button.btn.white:hover, span.btn.white:hover, div.code-container, div.code-container div.inner span.clear, label.hover span.notification b, a.hover span.notification b, div.InnerWindow_Page h1, section.enquiry-form, span.slide-tracking, a.button.light-blue, span.slide-terms, div.sub-menu ol, div.blue, div.infoBox, div.controls, a.actionlink, h1.section-head, span.productPrice, a.triggershopmenu, div.shoppingBasket, div.tariff-search, section.quoteResults, div.filteredInfoBox, span.closePopUp span, div.promotional-code a, ul.select-list li:after, div.add-to-basket button, ul.services-list li a.btnBlue:hover, div.content-slider ul li a.trustpilot:before, div.warning-message.prohibited div.container-checkbox, div.warning-message.prohibited div.prohibitedIcon span, table.collectionCutOffTable th, div.containerbreadcrumb, section.banner.media, a.banner.information {
+    background-color: #296db3;
+}
+
+table.standard th {
+    padding: 7px;
+    color: #fff;
+    font-family: arial;
+    text-align: center;
+}
+
+a.hover, .helper, p.notice, .roboto p, h1.impact, h2.impact, h3.impact, h4.impact, h5.impact, div.map h1, div.map h2, div.map h3, div.map h4, div.map h5, h1.headline, h2.headline, h3.headline, h4.headline, h5.headline, .moredetail, a.selected, div.options, span.pricetag, span.pricetag b, div.popup-editor, ul.select-list, .small_button, div.hover.text, a.quick_select, ul.panelled h1, ul.panelled h2, ul.panelled h3, ul.panelled h4, ul.panelled h5, table caption, div.impact h1, div.impact h2, div.impact h3, div.impact h4, div.impact h5, span.summary, ol.bullet li, ul.bullet li, div.jqistates, .table-list li b, td.uk b:before, #cartProcessing, div.column label, div.panelledArea, span.notificaton, table.standard th, td.europe b:before, td.worldwide b:before, td.tracked b:before, td.trackable b:before, td.drop-off b:before, td.collection b:before, div.form_box label, section.banner h1, section.banner h2, section.banner h3, div.categories li a, div.infoBox li a, div.accordion h3, p.sectionIntro b, div.filterList h3, div.filterList h4, div.filterList h5, div.no-printer h4, table.split tr th, div#popup-content, div.formGroup label, .button.light-blue b, div.sub-menu ol li a, div.sub-menu ol li strong.heading, div.code-container h1, div.code-container h2, div.code-container h3, div.code-container h4, div.code-container h5, div.content-slider ul, div.rotation.news li a, ul.advertisements li li, div.input-options label, ul li#contact-callUs span, div.contentarea.news p, div.box table td label, div.alert-notification, div.container-terms label, ul.panelled div.NewsSummary, div.banner.information ul li, a.banner.information ul li, .iconSellingPoints strong, div.opening-hours h4 span, div.radio_preferences h3, div.radio_preferences h4, div.radio_preferences h5, td.destinationCountry div, div.form.section label, .news_headlines li p, ul.flow-chart, ul.flow-chart b, .tiled-panels li, section.blue .heading, div.announcement, div.tiled-images, ul.products h1, ul.products h2, ul.products h3, ul.products h4, ul.products h5, ul.products h1 a, ul.products h2 a, ul.products h3 a, ul.products h4 a, ul.products h5 a, ul.address_list li, table.specification td, section.form.section label, div.opening-hours span.hours, table.standard td.packageCount, table.standard td.serviceName a, div.sub-menu span.accountuser, div.genericQuoteContent p, div.no-printer span.message, div.cart_collection_section, section.blue .heading span, div.heading_information div b, .accesspoint_quickselect_header, div.no-printer span.phonenumber, ul.panelled div.NewsSummary a.link, div.accordion-container.fullwidth div, div#insurance-quote div#termsDiv label, div#insurance-quote div#termsBusinessDiv label, table.collectionCutOffTable td.service, div.radio_preferences.accesspoints label, div.banner.information li a span.content, ul.loyalty-points li div.circle span.label, table.options_table td.FormTableLabel label, div.shoparea h2 a, div.shoparea h3 a, div.shoparea h4 a, div.shoparea h5 a, div.shoparea a h2, div.shoparea a h3, div.shoparea a h4, div.shoparea a h5, div.add-to-basket, div.formatList li, .video_player p, div.notice .button, div.notice div.container, div.notice h2, div.notice h3, div.notice h4, div.notice h5, table.basic th, .news_panel li h2, .news_panel li h5, ul.air-freight-info li, div.simplesearch input, div.add-to-basket button, section.tracking-form form, div.sub-menu.account li ul, label.label, div#addsearch-results, section.search select, div.information_page p, div#addsearch-results h2, div#addsearch-results h2 a, .reference-notification strong, section.search input[type=text], section.search div#trackingFailed, div#nestedAccordion h2.sectionhead, div#nestedAccordion h3.sectionhead, div#nestedAccordion h4.sectionhead, div#nestedAccordion h5.sectionhead, .summary-services section div.moreinfo, div.form.quote.airfreight table.dimensions, table.standard tr.courier span.servicetitle, div.warning-message.prohibited div.prohibitedIcon span, #addsearch-results .addsearch-result-item-sub p span em, .panelledArea div.radio_options_container table td label, div.advertisement.blue div.content-slider ul li a span.button {
+    font-family: "Roboto", Arial !important;
+    font-weight: normal !important;
+}
+
+table.standard td ul, table.standard td ul li {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+    font-size: 0.95em;
+    line-height: 2px;
+}
+
+    table.standard td ul.bullet li {
+        padding: 4px 0 4px 10px !important;
+        background-size: 5px auto;
+        background-position: left 8px;
+    }
+
+div#popup-content p, div.sectioned ul li, div.sectioned ul.bullet li {
+    color: #054f95;
+}
+
+table.standard td ul li, table.standard td ol li {
+    text-align: left;
+    padding: 8px 0;
+}
+
+table.standard div.hover {
+    position: relative;
+}
+
+div.hover.tick {
+    background-image: url('../image/carries/newfolder/icon-tick-blue-small.png');
+    height: 25px !important;
+    background-position: center center !important;
+    background-repeat: no-repeat;
+}
+
+div.sectioned div {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+table.standard.textLeft td, table.standard td.textLeft, table.responsive.carrier-surcharges td {
+    text-align: left !important;
+}
+
+
+.div-section {
+    background-color: #e2eaf9;
+    padding: 20px 20px 40px;
+    margin: 75px 0px 75px;
+    -moz-border-radius: 20px !important;
+    -webkit-border-radius: 20px !important;
+    border-radius: 20px !important;
+    -khtml-border-radius: 20px !important;
+}
+
+ul.bullet li {
+    color: #054f95;
+}
+
+div.container-advertisement img {
+    text-align: center;
+    float: none !important;
+    margin: auto !important;
+}
+
+div.container-advertisement {
+    box-shadow: 0 0 5px #d9e3ec;
+}
+
+div.infoBox, div.container-advertisement {
+    -moz-border-radius: 9px;
+    -webkit-border-radius: 9px;
+    border-radius: 9px;
+    -khtml-border-radius: 9px;
+}
+
+div.container-advertisement {
+    display: block;
+    width: auto;
+    background-color: #fff;
+    background-color: rgba(255,255,255,0.7);
+    /*background-image: url('../image/carries/rpt-chevrons.png');*/
+    background-position: center top;
+    background-repeat: repeat-x;
+    margin: 20px 0px 20px;
+    text-align: center;
+    padding: 15px 0px 0px;
+}

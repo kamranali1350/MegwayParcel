@@ -1,0 +1,361 @@
+﻿@model MegwayParcel.Common.Data.Order
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_WebsiteLayout.cshtml";
+}
+<link href="/css/carries.css" rel="stylesheet" />
+<link href="/css/desktop.css" rel="stylesheet" />
+
+<div class="container" style="background-color: #f6f9fc;">
+    <div class="row">
+        <div class="col-md-12">
+            <h5 class="text-center text-primary"><span>Landmark Global</span></h5>
+            <div class="ContentPage_Content">
+                <ul class="bullet brandTGExp">
+                    <li><a href="#howitworks" class="scroll">How It Works</a></li>
+                    <li><a href="#IOSS" class="scroll">Landmark&nbsp;Global (Delivered Taxes Paid)</a></li>
+                    <li><a href="#IOSS" class="scroll">Landmark Global (IOSS)</a></li>
+                    <li><a href="#returns" class="scroll">Returns</a></li>
+                    <li><a href="#australia" class="scroll">Shipments to Australia</a></li>
+                    <li><a href="#scandinavia" class="scroll">Shipments to Scandinavia</a></li>
+                    <li><a class="scroll" href="#weightRestrictions">Size &amp; Weight Restrictions</a></li>
+                    <li><a class="scroll" href="#volumetricWeight">Volumetric Weight</a></li>
+                    <li><a class="scroll" href="#surcharges">Surcharges</a></li>
+                    <li><a class="scroll" href="#prohibited">Service Restrictions &amp;&nbsp;Prohibited Items</a></li>
+                </ul>
+                <div class="sectioned">
+                    <div>
+                        <p><a id="generalInfo" name="generalInfo"></a></p>
+                        <h5 class="text-center text-primary"><span>General Information</span></h5>
+                        <p>Landmark Global is a tracked mail service for parcels up to 30kg. You can book a collection from your door or drop your consignment off at <a class="link" target="_blank" href="/information/depot-locations/">our London depot</a>.</p>
+                        <p>With Landmark Global, longer transit times are offset by lower costs, making it ideal for non-urgent shipments. It's trackable all the way.</p>
+                        <p>We offer three different options for Landmark Global depending on your customs arrangements, all of which will be shown as separate services in your quote. You will need to select the relevant service at the quote stage.</p>
+                        <table class="standard textLeft responsive carrier-info full">
+                            <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>Service</th>
+                                    <th>Suitable for:</th>
+                                    <th>Information</th>
+                                    <th>UK</th>
+                                    <th>Europe</th>
+                                    <th>Rest of World</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><img alt="Landmark Global" src="/image/Carries/tg-ecomm.png"></td>
+                                    <td>Landmark Global</td>
+                                    <td>
+                                        <ul class="bullet">
+                                            <li>Documents</li>
+                                            <li>Parcels</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <p>A tracked mail service from our depot for parcels up to 30kg. With the standard service, any applicable customs taxes and duties are payable by the receiver.</p>
+                                    </td>
+                                    <td><img src="/image/Carries/icon-cross-small.png" alt="N/A" width="25" height="25"></td>
+                                    <td>
+                                        <div class="click hover left tick">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="click hover left tick">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><img alt="Landmark Global" src="/image/Carries/tg-ecomm.png"></td>
+                                    <td>Landmark Global (Delivered Taxes Paid)</td>
+                                    <td>
+                                        <ul class="bullet">
+                                            <li>Documents</li>
+                                            <li>Parcels</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <p>With our DTP&nbsp;service, any applicable customs taxes and duties are paid by the shipper / account holder. Available to Australia, Belgium, Canada and Ireland.</p>
+                                    </td>
+                                    <td><img src="/image/Carries/icon-cross-small.png" alt="N/A" width="25" height="25"></td>
+                                    <td>
+                                        <div class="click hover left tick">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="click hover left tick">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><img alt="Landmark Global" src="/image/Carries/tg-ecomm.png"></td>
+                                    <td>Landmark Global (IOSS)</td>
+                                    <td>
+                                        <ul class="bullet">
+                                            <li>Documents</li>
+                                            <li>Parcels</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <p>For IOSS-registered shippers. Available to EU countries.</p>
+                                    </td>
+                                    <td><img src="/image/Carries/icon-cross-small.png" alt="N/A" width="25" height="25"></td>
+                                    <td>
+                                        <div class="click hover left tick">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="left tick"><img src="/image/Carries/icon-cross-small.png" alt="N/A" width="25" height="25"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 12px;">* Please add 1 working day to your transit time if opting for a collection service.</p>
+                    </div>
+                    <div>
+                        <p><a id="howitworks" name="howitworks"></a></p>
+                        <h5 class="text-center text-primary"><span>How It Works...</span></h5>
+                        <p>With our Landmark Global service, parcels are <a class="link" target="_blank" href="/services/warehouse/">shipped from our depot</a>. You have the option of dropping your consignment off at <a class="link" target="_blank" href="/information/depot-locations/">our London depot</a>, using one of our collection services, or choosing one of hundreds of DPD or UPS drop-off locations nationwide.</p>
+                        <p>Please add 1 working day to your estimated transit time if booking either an optional collection or an alternative drop-off option, to allow for overnight delivery to our depot. For <a class="link" target="_blank" href="/notifications/tg-collection-postcodes/">some postcodes in London</a>, we are able to collect ourselves and ship from the depot same day.</p>
+                        <p>Once your shipment has been delivered to our depot, we will process it and forward your parcel to its final destination via Landmark.</p>
+                        <p>Please refer to our documentation page for labelling instructions for each <a class="link" target="_blank" href="/information/documentation/">collection/drop-off option</a>.</p>
+                        <p>If you are not able to print any of your documents, please <a target="_blank" class="link" href="/contact-us/">get in touch</a> and we will be happy to post hard copies to you.</p>
+                    </div>
+                    <div>
+                        <p><a id="DTP" name="DTP"></a></p>
+                        <h5 class="text-center text-primary">
+                            <span>
+                                Landmark Global (Delivered Taxes Paid)<br>
+                            </span>
+                        </h5>
+                        <p>This service is available <strong>Delivered Taxes Paid</strong> (DTP) - which means the shipper pays for any customs duties and taxes rather than the recipient.</p>
+                        <p>It's available to Australia, Belgium, Canada and Ireland.</p>
+                        <p><a id="IOSS" name="IOSS"></a></p>
+                        <h5 class="text-center text-primary" style="margin-top: 40px;">
+                            <span>
+                                Landmark Global (IOSS)<br>
+                            </span>
+                        </h5>
+                        <p>You must be <a class="link" target="_blank" rel="nofollow" href="https://ec.europa.eu/taxation_customs/business/vat/ioss_en">IOSS-registered</a> to use this service and will need to provide your IOSS&nbsp;number.</p>
+                        <p><a class="link" href="/information/eu-shipping-options/">Find out more about IOSS.</a></p>
+                        <p>Shipments sent on this service without IOSS registration will be returned to sender.</p>
+                    </div>
+                    <div>
+                        <p><a id="returns" name="returns"></a></p>
+                        <h5 class="text-center text-primary"><span>Returns</span></h5>
+                        <p>Please note: In the event that the receiver does not take delivery of your goods, returns can take up to 6 months for this service, as Landmark Global will hold mail at their depot until they reach volume.</p>
+                    </div>
+                    <div>
+                        <p><a id="australia" name="australia"></a></p>
+                        <h5 class="text-center text-primary"><span>Shipments to Australia</span></h5>
+                        <p>Shipments to Australia must not exceed a value of AUS$1,000 (<a class="link" target="_blank" rel="nofollow" href="https://www.xe.com/currencyconverter/convert/?Amount=1000&amp;From=AUD&amp;To=GBP">click for live currency conversion to GBP</a>).</p>
+                        <p>Articles made of wood cannot be sent to Australia with Landmark, even if they are heat treated.</p>
+                    </div>
+                    <div>
+                        <p><a id="scandinavia" name="scandinavia"></a></p>
+                        <h5 class="text-center text-primary"><span>Shipments to Scandinavia</span></h5>
+                        <p>For parcels to Denmark, Finland, Norway and Sweden, the vast majority of parcels will be delivered to a pick-up shop near to your delivery address.</p>
+                    </div>
+                    <div>
+                        <p><a id="weightRestrictions" name="weightRestrictions"></a></p>
+                        <h5 class="text-center text-primary"><span>Size and Weight Restrictions</span></h5>
+                        <p>Restrictions may vary depending on the destination of your shipment. Here are the general restrictions for this service, with country-specific exceptions listed below:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> 150cm (length, width or height)</li>
+                            <li><strong>Maximum size:</strong> 300cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 30kg</li>
+                            <li><strong>Maximum diameter for rolls</strong>:&nbsp;40cm</li>
+                        </ul>
+                        <p>Australia:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 105cm</li>
+                            <li><strong>Maximum size:</strong> 300cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 23kg</li>
+                        </ul>
+                        <p>Belgium:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 150cm</li>
+                            <li><strong>Maximum size:</strong> 300cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 30kg</li>
+                        </ul>
+                        <p>Canada:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 200cm</li>
+                            <li><strong>Maximum size:</strong> 300cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 30kg</li>
+                        </ul>
+                        <p>Denmark:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 150cm</li>
+                            <li><strong>Maximum size:</strong> 300cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 20kg</li>
+                        </ul>
+                        <p>Finland:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 120cm; second and third longest sides 60cm</li>
+                            <li><strong>Maximum size:</strong> 300cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 30kg</li>
+                        </ul>
+                        <p>France:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 100cm; second longest side 80cm; third side 60cm</li>
+                            <li><strong>Maximum size:</strong> 150cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 30kg</li>
+                        </ul>
+                        <p>Germany:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 175cm</li>
+                            <li><strong>Maximum size:</strong> 300cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 30kg</li>
+                        </ul>
+                        <p>Greece:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 200cm; second longest side 80cm; third side 60cm</li>
+                            <li><strong>Maximum size:</strong> 300cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 32kg</li>
+                        </ul>
+                        <p>Ireland:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 150cm</li>
+                            <li><strong>Maximum size:</strong> 300cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 30kg</li>
+                        </ul>
+                        <p>Italy:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 120cm; second longest side 80cm; third side 60cm</li>
+                            <li><strong>Maximum size:</strong> 300cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 30kg</li>
+                        </ul>
+                        <p>Netherlands</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 120cm; second longest side 80cm; third side 60cm</li>
+                            <li><strong>Maximum size:</strong> 300cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 31.5kg</li>
+                        </ul>
+                        <p>New Zealand:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 150cm</li>
+                            <li><strong>Maximum size:</strong> 300cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 25kg</li>
+                        </ul>
+                        <p>Portugal:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 120cm</li>
+                            <li><strong>Maximum size:</strong> 225cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 31.5kg</li>
+                        </ul>
+                        <p>Spain:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 120cm</li>
+                            <li><strong>Maximum size:</strong> 225cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 31.5kg</li>
+                        </ul>
+                        <p>Sweden:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 120cm; second longest side 60cm; third side 60cm</li>
+                            <li><strong>Maximum size:</strong> 300cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 20kg</li>
+                        </ul>
+                        <p>UK:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 90cm</li>
+                            <li><strong>Maximum size:</strong> 225cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 30kg</li>
+                        </ul>
+                        <p>USA:</p>
+                        <ul class="bullet">
+                            <li><strong style="font-weight: bold;">Maximum dimensions per item:</strong> longest side 152cm</li>
+                            <li><strong>Maximum size:</strong> 330cm girth*</li>
+                            <li><strong style="font-weight: bold;">Maximum weight for parcels:</strong> 31.5kg</li>
+                        </ul>
+                        <p>
+                            *Girth is calculated as follows: (sum of two smallest dimensions X 2) + longest dimension.<br>
+                            <br>
+                            For example: for a parcel of dimensions 20 x 30 x 40cm:<br>
+                            <br>
+                            (20 + 30) x 2 + 40&nbsp; = 140cm
+                        </p>
+                    </div>
+                    <div>
+                        <p><a id="volumetricWeight" name="volumetricWeight"></a></p>
+                        <h5 class="text-center text-primary"><span>Volumetric Weight</span></h5>
+                        <p>Your shipment will be charged by either <strong style="font-weight: bold;">actual weight</strong> or <strong style="font-weight: bold;">volumetric weight</strong> – whichever is greater.</p>
+                        <p><strong style="font-weight: bold;">Volumetric weight</strong> is a value derived from the size rather than the weight of your parcel and may apply if your parcel is particularly large and contains relatively light items.</p>
+                        <p><strong>Landmark Global</strong> calculates volumetric weight by multiplying the three dimensions of your parcel together and dividing by <strong style="font-weight: bold;">6000</strong>.</p>
+                        <p><strong style="font-weight: bold;">For example:</strong></p>
+                        <table class="standard textLeft responsive volumetric">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Parcel Weight</th>
+                                    <th>Actual Weight</th>
+                                    <th>Dimensions</th>
+                                    <th>Divisor</th>
+                                    <th>Volumetric Weight</th>
+                                    <th>Chargeable Weight</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><img alt="Landmark Global" src="/image/Carries/tg-ecomm.png"></td>
+                                    <td>10kg</td>
+                                    <td>10kg</td>
+                                    <td>50 x 30 x 20cm</td>
+                                    <td>6000</td>
+                                    <td>5kg</td>
+                                    <td>10kg</td>
+                                </tr>
+                                <tr>
+                                    <td><img alt="Landmark Global" src="/image/Carries/tg-ecomm.png"></td>
+                                    <td>10kg</td>
+                                    <td>10kg</td>
+                                    <td>50 x 60 x 40cm</td>
+                                    <td>6000</td>
+                                    <td>20kg</td>
+                                    <td>20kg</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 12px;">&nbsp;</p>
+                    </div>
+                    <div>
+                        <p><a id="surcharges" name="surcharges"></a></p>
+                        <h5 class="text-center text-primary"><span>Surcharges</span></h5>
+                        <p>Consignments that exceed size and weight restrictions will not be shipped from our depot.</p>
+                        <table class="standard textLeft responsive carrier-surcharges" style="margin-top: 15px;">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Fee</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>DTP (Delivered Taxes Paid)&nbsp;Admin Fee</td>
+                                    <td>A fee applied to all Delivered Taxes Paid (DTP) shipments to Belgium, Ireland, Canada &amp; Australia.</td>
+                                    <td>£2.50, plus 5% of the tax bill</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <p><a id="prohibited" name="prohibited"></a></p>
+                        <h5 class="text-center text-primary"><span>Service Restrictions &amp;&nbsp;Prohibited Items</span></h5>
+                        <ul class="bullet">
+                            <li>For a list of prohibited and restricted items specific to Landmark Global, please <a class="link" href="/assets/downloads/Dangerous-goods-guide-Landmark.pdf">download our guide</a> (PDF). Please note that prohibited items are subject to vary depending on your delivery destination.</li>
+                            <li>You cannot send food of any kind (including non-perishable) using the Landmark service.</li>
+                            <li>Articles made of wood cannot be sent to Australia using Landmark, even if they are heat treated.</li>
+                            <li>Our Landmark service to Germany cannot be used to deliver to DHL Packstations.</li>
+
+                        </ul>
+                    </div>
+                </div>
+                <p>&nbsp;</p>
+            </div>
+        </div>
+    </div>
+</div>

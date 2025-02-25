@@ -1,0 +1,25 @@
+﻿@model List<MegwayParcel.Common.Data.SiteMap>
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Site Map";
+    Layout = null;
+}
+<div class="container" style="background-color: #f6f9fc;">
+    @foreach (var item in Model.Where(x => x.ParentId == null).OrderBy(s => s.SortOrder))
+    {
+        <ul style="list-style-type:square">
+            <li>
+                <a href="@item.Url" target="_blank">@item.Name</a>
+                @foreach (var det in Model.Where(x => x.ParentId == item.SiteMapId).OrderBy(s => s.SortOrder))
+                {
+                    <ul style="list-style-type:square">
+                        <li><a href="@det.Url" target="_blank">@det.Name</a></li>
+                    </ul>
+                }
+            </li>
+        </ul>
+    }
+
+</div>

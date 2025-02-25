@@ -1,0 +1,284 @@
+﻿@model MegwayParcel.Common.Data.Order
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+}
+<link href="/css/carries.css" rel="stylesheet" />
+<link href="/css/desktop.css" rel="stylesheet" />
+
+<div class="container" style="background-color: #f6f9fc;">
+    <div class="row">
+        <div class="col-md-12">
+            <h5 class="text-center text-primary"><span>DPD</span></h5>
+            <ul class="bullet brandDPD">
+                <li><a href="#dpduk" class="scroll">DPD (UK)</a></li>
+                <li><a href="#euShipments" class="scroll">Requirements for shipments to the EU</a></li>
+                <li><a href="#dtp" class="scroll">Deliver Taxes Paid</a></li>
+                <li><a href="#scandinavia" class="scroll">Shipments to Scandinavia</a></li>
+                <!-- <li><a href="#nonUK" class="scroll">Intra-European Shipments</a></li> -->
+                <li><a href="#Predict" class="scroll">DPD Predict</a></li>
+                <li><a href="#weightRestrictions" class="scroll">Size &amp; Weight Restrictions</a></li>
+                <li><a href="#surcharges" class="scroll">Surcharges</a></li>
+                <li><a href="#prohibited" class="scroll">Prohibited &amp; Restricted Items</a></li>
+            </ul>
+            <br />
+            <h5 class="text-center text-primary"><span>General Information</span></h5>
+            <p>
+                <i>
+                    DPD is one of Europe's most reputable door-to-door courier companies, shipping millions of parcels across the UK and worldwide every year. The company is renowned for its commitment to green shipping and for its technological innovation: its Total Zero initiative has made it the first carbon neutral express carrier, while its 'Predict' service provides a one-hour delivery window for your customers in advance. Megway Parcels is pleased to offer the DPD Classic service at a great price.
+                </i>
+            </p>
+            <p>Please see below for further details:</p>
+            <table class="standard responsive carrier-info full">
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>Suitable for:</th>
+                        <th>Information</th>
+                        <th>UK</th>
+                        <th>Europe</th>
+                        <th>Rest of World</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="/image/Carries/dpd-classic.png" alt="DPD Classic"></td>
+                        <td>DPD Classic</td>
+                        <td>
+                            <ul class="bullet">
+                                <li>Documents</li>
+                                <li>Parcels</li>
+                            </ul>
+                        </td>
+                        <td class="textLeft">Reliable, road-based European parcel delivery.</td>
+                        <td><img src="/image/Carries/icon-cross-small.png" alt="N/A" width="25" height="25"></td>
+                        <td>
+                            <div class="click hover left tick"></div>
+                        </td>
+                        <td><img src="/image/Carries/icon-cross-small.png" alt="N/A" width="25" height="25"></td>
+                    </tr>
+                    <tr>
+                        <td><img src="/image/Carries/dpd-classic.png" alt="DPD (UK)"></td>
+                        <td>DPD (UK)</td>
+                        <td>
+                            <ul class="bullet">
+                                <li>Documents</li>
+                                <li>Parcels</li>
+                            </ul>
+                        </td>
+                        <td class="textLeft">Delivery across the UK.&nbsp;TG may collect for this service (see below).</td>
+                        <td>
+                            <div class="click hover left tick"></div>
+                        </td>
+                        <td><img src="/image/Carries/icon-cross-small.png" alt="N/A" width="25" height="25"></td>
+                        <td><img src="/image/Carries/icon-cross-small.png" alt="N/A" width="25" height="25"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="margin-top: 12px;">*You can access country-specific transit time estimates for DPD services by entering your collection and delivery countries <a href="https://www.dpd.com/nl_en/business_customers/help_en_tools/shipping_help/delivery_time_calculator" title="DPD Transit Time Calculator" target="_blank" class="link">here</a>.</p>
+            <div class="div-section">
+                <p><a id="dpduk" name="dpduk"></a></p>
+
+                <h5 class="text-center text-primary">
+                    <span>
+                        DPD (UK)<br>
+                    </span>
+                </h5>
+                <p>For postcodes in our <a class="link" href="/notifications/tg-collection-postcodes/">TG&nbsp;Courier collection zone</a> - London and North West England - our drivers will collect your parcel. Otherwise DPD&nbsp;will collect.</p>
+                <p>Please refer to our documentation page for <a class="link" target="_blank" href="/information/documentation/">labelling instructions</a>.</p>
+                <p>If you are not able to print any of your documents, please <a target="_blank" class="link" href="/contact-us/">get in touch</a> and we will be happy to post hard copies to you.</p>
+                <p><strong>DPD&nbsp;Saturday, 10.30am and 12pm services</strong></p>
+                <p>
+                    Our DPD&nbsp;Saturday, 10.30am and 12pm services
+                    <a class="link" href="#">
+                        ship via our depot
+                    </a>. You can drop off your consignment at
+                    <a class="link" href="#">
+                        one of our depots
+                    </a>, book a collection from your door, or choose one of hundreds of DPD or UPS drop-off locations nationwide. Once your shipment has been delivered to our depot, we will process  it and forward your parcel to its final destination via DPD.
+                </p>
+                <p>
+                    We'll collect and ship from our depot same day for
+                    <a style="padding: 0px; margin: 0px; " class="link" href="#">some collection postcodes</a>.  For all other postcodes, please add 1 extra working day for overnight  delivery to our depot.
+                </p>
+                <p>For Saturday delivery with DPD&nbsp;Saturday, your parcel must be collected on Friday for the above postcodes, and on Thursday for all others. Drop-offs at our depot must be made on Friday by 3pm. DPD may not hold parcels for Saturday delivery if they are collected earlier in the week.</p>
+            </div>
+            <h5 class="text-center text-primary" style="margin-top: 40px;"><span>Requirements for shipments to the EU</span></h5>
+            <p>For shipments valued up to €150, you must be <a class="link" rel="nofollow" target="_blank" href="https://ec.europa.eu/taxation_customs/business/vat/ioss_en">IOSS-registered</a> to use this service when shipping to some EU countries, and will need to provide an IOSS&nbsp;number. Please refer to the tables below.</p>
+            <p>Shipments sent without IOSS registration where it is required will be returned to sender.</p>
+            <p>For shipments valued above €150, full country coverage is available regardless of IOSS registration.</p>
+            <h5 style="font-size: 20px; margin-top: 30px;" class="text-center text-primary">DPD Classic Service Availability (B2B and B2C)</h5>
+            <table style="margin-top: 10px;" class="standard blue responsive carrier-info fullwidth">
+                <thead>
+                    <tr>
+                        <th style="width: 33%;">Goods Value</th>
+                        <th style="width: 33%;">With IOSS</th>
+                        <th>Without IOSS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Less than €150</td>
+                        <td>Full country coverage</td>
+                        <td>
+                            <strong>Only available to:</strong><br>
+                            Austria, France, Germany, Ireland, Italy*, Netherlands, Spain
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>More than €150</td>
+                        <td>Full country coverage</td>
+                        <td>Full country coverage</td>
+                    </tr>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+            <h5 style="font-size: 20px; margin-top: 30px;" class="text-center text-primary">DPD Classic Service Availability (Private shippers, C2C)</h5>
+            <table style="margin-top: 10px; width:100%;" class="standard blue responsive carrier-info fullwidth">
+                <thead>
+                    <tr>
+                        <th style="width: 33%;">Goods Value</th>
+                        <th colspan="2">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Less than €150</td>
+                        <td colspan="2">
+                            <strong>Only available to:</strong><br>
+                            Austria, France, Germany, Ireland, Italy*, Netherlands
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>More than €150</td>
+                        <td colspan="2">Full country coverage</td>
+                    </tr>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+            <p>*For shipments to Italy, if you don't have an IOSS number, you must provide the receiver's Tax ID number. (<a class="link" href="/libraryresources/library/images/alerts/DPD Shipping to Italy Guidelines.pdf">More info</a> - PDF download.)</p>
+            <div class="div-section">
+                <p><a id="dtp" name="dtp"></a></p>
+                <h5 class="text-center text-primary"><span>Deliver Taxes Paid (DTP)</span></h5>
+                <p>This service is available <strong>Delivered Taxes Paid</strong> (DTP) for EU&nbsp;destinations - which means the shipper pays for any customs fees and taxes rather than the recipient.</p>
+                <p><a class="link" href="/information/ddp/">Find out more about DTP services.</a></p>
+            </div>
+            <div>
+                <p><a id="scandinavia" name="scandinavia"></a></p>
+                <h5 class="text-center text-primary"><span>Shipments to Scandinavia</span></h5>
+                <p>Parcels to Sweden and Finland will be delivered to <a target="_blank" rel="nofollow" class="link" href="https://www.dpd.co.uk/apps/shopfinder/index.jsp">DPD&nbsp;Pickup Shops</a> local to your delivery address.</p>
+                <p>For parcels to Denmark and Norway, only one attempt will be made to deliver to the recipient's address. If unsuccessful, the parcel will be made available to collect at  a local Pickup Shop the following day.</p>
+            </div>
+            <div class="div-section">
+                <p><a id="Predict" name="Predict"></a></p>
+                <h5 class="text-center text-primary"><span>DPD Predict</span></h5>
+                <p>For European deliveries, DPD offers the Predict service. If the recipient's mobile number is provided when booking through Megway Parcels, DPD will text them to announce a one-hour delivery window (e.g. 10am-11am). They will also receive an email.</p>
+                <p>Not at home? You can change the delivery day, reroute the parcel to the nearest DPD Pickup shop, or arrange to have it left in a safe place or with a neighbour.</p>
+                <p>Predict is currently available in the following countries:</p>
+                <div class="width50">
+                    <ul class="bullet">
+                        <li>Austria</li>
+                        <li>Belgium</li>
+                        <li>Czech Republic</li>
+                        <li>Estonia</li>
+                        <li>France</li>
+                        <li>Germany</li>
+                        <li>Hungary</li>
+                        <li>Ireland</li>
+                        <li>Luxembourg</li>
+                        <li>Netherlands</li>
+                        <li>Poland</li>
+                        <li>Portugal</li>
+                        <li>Slovakia</li>
+                        <li>Slovenia</li>
+                    </ul>
+                </div>
+                <p class="clear">&nbsp;</p>
+            </div>
+            <div>
+                <p><a name="weightRestrictions" id="weightRestrictions"></a></p>
+                <h5 class="text-center text-primary"><span>Size and Weight Restrictions</span></h5>
+                <p>Restrictions may vary depending on the destination of your shipment. The following information is provided as a general guide:</p>
+                <ul class="bullet">
+                    <li><strong style="font-weight: bold;">Maximum piece weight:</strong> 30kg</li>
+                    <li><strong style="font-weight: bold;">Maximum length:</strong> 100cm (UK), 120cm (EU). 2nd longest side can't be over 76cm.</li>
+                    <li><strong style="font-weight: bold;">Maximum size:</strong> 300cm girth*</li>
+                </ul>
+                <p>Girth is calculated as follows: (sum of two smallest dimensions x 2) + longest dimension.</p>
+                <p><strong>For example</strong>: for a parcel of dimensions 20 x 30 x 40cm:</p>
+                <p>(20 + 30) x 2 + 40 &nbsp;= <strong>140cm</strong></p>
+                <p>For drop-offs at DPD&nbsp;Pickup locations, the maximum allowable weight is 20kg and the maximum length is 0.5m.</p>
+            </div>
+
+            <div class="div-section">
+                <p><a name="surcharges" id="surcharges"></a></p>
+                <h5 class="text-center text-primary"><span>Surcharges</span></h5>
+                <table style="margin-bottom: 35px;" class="standard textLeft responsive carrier-surcharges" cellspacing="0" cellpadding="0">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th style="width:52%;" valign="middle">Description</th>
+                            <th style="width:27%;" valign="middle">Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Failed Collection</td>
+                            <td>Administered if DPD attempts to collect your parcel and no-one is available to hand it over</td>
+                            <td>£5</td>
+                        </tr>
+                        <tr>
+                            <td>Northern Ireland</td>
+                            <td>Applies if "UK (Mainland)" is selected when quoting for collection in Northern Ireland.</td>
+                            <td>£10</td>
+                        </tr>
+                        <tr>
+                            <td>DTP (Delivered Taxes Paid) Admin&nbsp;Fee</td>
+                            <td>Admin fee for billing customs duties to the shipper rather than the receiver.</td>
+                            <td>£5</td>
+                        </tr>
+                        <tr>
+                            <td>Oversize Export</td>
+                            <td>For exports using the DPD&nbsp;Classic service that exceed the maximum weight and dimension restrictions.</td>
+                            <td>£23.94 per piece</td>
+                        </tr>
+                        <tr>
+                            <td>Handling Charge</td>
+                            <td>For domestic (UK)&nbsp;shipments that exceed the maximum weight and dimension restrictions.</td>
+                            <td>£4.44 per piece</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 12px;">Please note that surcharges on domestic (UK) deliveries are subject to VAT.</p>
+            </div>
+            <div>
+                <p><a name="prohibited" id="prohibited"></a></p>
+                <h5 class="text-center text-primary"><span>Prohibited &amp; Restricted Items</span></h5>
+                <ul class="bullet">
+                    <li>Personal effects are not permitted on this service.</li>
+                    <li><span style="color: rgb(255, 0, 0);">Liquids are not accepted on this service.</span></li>
+                    <li>Pallets and wooden crates/boxes are not accepted on this service.</li>
+                    <li>Suitcases are not accepted on this service.</li>
+                    <li>Jewellery and watches are not accepted on DPD services.</li>
+                    <li>This service cannot be used for returns or repairs.</li>
+                    <li>DPD&nbsp;are unable to deliver to Amazon for international shipments.</li>
+                    <li>Please refer to this list of <a class="link" target="_blank" href="/assets/downloads/DPD_Prohibited_Items.pdf">prohibited items by destination country</a> (PDF&nbsp;download).</li>
+                    <li>Items should be packaged in boxes only, not jiffy bags, bubble wrap on its own, etc.</li>
+                    <li>Our list of hazardous, prohibited and restricted items is available <a href="/information/dangerous-and-hazardous/" class="link" target="_blank">here</a>, including those sent at owner's risk.</li>
+                    <li>For up to date information specific to DPD, please check their <a href="http://www.dpd.co.uk/content/products_services/shipping_advice.jsp" class="link" title="DPD Prohibited Items" target="_blank">prohibited items page</a>. Please note that prohibited items are subject to vary depending on your delivery destination.</li>
+                </ul>
+            </div>
+
+
+
+        </div>
+    </div>
+
+</div>

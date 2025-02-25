@@ -1,6 +1,22 @@
-﻿@{
+﻿@model MegwayParcel.Common.Data.Order
+@{
     ViewData["Title"] = "Privacy Policy";
+    Layout = null;//"/Views/Shared/_WebsiteLayout.cshtml";
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+@*select * from [order]
+select * from address
+select * from exporterdetail
+select * from deliverydetail
+select * from customerinvoice
+select * from consignmentsummary*@
+
+@* @Html.Partial("_Invoice",Model) *@
+
+
+@* Scaffold-DbContext "Server=.;Database=Megway_Parcels;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir DBContext -force *@
+
+@* optionsBuilder.UseSqlServer("Server=.;Database=Megway_Parcels;Trusted_Connection=True;");
+optionsBuilder.UseSqlServer("Server=.;Database=Megway_Parcels;User ID=sa; Password=123;");
+ *@

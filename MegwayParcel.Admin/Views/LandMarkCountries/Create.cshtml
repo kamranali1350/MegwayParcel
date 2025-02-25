@@ -1,0 +1,70 @@
+﻿@model LandMarkCountryViewModel
+
+@{
+    ViewData["Title"] = "Create LandMark Country";
+}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title  text-center">@ViewData["Title"]</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form asp-action="Create">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label asp-for="Name" class="control-label"></label>
+                                <input type="text" asp-for="Name" class="form-control" name="Name" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ISO" class="control-label"></label>
+                                <input type="text" asp-for="ISO" class="form-control" name="ISO" />
+                                <span asp-validation-for="ISO" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="SortOrder" class="control-label"></label>
+                                <input type="number" asp-for="SortOrder" class="form-control" name="SortOrder" />
+                                <span asp-validation-for="SortOrder" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="IsActive" class="control-label"></label>
+                                @* <input type="checkbox" asp-for="IsActive" class="form-control" name="IsActive" /> *@
+                                <input type="checkbox" asp-for="IsActive" name="IsActive"
+                                    checked data-bootstrap-switch data-off-color="danger"
+                                    data-on-color="success">
+                                <span asp-validation-for="IsActive" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2();
+            //Initialize Select2 Elements
+            $("input[data-bootstrap-switch]").each(function () {
+                $(this).bootstrapSwitch('state', $(this).prop('checked'));
+            });
+        });
+    </script>
+}

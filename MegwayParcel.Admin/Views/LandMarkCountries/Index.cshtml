@@ -1,0 +1,73 @@
+﻿@model IEnumerable<MegwayParcel.Common.Data.LandMarkCountries>
+
+@{
+    ViewData["Title"] = "LandMark Countries";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class ="card-title">
+                    <h3 class="text-center">@ViewData["Title"]</h3>
+                </div>
+                <div style="float:right">
+                <a asp-action="Import" class="btn btn-success">Import from Excel</a>
+                <a asp-action="Create" class="btn btn-primary">Create New Country</a>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+
+<table id="landMarkcountryTable" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Country ID</th>
+            <th>Name</th>
+            <th>ISO</th>
+            <th>Sort Order</th>
+            <th>Is Active</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var country in Model)
+        {
+            <tr>
+                <td>@country.CountryId</td>
+                <td>@country.Name</td>
+                <td>@country.ISO</td>
+                <td>@country.SortOrder</td>
+                <td>@country.IsActive</td>
+                <td>@country.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@country.CountryId"
+                       class="btn btn-warning btn-sm">
+                        <i class="fa fa-edit"></i>Edit
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@country.CountryId"
+                       class="btn btn-danger btn-sm">
+                        <i class="fa fa-trash"></i> Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#landMarkcountryTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true
+            });
+        });
+    </script>
+}

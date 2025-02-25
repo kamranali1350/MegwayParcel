@@ -1,0 +1,81 @@
+﻿@model IEnumerable<MegwayParcel.Common.Data.CustomerInvoice>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>List</h1>
+
+<p>
+    <a asp-action="Index">Create New</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerInvoiceId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CommodityCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValueForCustoms)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalGoodsValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingCharges)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalValueForCustoms)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAgree)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerInvoiceId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CommodityCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ValueForCustoms)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalGoodsValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShippingCharges)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalValueForCustoms)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsAgree)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.CustomerInvoiceId}) |
+                </td>
+        </tr>
+}
+    </tbody>
+</table>

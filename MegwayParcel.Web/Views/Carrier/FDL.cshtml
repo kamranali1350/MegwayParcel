@@ -1,0 +1,208 @@
+﻿@model MegwayParcel.Common.Data.Order
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_WebsiteLayout.cshtml";
+}
+<link href="/css/carries.css" rel="stylesheet" />
+<link href="/css/desktop.css" rel="stylesheet" />
+
+<div class="container" style="background-color: #f6f9fc;">
+    <div class="row">
+        <div class="col-md-12">
+            <h5 class="text-center text-primary"><span>Fast Despatch Logistics</span></h5>
+            <div class="ContentPage_Content">
+                <div class="sectioned">
+                    <ul class="bullet">
+                        <li><a href="#howitworks" class="scroll">How It Works</a></li>
+                        <li><a class="scroll" href="#tracking">Tracking</a></li>
+                        <li><a class="scroll" href="#transittimes">Transit Times</a></li>
+                        <li><a class="scroll" href="#weightRestrictions">Size &amp; Weight Restrictions</a></li>
+                        <li><a class="scroll" href="#volumetricWeight">Volumetric Weight</a></li>
+                        <li><a class="scroll" href="#surcharges">Surcharges</a></li>
+                        <li><a class="scroll" href="#prohibited">Service Restrictions / Prohibited Items</a></li>
+                    </ul>
+                    <div>
+                        <p><a id="generalInfo" name="generalInfo"></a></p>
+                        <h5 class="text-center text-primary"><span>General Information</span></h5>
+                        <p>Fast Despatch Logistics (FDL) is one of the fastest-growing delivery companies in the UK. This service is fully tracked, with GPS pinpoint, photo and signature upon delivery. The service delivers on weekends at no extra charge. FDL&nbsp;collects from our depot.</p>
+                        <p>See the table below for an overview:</p>
+                        <table style="margin-top: 10px;" class="standard textLeft responsive carrier-info full">
+                            <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+                                    <th>Suitable for:</th>
+                                    <th>Information</th>
+                                    <th>Transit times</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                </tr>
+                                <tr>
+                                    <td><img src="/image/Carries/fdl.png" alt="Fast Despatch Logistics"></td>
+                                    <td>Fast Despatch Logistics</td>
+                                    <td>
+                                        <ul class="bullet">
+                                            <li>Documents</li>
+                                            <li>Parcels</li>
+                                        </ul>
+                                    </td>
+                                    <td class="textLeft">Express parcel service to destinations across the UK.</td>
+                                    <td>1 day from depot to UK&nbsp;mainland; 2-3 days to Scottish Highlands, Northern Ireland and Offshore Isles*</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            *Please add one working day to your transit time if opting for a third-party collection service. For collections made in <a class="link" target="_blank" href="/notifications/tg-collection-postcodes/">these postcodes</a>, FDL will pick up from our depot same day.<span style="color: rgb(255, 0, 0);">
+                                <br>
+                            </span>
+                        </p>
+                    </div>
+                    <div>
+                        <p><a id="howitworks" name="howitworks"></a></p>
+                        <h5 class="text-center text-primary"><span>How It Works...</span></h5>
+                            <p>With our FDL service, parcels are <a class="link" target="_blank" href="/services/warehouse/">collected from our depot</a>. You have the option of dropping your consignment off at <a class="link" target="_blank" href="/information/depot-locations/">one of our depots</a>, using one of our collection services, or choosing one of hundreds of DPD or UPS drop-off locations nationwide.</p>
+                            <p>Please add 1 working day to your estimated transit time if booking either an optional collection or an alternative drop-off option, to allow for overnight delivery to our depot. For some postcodes in <a class="link" target="_blank" href="/notifications/tg-collection-postcodes/">London, the East Midlands and North West England</a>, we are able to collect ourselves and ship from the depot same day.</p>
+                            <p>Once your shipment has been delivered to our depot, we will process it and forward your parcel to its final destination via FDL.</p>
+                            <p>Please refer to our documentation page for labelling instructions for each <a class="link" target="_blank" href="/information/documentation/">collection/drop-off option</a>.</p>
+                            <p>If you are not able to print any of your documents, please <a target="_blank" class="link" href="/contact-us/">get in touch</a> and we will be happy to post hard copies to you.</p>
+                    </div>
+                    <div>
+                        <p><a id="tracking" name="tracking"></a></p>
+                        <h5 class="text-center text-primary">
+                            <span>
+                                Tracking<br>
+                            </span>
+                            </h5>
+                            <p>You can track your parcel by entering your TP- order reference number into our <a class="link" target="_blank" href="/track-shipment/">tracking tool</a>.</p>
+                    </div>
+                    <div>
+                        <p><a id="transittimes" name="transittimes"></a></p>
+                        <h5 class="text-center text-primary">
+                            <span>Transit Times</span></h5>
+                            <p>Next day delivery is available to most areas across the UK. Please refer to the postcodes table below.</p>
+                            <table class="standard theme-blue left" style="margin-bottom: 35px; margin-top:20px;" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <th width="150px">Transit Time</th>
+                                        <th>Postcodes</th>
+                                    </tr>
+                                    <tr style="background-color:#ffffff !important;">
+                                        <td style="text-align:center;">1 Day</td>
+                                        <td style="text-align:center;">AL, B, BA, BB, BD*, BH, BL, BN, BR, BS, CB, CF, CH, CM, CO, CR, CT, CV, CW, DA, DD, DE, DH, DL*, DN, DT, DY, E, EC, EH, EN, EX, FK*, FY, G*, GL, GU, HA, HD, HG, HP, HU, HX, IG, IP, KT, KY, L, LE, LN, LS, LU, M, ME, MK, ML, N, NE, NG, NN, NP, NR, NW, OL, OX, PE, PL, PO*, PR, RG, RH, RM, S, SA, SE, SG, SK, SL, SM, SO, SP, SR, ST, SW, TA, TF, TN, TR*, TS, TW, UB, W, WA, WC, WD, WF, WN, WR, WS, WV, YO</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center;">2-3 Days</td>
+                                        <td style="text-align:center;">BD23-24, CA, DG, DL7-12, DL16, FK17-21, G60, G81-84, HR, LA, LD, LL, SY, TD</td>
+                                    </tr>
+                                    <tr style="background-color:#ffffff !important;">
+                                        <td style="text-align:center;">2-4 Days</td>
+                                        <td style="text-align:center;">AB</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center;">2-5 Days</td>
+                                        <td style="text-align:center;">BT, HS, IM, IV, KA, KW, PA, PH, PO30-41, TR21-25, ZE</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p>*Some exceptions. Please refer to the postcodes listed for longer transit times.</p>
+                    </div>
+                    <div>
+                        <p><a id="weightRestrictions" name="weightRestrictions"></a></p>
+                        <h5 class="text-center text-primary">
+                            <span>Size and Weight Restrictions</span><strong>
+                                <br>
+                            </strong>
+                            </h5>
+                            <ul class="bullet">
+                                <li><strong>Max weight:</strong> 25kg</li>
+                                <li><strong>Max length:</strong> 120cm</li>
+                            </ul>
+                    </div>
+                    <div>
+                        <p><a id="volumetricWeight" name="volumetricWeight"></a></p>
+                        <h5 class="text-center text-primary">
+                            <span>Volumetric Weight</span></h5>
+                            <p>Your shipment will be charged by either <strong style="font-weight: bold;">actual weight</strong> or <strong style="font-weight: bold;">volumetric weight</strong> – whichever is greater.</p>
+                            <p><strong style="font-weight: bold;">Volumetric weight </strong>is a value derived from the size rather than the weight of your parcel and may apply if your parcel is particularly large and contains relatively light items.</p>
+                            <p>For this service, we calculate volumetric weight by multiplying the three dimensions of your parcel together and dividing by <strong>6000</strong>.</p>
+                            <p><strong style="font-weight: bold;">For example:</strong></p>
+                            <table class="standard theme-blue left" style="margin-top: 25px;">
+                                <tbody>
+                                    <tr>
+                                        <th width="20%">Actual Weight</th>
+                                        <th width="20%">Dimensions</th>
+                                        <th width="20%">Divisor</th>
+                                        <th width="20%">Volumetric Weight</th>
+                                        <th width="20%">Chargeable Weight</th>
+                                    </tr>
+                                    <tr style="background-color:#ffffff !important;">
+                                        <td>10kg</td>
+                                        <td>50 x 30 x 20cm</td>
+                                        <td>6000</td>
+                                        <td>5kg</td>
+                                        <td>10kg</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10kg</td>
+                                        <td>50 x 60 x 40cm</td>
+                                        <td>6000</td>
+                                        <td>20kg</td>
+                                        <td>20kg</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                    </div>
+                    <div>
+                        <p><a id="surcharges" name="surcharges"></a></p>
+                        <h5 class="text-center text-primary">
+                            <span>Surcharges</span></h5>
+                            <table class="standard responsive carrier-surcharges">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Description</th>
+                                        <th>Fee</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Oversized</td>
+                                        <td>If your parcel measures more than 120cm in length.</td>
+                                        <td>£20</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Overweight</td>
+                                        <td>If your parcel weighs more than 25kg.</td>
+                                        <td>£30</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Return to Sender / Undeliverable</td>
+                                        <td>If FDL is unable to deliver your parcel.</td>
+                                        <td>£2.50 + freight rate / cost of carriage</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p>Please note that surcharges on domestic (UK) deliveries are subject to VAT.</p>
+                    </div>
+                    <div>
+                        <p><a id="prohibited" name="prohibited"></a></p>
+                        <h5 class="text-center text-primary">
+                            <span>Service Restrictions / Prohibited Items</span></h5>
+                            <ul class="bullet">
+                                <li>Please refer to FDL's <a href="https://fastdespatch.com/en/prohibited-and-restricted-items-list" target="_blank" rel="nofollow" class="link">list of prohibited items</a>, as well as our own list of <a href="/information/dangerous-and-hazardous/">hazardous, prohibited and owner’s risk items</a>.</li>
+                                <li>If you’d like advice on whether or not your items are prohibited, please contact our Customer Services team via, email sales@megwayparcels.co.uk or call 01604-356242.</li>
+                            </ul>
+                    </div>
+                </div>
+                <p>&nbsp;</p>
+            </div>
+            </>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,676 @@
+﻿@using MegwayParcel.Common
+@using MegwayParcel.Common.Data
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@using System.IO;
+@model GetQuoteOutput_DTO
+@{
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+    ViewData["Title"] = "Quote";
+    string str = Context.Session.GetString("Setting");
+    CompanySetting setting = null;
+    if (str != null)
+    {
+        setting = JsonConvert.DeserializeObject<CompanySetting>(str);
+    }
+
+    double isc = 0;
+    double rsc = 0;
+    double freight = 0;
+    double collCharges = 0;
+    //insurance amount contains 4.19 pounds for landmark service
+    double insuranceamount = 0;
+    //collection amount contains 5.5 pounds for landmark service
+    double collectionamount = 0;
+    //Surcharge amount contains 9.20 pounds for landmark service
+    double Surchargeamount = 0;
+
+    if (setting != null)
+    {
+        isc = (double)(setting.SurchargePercent / 100);
+        rsc = (double)(setting.RemoteSurchargePercent / 100);
+        freight = (double)(setting.ShippingPercent / 100);
+        collectionamount = (double)(setting.CollectionAmount);
+        insuranceamount = (double)(setting.InsuranceCharges);
+        Surchargeamount = (double)(setting.SurchargePercent);
+
+        //collCharges = (double)setting.CollectionAmount;
+    }
+
+
+    string folderName = ViewBag.LogoPath;
+    DirectoryInfo Folder;
+    FileInfo[] Images;
+    Folder = new DirectoryInfo(folderName);
+    Images = Folder.GetFiles();
+    List<String> imagesList = new List<String>();
+    string service = "Landmark Global".ToLower();
+
+
+    for (int i = 0; i < Images.Length; i++)
+    {
+        //Images[i].Name
+        imagesList.Add(String.Format(@"{0}/{1}", folderName, Images[i].Name));
+        string name = Images[i].Name.Replace(".png", "");
+        var result = service.Contains(name);
+        if (result)
+        {
+            Console.WriteLine(Images[i].Name + "    " + service);
+        }
+    }
+    var serviceInfoList = new List<ServiceInfo>
+        {
+            new ServiceInfo
+            {
+                Id = 1,
+                Name = "Landmark Global (IOSS)",
+                Information = "Landmark Global (IOSS) Service Information\n• A tracked international postal service for up to 30kg.\n• Ships from our depot in London.\n• Collection for this service is arranged by a reliable third-party.\n• Some collection options may require 1 extra working day.\n• For shipments to Denmark, Finland, Norway and Sweden, the vast majority of parcels will be delivered to a pick-up shop near to your delivery address."
+            },
+            new ServiceInfo
+            {
+                Id = 2,
+                Name = "Landmark Global",
+                Information = "Landmark Global Service Information\n• A tracked international postal service for up to 30kg.\n• Ships from our depot in London.\n• Collection for this service is arranged by a reliable third-party.\n• Some collection options may require 1 extra working day.\n• For shipments to Denmark, Finland, Norway and Sweden, the vast majority of parcels will be delivered to a pick-up shop near to your delivery address."
+            },
+            new ServiceInfo
+            {
+                Id = 3,
+                Name = "TG International Economy",
+                Information = "• This is an economical service to destinations worldwide.\n• Collections for this service are arranged by a reliable third-party.\n• Some collection options may require 1 additional working day."
+            },
+            new ServiceInfo
+            {
+                Id = 4,
+                Name = "TG International Express",
+                Information = "• This is a premium air service to destinations worldwide.\n• Collections for this service are arranged by a reliable third-party.\n• Some collection options may require 1 extra working day."
+            },
+            new ServiceInfo
+            {
+                Id = 5,
+                Name = "TG Express Worldwide",
+                Information = "• This is an air service to destinations worldwide.\n• Delivery is made through the DHL network.\n• Collection is arranged by a reliable third-party.\n• Some collection options may require 1 extra working day."
+            },
+            new ServiceInfo
+            {
+                Id = 6,
+                Name = "TG Express Worldwide Light",
+                Information = "• This is an air service to destinations worldwide.\n• Delivery is made through the DHL network.\n• Collection is arranged by a reliable third-party courier.\n• Some collection options may require 1 extra working day."
+            },
+            new ServiceInfo
+            {
+                Id = 7,
+                Name = "TG Express Worldwide 10:30",
+                Information = "• This is an air service to destinations worldwide.\n• Delivery is made through the DHL network.\n• Collection is arranged by a reliable third-party.\n• Some collection options may require 1 extra working day."
+            },
+            new ServiceInfo
+            {
+                Id = 8,
+                Name = "TG Express Worldwide 12:00",
+                Information = "• This is an air service to destinations worldwide.\n• Delivery is made through the DHL network.\n• Collection is arranged by a reliable third-party.\n• Some collection options may require 1 extra working day."
+            },
+            new ServiceInfo
+            {
+                Id = 9,
+                Name = "TG Euro Parcel",
+                Information = "• Available for destinations across Europe.\n• Delivery is made through the DPD network, with collections arranged by a reliable third-party.\n• Some collection options may require 1 extra working day.\n• Liquids are not accepted on this service.\n• Suitcases are not accepted on this service.\n• Pallets and wooden boxes/crates are not accepted on this service.\n• This service cannot be used for returns or repairs.\n• This service cannot be used to deliver to Amazon.\n• Items should be packaged in boxes only, not jiffy bags, loose bubble wrap, etc.\n• Please refer to our restricted and prohibited items for further information."
+            },
+            new ServiceInfo
+            {
+                Id = 10,
+                Name = "TG Economy Select",
+                Information = "• This is a road service to destinations worldwide.\n• Delivery is made through the DHL network.\n• Collection is arranged by a reliable third-party.\n• Some collection options may require 1 extra working day."
+            },
+            new ServiceInfo
+            {
+                Id = 11,
+                Name = "An Post",
+                Information = "• An economical service delivered through Ireland's postal network.\n• Collection for this service is arranged by a reliable third-party.\n• Some collection options may require 1 extra working day."
+            },
+            new ServiceInfo
+            {
+                Id = 12,
+                Name = "EVRI 48 Hour",
+                Information = "• Collection for this service is arranged by a reliable third-party.\n• Delivery from our depot to anywhere in the UK in 2 working days.\n• Some collection options may require 1 extra working day."
+            },
+            new ServiceInfo
+            {
+                Id = 13,
+                Name = "EVRI Next Day",
+                Information = "• Collection for this service is arranged by a reliable third-party.\n• Next working day delivery from our depot to anywhere in the UK.\n• Some collection options may require 1 extra working day."
+            },
+            new ServiceInfo
+            {
+                Id = 14,
+                Name = "DHL Parcel Bagit",
+                Information = "• Fully tracked express parcel service across the UK mainland\n• Door-to-door delivery for items up to 5kg\n• Items must be placed in a flyer bag (47.5 x 40 x 15cm)\n• Collections are made by a reliable third-party"
+            },
+            new ServiceInfo
+            {
+                Id = 15,
+                Name = "DHL Parcel UK",
+                Information = "• Fully tracked express parcel service across the UK\n• Door-to-door delivery\n• Great value for multi-piece shipments up to 30kg\n• Collections made by a reliable third-party or DHL Parcel UK depending on area"
+            },
+            new ServiceInfo
+            {
+                Id = 16,
+                Name = "UPS Standard ® Single (TG)",
+                Information = "• Collection for this service is arranged by a reliable third-party.\n• Suitcases are not accepted on UPS services.\n• UPS do not accept pallets on any of their services."
+            },
+            new ServiceInfo
+            {
+                Id = 17,
+                Name = "DX",
+                Information = "• Next day delivery across the UK mainland.\n• Collections for this service are arranged by a reliable third-party.\n• Some collection options may require 1 additional working day."
+            },
+            new ServiceInfo
+            {
+                Id = 18,
+                Name = "DPD",
+                Information = "• This is a collected service for destinations across the UK.\n• Liquids are not accepted on this service.\n• Pallets and wooden boxes/crates are not accepted on this service.\n• This service cannot be used for returns or repairs."
+            },
+            new ServiceInfo
+            {
+                Id = 19,
+                Name = "DPD 12pm",
+                Information = "• Delivery across the UK.\n• Collection for this service is arranged by a reliable third-party.\n• Some collection options may require 1 extra working day.\n• Liquids are not accepted on this service.\n• Pallets and wooden boxes/crates are not accepted on this service.\n• This service cannot be used for returns or repairs."
+            },
+            new ServiceInfo
+            {
+                Id = 20,
+                Name = "DHL Domestic Express",
+                Information = "• This is a door-to-door service provided by DHL\n• Delivery to most UK postcodes by the end of the next possible working day"
+            },
+            new ServiceInfo
+            {
+                Id = 21,
+                Name = "DPD Saturday",
+                Information = "• Delivery across the UK.\n• Collection for this service is arranged by a reliable third-party.\n• Some collection options may take 1 extra working day.\n• For Saturday delivery, your parcel must be collected on Friday for these postcodes, and on Thursday for all others. Drop-offs at our depot must be made on Friday by 3pm.\n• Liquids are not accepted on this service.\n• Pallets and wooden boxes/crates are not accepted on this service.\n• This service cannot be used for returns or repairs."
+            },
+            new ServiceInfo
+            {
+                Id = 22,
+                Name = "UPS Express Saver® (TG)",
+                Information = "• Collection for this service is arranged by a reliable third-party.\n• Suitcases are not accepted on UPS services.\n• UPS do not accept pallets on any of their services."
+            },
+            new ServiceInfo
+            {
+                Id = 23,
+                Name = "UPS Express® (TG)",
+                Information = "• Collection for this service is arranged by a reliable third-party.\n• Suitcases are not accepted on UPS services.\n• UPS do not accept pallets on any of their services."
+            },
+            new ServiceInfo
+            {
+                Id = 24,
+                Name = "DHL Domestic Express 12pm",
+                Information = "• This is a door-to-door service provided by DHL\n• Delivery to most UK postcodes by the end of the next possible working day"
+            },
+            new ServiceInfo
+            {
+                Id = 25,
+                Name = "UPS Express Plus® (TG)",
+                Information = "• Collection for this service is arranged by a reliable third-party.\n• Suitcases are not accepted on UPS services.\n• UPS do not accept pallets on any of their services."
+            },
+            new ServiceInfo
+            {
+                Id = 26,
+                Name = "DPD 10:30 am",
+                Information = "• Delivery across the UK.\n• Collection for this service is arranged by a reliable third-party.\n• Some collection options may require 1 extra working day.\n• Liquids are not accepted on this service.\n• Pallets and wooden boxes/crates are not accepted on this service.\n• This service cannot be used for returns or repairs."
+            },
+            new ServiceInfo
+            {
+                Id = 27,
+                Name = "DHL Domestic Express 9am",
+                Information = "• This is a door-to-door service provided by DHL\n• Delivery to most UK postcodes by the end of the next possible working day"
+            },
+            new ServiceInfo
+            {
+                Id = 28,
+                Name = "Royal Mail Tracked",
+                Information = "24/48 Tracked delivery within UK Mainland, Highlands, Northern Ireland and Offshore isles.\nCollected, tracked and delivered by a Royal Mail.\nFlexible delivery options for your recipient. " +
+                "\n• You can also choose to drop off at your local Post Office or Royal Mail Parcelshops"
+            },
+
+            new ServiceInfo
+            {
+                Id = 29,
+                Name = "An Post",
+                Information = "An economical service delivered through Ireland's postal network.\nCollection for this service is arranged by a reliable third-party.\nSome collection options may require 1 extra working day."
+            },
+             new ServiceInfo
+            {
+                Id = 30,
+                Name = "USPS Print",
+                Information = "Cost-effective service to the USA exclusively for printed and permanently-bound material including books, magazines, catalogues, journals and brochures.\n Suitable for goods weighing up to 5kg (11lb).\nPlease refer to the service information for more details on accepted goods.\nCollection for this service is arranged by Transglobal Express.\nSome collection options may require 1 extra working day.\nThis service is for mainland USA only. A surcharge of £30 per item will apply to parcels sent to Alaska, Puerto Rico, Guam or the US Virgin Islands"
+            },
+             new ServiceInfo
+            {
+                Id = 31,
+                Name = "USPS Smartmail Plus Ground",
+                Information = "An economical service to the USA.\nSuitable for parcels weighing up to 5kg (11lb).\nThe average transit time from our depot is 5.2 days.\nCollection for this service is arranged by Transglobal Express.\nSome collection options may require 1 extra working day.\nThis service is for mainland USA only. A surcharge of £30 per item will apply to parcels sent to Alaska, Puerto Rico, Guam or the US Virgin Islands."
+            },
+        };
+}
+
+<input type="hidden" value="@ViewBag.requestQuoteStr" id="requestQuoteStr" />
+<div class="container-fluid py-5">
+    <div class="container p-3 mb-5 bg-body-tertiary rounded">
+        <div class="row g-4 justify-content-center">
+           
+            <!-- Price item START -->
+            @foreach (var item in Model.ServiceResults)
+                {
+                    int transitDay = 0;
+
+                    int.TryParse(item.TransitTimeEstimate, out transitDay);
+                    string logoName = "";
+                    for (int i = 0; i < Images.Length; i++)
+                    {
+                        string name = Images[i].Name.Replace(".png", "");
+                        var result = item.ServiceName.ToLower().Contains(name);
+                        if (result)
+                        {
+                            logoName = name + ".png";
+                        }
+                    }
+                    if (string.IsNullOrEmpty(logoName))
+                    {
+                        logoName = "TG Economy Direct.png";
+                    }
+                    if (item.ServiceName.ToLower().Contains("tg international"))
+                    {
+                        logoName = "fedex.png";
+                    }
+                    if (item.ServiceName.ToLower().Contains("tg express"))
+                    {
+                        logoName = "dhl.png";
+                    }
+                    if (item.ServiceName.ToLower().Contains("tg expedited"))
+                    {
+                        logoName = "ups.png";
+                    }
+                    if (item.ServiceName.ToLower().Contains("tg express saver"))
+                    {
+                        logoName = "ups.png";
+                        //Console.WriteLine("ups",logoName);
+                    }
+                    if (item.ServiceName.ToLower().Contains("tg euro"))
+                    {
+                        logoName = "dpd.png";
+                    }
+                    if (item.ServiceName.ToLower().Contains("tg economy select"))
+                    {
+                        logoName = "dhl.png";
+                    }
+                    if (item.ServiceName.ToLower().Contains("Land Mark"))
+                    {
+                        logoName = "landmark.png";
+                    }
+                    var keywords = new[]
+                        {
+                        "royal mail tracked 48 (letterbox)",
+                        "royal mail tracked 24 (letterbox)",
+                        "royal mail tracked 48",
+                        "royal mail tracked 24"
+                    };
+
+                    // Check if any keyword is contained in the ServiceName (case-insensitive)
+                    if (keywords.Any(keyword => item.ServiceName.ToLower().Contains(keyword.ToLower())))
+                    {
+                        logoName = "royalmail.png";
+                    }
+                    //if (item.ServiceName.ToLower().Contains("royal mail tracked 48 (letterbox)"))||
+                    //       (item.ServiceName.ToLower().Contains("royal mail tracked 24 (letterbox)"))
+                    //       || (item.ServiceName.ToLower().Contains("royal mail tracked 48")
+                    //       || (item.ServiceName.ToLower().Contains("royal mail tracked 24"))
+                    //      {
+                    //    logoName = "royalmail.png";
+                    //}
+
+                    var surcharge = item.ServicePriceBreakdown?.Where(x => x.Code == "ISC").FirstOrDefault();
+                    var remoteSurchage = item.ServicePriceBreakdown?.Where(x => x.Code == "RSC").FirstOrDefault();
+                    var collection = item.ServicePriceBreakdown?.Where(x => x.Code == "COL").FirstOrDefault();
+                    var insurance = item.OptionalExtras?.Where(x => x.Code == "INS").FirstOrDefault();
+                    var serviceNameLower = item.ServiceName.ToLower();
+                    var serviceNameLength = item.ServiceName.Length;
+
+                    var toolTip = serviceInfoList
+                    .Where(x => serviceNameLower.Contains(x.Name.ToLower()))
+                    .OrderByDescending(x => x.Name.Length)
+                    .FirstOrDefault();
+
+                    if (toolTip == null)
+                    {
+                        toolTip = serviceInfoList
+                        .Where(x => serviceNameLower.Contains(x.Name.ToLower().Substring(0, Math.Min(7, x.Name.Length))))
+                        .OrderByDescending(x => Math.Min(7, x.Name.Length))
+                        .FirstOrDefault();
+                    }
+                    if (toolTip == null)
+                    {
+                        toolTip = serviceInfoList
+                        .Where(x => serviceNameLower.Contains(x.Name.ToLower().Substring(0, Math.Min(6, x.Name.Length))))
+                        .OrderByDescending(x => Math.Min(6, x.Name.Length))
+                        .FirstOrDefault();
+                    }
+                    if (toolTip == null)
+                    {
+                        toolTip = serviceInfoList
+                        .Where(x => serviceNameLower.Contains(x.Name.ToLower().Substring(0, Math.Min(5, x.Name.Length))))
+                        .OrderByDescending(x => Math.Min(5, x.Name.Length))
+                        .FirstOrDefault();
+                    }
+
+                    if (toolTip == null)
+                    {
+                        toolTip = serviceInfoList
+                        .Where(x => serviceNameLower.Contains(x.Name.ToLower().Substring(0, Math.Min(3, x.Name.Length))))
+                        .OrderByDescending(x => Math.Min(3, x.Name.Length))
+                        .FirstOrDefault();
+                    }
+                    if (toolTip == null)
+                    {
+                        toolTip = serviceInfoList
+                        .Where(x => serviceNameLower.Contains(x.Name.ToLower().Substring(0, Math.Min(2, x.Name.Length))))
+                        .OrderByDescending(x => Math.Min(3, x.Name.Length))
+                        .FirstOrDefault();
+                    }
+                    if (toolTip == null)
+                    {
+                        toolTip = new ServiceInfo();
+                    }
+                    double extraCharges = 0;
+
+                    if (item.TotalCost.TotalCostGrossWithoutCollection <= 70 &&  item.ServiceID < 500)
+                    {
+                        extraCharges = item.TotalCost.TotalCostGrossWithoutCollection * freight;
+                    }
+                    else if (item.TotalCost.TotalCostGrossWithoutCollection <= 100 &&  item.ServiceID < 500)
+                    {
+                        extraCharges = 6.5;
+                    }
+                    else if (item.TotalCost.TotalCostGrossWithoutCollection > 100 &&  item.ServiceID < 500)
+                    {
+                        extraCharges = 12;
+                    }
+                    else if (item.ServiceID == 1200)
+                    {
+                        if (item.ChargeableWeight <= 3)
+                        {
+                            extraCharges =  insuranceamount +item.ChargeableWeight ;
+                            extraCharges=extraCharges+extraCharges*freight;
+                        }
+                        else if (item.ChargeableWeight > 3 && item.ChargeableWeight <= 15)
+                        {
+
+                            extraCharges =  collectionamount +item.ChargeableWeight ;
+                            extraCharges=extraCharges+extraCharges*freight;
+                        }
+                        else if (item.ChargeableWeight > 15 && item.ChargeableWeight <= 30)
+                        {
+                            extraCharges =  Surchargeamount +item.ChargeableWeight ;
+                            extraCharges=extraCharges+extraCharges*freight;
+                        }
+
+                    }
+                    toolTip ??= new ServiceInfo();
+
+                <div class="col-md-5">
+                    <div class="card shadow selectedCard">
+                        @*<input  type="text" id="ServiceID" value="@item.ServiceID" />*@
+                        @*<input type="text" id="ServiceName" value="@item.ServiceName" />*@
+                        <span style="font-size:large;" id="ServiceName" class="mt-3 ServiceName text-center text-black"><b>@item.ServiceName</b></span>
+                        <hr />
+                        <span style="display:none" id="ServiceID" class="ServiceID">@item.ServiceID</span>
+                        <input style="display:none" type="text" id="ServiceCode" value="@item.ServiceCode" />
+                        <span style="display:none" id="ServiceCode" class="ServiceCode">@item.ServiceCode</span>
+                        <input type="hidden" class="SelectedCompanyLogo" value="@logoName" />
+                        <input type="hidden" class="selectQuoteStr" value="@(JsonConvert.SerializeObject(item))" />
+                        <div class="card-header pb-0" style="padding: 8px;">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="hstack gap-2">
+                                        <img style="width:auto; height:40px" src="/image/shipment/@logoName" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-0">Est. Transit Time: </p>
+                                    <p class="mb-0" style="color:black;">@item.TransitTimeEstimate<span style="color:black;">@(transitDay > 1 ? " days" : " day")</span></p>
+                                </div>
+                                @*  <div class="col-md-2">
+                <span class="mb-0" data-bs-toggle="tooltip" data-bs-placement="top" data-html="true" title="@toolTip.Information">
+                <i class="bi bi-patch-exclamation"></i>
+                </span>
+                </div> *@
+                            </div>
+                        </div>
+                        <!-- Card body -->
+                        <div class="card-body p-2">
+                            <div class="row">
+                                <div class="col-md-5" style="font-size: 25px;color: black;font-weight: 600;">
+                                    @if (item.TotalCost.TotalCostGrossWithoutCollection > 0)
+                                    {
+                                        <span style="">£<span style="" class="freightCharges">@(String.Format("{0:0.00}", item.TotalCost.TotalCostGrossWithoutCollection + extraCharges))</span></span>
+
+                                    }
+                                    else
+                                    {
+                                        <span style="" class="freightCharges">0.00</span>
+                                    }
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="javascript:void(0)" class="btn btn-info btn-sm mb-0 rounded-pill btnViewQuote">More Info</a>
+                                    <a href="javascript:void(0)" class="btn btn-success btn-sm mb-0 btnSelectQuote rounded-pill">BOOK</a>
+                                </div>
+                            </div>
+                            <!-- List -->
+
+                        </div>
+
+
+                        <div style="display:none" class="viewQuoteHtml">
+                            <div class="card-header pb-0" style="padding: 8px;">
+
+                                <input type="hidden" class="serviceName" value="@Html.Raw(@item.ServiceName)" />
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="hstack gap-2">
+                                            <img style="width:70px;" src="/image/shipment/@logoName" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-0">Est. Transit Time: </p>
+                                        <p class="mb-0" style="color:black;">@item.TransitTimeEstimate<span style="color:black;">@(transitDay > 1 ? " days" : " day")</span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-0">Total</p>
+                                        <p class="mb-0" style="font-size: 25px;color: black;font-weight: 600;">
+                                            @if (item.TotalCost.TotalCostGrossWithoutCollection > 0)
+                                            {
+                                                <span style="">£<span style="">@(String.Format("{0:0.00}", item.TotalCost.TotalCostGrossWithoutCollection + extraCharges))</span></span>
+                                            }
+                                            else
+                                            {
+                                                <span>0.00</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Card body -->
+                            <div class="card-body p-2">
+                                <div class="row">
+                                    <table class="table table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <th>Chargeable Weight:</th>
+                                                <td>@item.ChargeableWeight</td>
+                                                <th>Surcharges:</th>
+                                                <td>
+
+                                                    @if (surcharge != null)
+                                                    {
+                                                        <span>@(String.Format("{0:0.00}", surcharge.Cost + (surcharge.Cost * isc)))</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>0.00</span>
+                                                    }
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Remote Surcharges:</th>
+                                                <td>
+                                                    @if (remoteSurchage != null)
+                                                    {
+                                                        <span>@(String.Format("{0:0.00}", remoteSurchage.Cost + (remoteSurchage.Cost * rsc)))</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>0.00</span>
+                                                    }
+                                                </td>
+                                                @*   <th>Subtotal</th>
+                                <td>
+                                @{
+                                var freightCharges = item.ServicePriceBreakdown?.Where(x => x.Code == "FRT").FirstOrDefault();
+                                }
+                                @if (freightCharges != null)
+                                {
+                                <span>@(String.Format("{0:0.00}", freightCharges.Cost))</span>
+                                }
+                                else
+                                {
+                                <span>0.00</span>
+                                }
+                                </td> *@
+                                                <th>Collection</th>
+                                                <td>
+
+                                                    @if (collection != null)
+                                                    {
+                                                        <span>@(collection.Cost + collCharges)</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>0.00</span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>
+
+                                                <th>Insurance Cover:</th>
+                                                <td>
+                                                    @if (insurance != null)
+                                                    {
+                                                        <span>@insurance.Cost</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>0.00</span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="mt-5">
+                                        @if (toolTip != null && toolTip.Id > 0 && !string.IsNullOrEmpty(toolTip.Information))
+                                        {
+                                            <h6>@toolTip.Name Service Information</h6>
+                                            <ul>
+                                                @foreach (var info in toolTip.Information.Split('\n').Where(i => !string.IsNullOrWhiteSpace(i)))
+                                                {
+                                                    <li>@info.Replace("•", "").Trim()</li>
+                                                }
+                                            </ul>
+                                        }
+
+                                    </div>
+                                </div>
+                                <!-- List -->
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+            <!-- Price item END -->
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="viewQuoteModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="viewModalTitle">Qoute Details</h6>
+                <button type="button" onclick="closeQuoteModal();" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    function closeQuoteModal() {
+        $('#viewQuoteModal').modal('hide');
+    }
+
+    $('body').on('click', '.btnViewQuote', function () {
+        let _thisRow = $(this).closest('.selectedCard');
+        debugger;
+        $('#viewModalTitle').text(_thisRow.find('.serviceName').val());
+        $('#viewQuoteModal .modal-body').html(_thisRow.find('.viewQuoteHtml').html())
+        $('#viewQuoteModal').modal('show');
+
+
+    });
+    $('body').on('click', '.btnSelectQuote', function () {
+        debugger;
+       
+        let _thisRow = $(this).closest('.selectedCard');
+        let _order = {};
+        _order.RequestQuote = $("#requestQuoteStr").val();
+        _order.ServiceId = $(_thisRow).find('.ServiceId').text();
+        _order.ServiceCode = $(_thisRow).find('.ServiceCode').text();
+
+        //alert(_order.ServiceId);
+        _order.SelectQuote = $(_thisRow).find('.selectQuoteStr').val();
+
+        _order.Surcharges = $(_thisRow).find('.itemSurcharge').text();
+        _order.RemoteSurcharges = $(_thisRow).find('.remoteSurcharge').text();
+        _order.ShippingCharges = $(_thisRow).find('.freightCharges').text();
+        _order.SelectedCompanyLogo = $(_thisRow).find('.SelectedCompanyLogo').val();
+        $.ajax({
+            url: "/Home/SaveOrder",
+            type: "POST",
+            datatype: "json",
+            data: _order,
+            success: function (data) {
+                if (data == "login") {
+                    $('#loginPageReload').val(1);
+                    $('#loginModal').modal('show');
+                } else {
+                    window.location.href = "/Address/Index?orderId=" + data.orderId
+                }
+            },
+            beforeSend: function () {
+                $("#waitSpinnerId").show();
+            },
+            error: function (xhr) { // if error occured
+
+            },
+            complete: function () {
+                $("#waitSpinnerId").hide();
+            },
+
+        });
+    });
+
+</script>

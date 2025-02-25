@@ -1,0 +1,118 @@
+﻿@model MegwayParcel.Common.Data.ContactU
+
+@{
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+}
+<style>
+    .shadow-img {
+        border: 8px solid #fff;
+        box-shadow: 0 0 30px rgb(0 0 0 / 20%);
+    }
+
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+    }
+
+    img {
+        vertical-align: middle;
+        border-style: none;
+    }
+</style>
+
+<div class="jumbotron jumbotron-fluid mb-5">
+    <div class="container text-center py-5">
+        <h1 class="text-white display-3">Contact Us</h1>
+       
+    </div>
+</div>
+
+<div class="container" style="background: #fff; box-shadow: 0 0 30px #ededed">
+    <div class="row contact-form-area wow fadeInUp" style="padding: 40px 40px;">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="img-thumb wow fadeInLeft" style="margin-top:45px;">
+                <img class="img-fluid shadow-img" src="~/image/contact-us-1280-x-720-1486069915.jpg" alt="">
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 my-5">
+            <div class="profile-wrapper wow fadeInRight">
+                <h6 class="text-primary text-uppercase font-weight-bold">Contact Us</h6>
+                <p style="text-align:justify;">
+                    At Megway Parcel Ltd, we value your feedback and questions. Whether you have a comment, suggestion, or need help with a shipment, our team is here to assist you.
+                </p>
+                <p style="text-align:justify;">
+                    Email: sales@megwayparcels.co.uk
+                </p>
+                <p style="text-align:justify;">
+                    Phone: +441604356242
+                    </p>
+                <p style="text-align:justify;">
+                    Hours: Monday to Saturday 9 AM to 6 PM
+               </p>
+                <p>
+                    Mailing Address:
+                    Megway Parcel Ltd
+                    1 Abington Square
+                    Northampton, NN1 4AE
+                </p>
+                <p>Alternatively, you can fill out the form below and we will get back to you as soon as possible.</p>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            
+            <h6 class="text-primary text-uppercase font-weight-bold">Contact For Any Queries</h6>
+
+            <div class="contact-form bg-secondary" style="padding: 30px;">
+                <div id="success"></div>
+                <form action="/Setting/SaveContact" method="post" name="sentMessage" id="contactForm" novalidate="novalidate">
+                    <input asp-for="ContactUsId" hidden="hidden" />
+                    <div class="control-group">
+                        <input asp-for="Name" class="form-control border-0 p-4" id="name" placeholder="Name"
+                               required="required" data-validation-required-message="Please enter your name" />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="control-group">
+                        <input asp-for="Email" class="form-control border-0 p-4" id="email" placeholder="Email"
+                               required="required" data-validation-required-message="Please enter your email" />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="control-group">
+                        <input asp-for="PhoneNo" class="form-control border-0 p-4" id="phoneNo" placeholder="Phone"
+                               required="required" data-validation-required-message="Please enter a Phone" />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="control-group">
+                        <textarea asp-for="Details" class="form-control border-0 py-3 px-4" rows="3" id="message" placeholder="Message"
+                                  required="required"
+                                  data-validation-required-message="Please enter your message"></textarea>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary py-3 px-4" type="submit" id="sendMessageButton">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+
+        </div>
+
+    </div>
+
+   @*<script>
+    $("#sendMessageButton").click(function () {
+        $.ajax({
+            url: "/Setting/SaveContact,
+            type: "Post",   
+            datatype: "json",
+
+        });
+    });
+   </script>*@

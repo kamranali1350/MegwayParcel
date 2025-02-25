@@ -1,0 +1,126 @@
+﻿@model MegwayParcel.Common.Data.Order
+@using MegwayParcel.Common.Data
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Insurance";
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+
+    string str = Context.Session.GetString("Setting");
+    decimal insuranceRate = 5;
+    CompanySetting setting = null;
+    if (str != null)
+    {
+        setting = JsonConvert.DeserializeObject<CompanySetting>(str);
+        insuranceRate = setting.InsuranceCharges;
+    }
+    decimal totalGoodsValue = (decimal)Model.ConsignmentSummaries.FirstOrDefault().TotalGoodsValue;
+    decimal freeCoverIns = 50;
+    if (Model.SelectedCompanyLogo == "evri")
+    {
+        freeCoverIns = 25;
+    }
+}
+<input type="hidden" id="insuranceRate" value="@insuranceRate" />
+<input type="hidden" id="freeCoverIns" value="@freeCoverIns" />
+
+
+<section class="pt-3 bg-body-tertiary">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="fs-4 mb-0"><i class="bi bi-bookmark-heart fa-fw me-1"></i>Insurance</h1>
+                <p>
+                    Insurance covers your shipment against loss or damage. We
+                    provide free cover up to a value of £50 (£25 for our Evri), along with options for higher value
+                    shipments.
+                    Please note: Regardless of which insurance option you choose, you
+                    will still need to pack your parcel securely.It is your responsibility to
+                    ensure that your packaging is suitable for transit.Parcels may be
+                    stacked or pass through automated sorting facilities that use
+                    conveyor belts and chutes. Orientation (i.e. “this way up”) is not
+                    guaranteed.
+                </p>
+            </div>
+        </div>
+        <form method="post" action="/Address/SaveInsurance">
+            <input type="hidden" asp-for="OrderId" />
+            <div class="vstack gap-4">
+                <input type="hidden" asp-for="OrderId" />
+                <div class="card border">
+                    <div class="card-header border-bottom"><h6>ABOUT FREE COVER</h6></div>
+                    <div class="card-body">
+                        @if (Model.SelectedCompanyLogo.ToUpper() == "EVRI")
+                        {
+                            <p>We provide free insurance for consignments up to a value of £25.</p>
+                        }
+                        else
+                        {
+                            <p>We provide free insurance for consignments up to a value of £50.</p>
+                        }
+                    </div>
+                </div>
+
+            </div>
+            <br />
+            @if (totalGoodsValue > freeCoverIns)
+            {
+                <div class="vstack gap-4">
+                    <div class="card border">
+                        <div class="card-header border-bottom"><h6>Standard Insurance(up to £2500)</h6></div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Insurance Cover</label>
+                                        <input min="0" max="2500" type="number" asp-for="InsuranceValue" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Insurance Charges</label>
+                                        <input asp-for="InsuranceCharges" class="form-control" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            }
+
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="/Address/Collection?orderId=@Model.OrderId">
+                        <input type="button" class="btn btn-danger mb-0" value="Back" />
+                    </a>
+                </div>
+                <div class="col-md-6 text-end">
+                    <input type="submit" value="Next" class="btn btn-primary mb-0">
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+
+<script>
+    $("body").on('keyup change', '#InsuranceValue', function () {
+        let val = $("#InsuranceValue").val();
+        val = parseFloat(val);
+        let _freeCover = parseFloat($('#freeCoverIns').val());
+        if (val > _freeCover && val > 0 && val <= 250) {
+            $("#InsuranceCharges").val(7.50)
+        } else if (val > 250) {
+            let insuranceRate = parseFloat($("#insuranceRate").val());
+            let rate = insuranceRate / 100;
+
+            $("#InsuranceCharges").val((parseFloat(val) * rate).toFixed(2));
+        } else {
+            $("#InsuranceCharges").val(0);
+        }
+    });
+    //window.location.href = "/Address/Checkout?orderId=" + $("#OrderId").val()
+
+</script>

@@ -1,0 +1,246 @@
+﻿@model MegwayParcel.Common.Data.Order
+@using MegwayParcel.Common.Data
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+    var collection = Model.Addresses.Where(x => x.TypeId == 1).FirstOrDefault();
+    var exporter = Model.Addresses.Where(x => x.TypeId == 2).FirstOrDefault();
+    var delivery = Model.Addresses.Where(x => x.TypeId == 3).FirstOrDefault();
+    var shipmentResult = JsonConvert.DeserializeObject<ServiceResult>(Model.SelectQuote);
+
+    var devDetail = Model.DeliveryDetails.FirstOrDefault();
+    string str = Context.Session.GetString("Setting");
+    CompanySetting setting = null;
+    if (str != null)
+    {
+        setting = JsonConvert.DeserializeObject<CompanySetting>(str);
+    }
+    double total = (double)(Model.ShippingCharges + Model.Surcharges + Model.RemoteSurcharges + Model.SignaturePrice + (Model.ResidentialSurcharge ?? 0));
+    string logoName = shipmentResult.ServiceName + ".png";
+}
+
+<style>
+    td {
+        color: #747579 !important;
+    }
+</style>
+<section class="pt-3 bg-body-tertiary">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-8 col-xl-9">
+                <div class="col-md-12">
+                    <div class="vstack gap-4">
+                        <div class="card border" style="overflow:auto;">
+                            <div class="card-header border-bottom">
+                                <h6 class="card-header-title">Quote Summary</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td>Carrier:</td>
+                                        <td><b> @shipmentResult.CarrierName</b></td>
+                                        <td>Service:</td>
+                                        <td><img src="/image/shipment/@Model.SelectedCompanyLogo" style="width:70px;" /> <b> @Html.Raw(shipmentResult.ServiceName)</b></td>
+                                        <td>Chargeable weight:</td>
+                                        <td> <b> @shipmentResult.ChargeableWeight</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Price:</td>
+                                        <td><b>£ @Model.ShippingCharges</b></td>
+                                        <td>Surcharges:</td>
+                                        <td><b>£ @(Model.Surcharges)</b></td>
+                                        <td>Remote Surcharges:</td>
+                                        <td><b>£ @(Model.RemoteSurcharges)</b></td>
+                                    </tr>
+                                    <tr>
+                                        @if ((devDetail?.IsSignatureRequired ?? false))
+                                        {
+                                            <td>Signature Price:</td>
+                                            <td><b>£ @(Model.SignaturePrice)</b></td>
+                                        }
+                                        @if ((devDetail?.IsResidentialAddress ?? false))
+                                        {
+                                            <td>Residential Surcharge:</td>
+                                            <td><b>£ @(Model.ResidentialSurcharge)</b></td>
+                                        }
+                                        <td>Total:</td>
+                                        <td><b>£ @(String.Format("{0:0.00}", (total)))</b></td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                @if (Model.CustomerInvoices != null && Model.CustomerInvoices.Count > 0)
+                {
+                    int counter = 1;
+                    <div class="vstack gap-4">
+                        <div class="card border" style="overflow:auto;">
+                            <div class="card-header border-bottom">
+                                <h6 class="card-header-title">Contents Declaration</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm">
+                                    @foreach (var item in Model.CustomerInvoices)
+                                    {
+                                        <tr>
+                                            <th>Item @counter</th>
+                                            <td>Goods description: </td>
+                                            <th>@item.ProductDescription</th>
+                                            <td>Commodity code:</td>
+                                            <th>@item.CommodityCode</th>
+                                            <td>Country of origin:</td>
+                                            <th>@item.CountryId</th>
+                                        </tr>
+                                        {
+                                            counter++;
+                                        }
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="vstack gap-4">
+                        <div class="card border" style="overflow:auto;">
+                            <div class="card-header border-bottom">
+                                <h6 class="card-header-title">Customs Duty & Tax Billing Options</h6>
+                            </div>
+                            <div class="card-body">
+                                <input type="radio" /> pays (DDU) Receiver pays (DDU)
+                                <p>
+                                    By sending DDU, the receiver will be required to pay all applicable destinationduties and taxes.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                }
+
+                <div class="vstack gap-4">
+                    <div class="card border" style="overflow:auto;">
+                        <div class="card-header border-bottom">
+                            <h6 class="card-header-title">Customs Declaration</h6>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <tr>
+                                    <td>Use your own customs invoice?</td>
+                                    <th>@Model.ConsignmentSummaries.FirstOrDefault().IsCustomsInvoice</th>
+                                    <td>Content Summary: </td>
+                                    <th>@Model.ConsignmentSummaries.FirstOrDefault().ContentSummary</th>
+                                    <td>Reason for Shipment:</td>
+                                    <th>@Model.ConsignmentSummaries.FirstOrDefault().ReasonForShipment</th>
+                                </tr>
+                                <tr>
+                                    <td>Total Goods Value:</td>
+                                    <th>£ @Model.ConsignmentSummaries.FirstOrDefault().TotalGoodsValue</th>
+                                    <td>Shipping Charges:</td>
+                                    <th>£ @Model.ConsignmentSummaries.FirstOrDefault().ShippingCharges</th>
+                                    <td>Total Value for Customs:</td>
+                                    <th>£ @Model.ConsignmentSummaries.FirstOrDefault().TotalValueForCustoms</th>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="vstack gap-4">
+                    <div class="card border" style="overflow:auto;">
+                        <div class="card-header border-bottom">
+                            <h6 class="card-header-title">Declaration</h6>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                Tick to below to confirm that all the information
+                                provided is true and accurate, and that there are
+                                no dangerous & hazardous goods in your
+                                consignment.
+                            </p>
+                            <p>
+                                <input type="checkbox" checked="checked" />
+                                I declare that this is true and correct
+                            </p>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a href="/Address/Declaration?orderId=@Model.OrderId">
+                                        <input type="button" class="btn btn-danger mb-0" value="Back" />
+                                    </a>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <a href="/Address/Basket">
+                                        <button class="btn btn-primary mb-0" type="button">Checkout</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-xl-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="vstack gap-4">
+                            <div class="card border" style="overflow:auto;">
+                                <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                                    <h6 class="card-header-title">Sender's Details</h6>
+                                    <a href="/Address/Index?orderId=@Model.OrderId"><button type="button" class="btn btn-light btn-sm rounded-pill">Edit</button></a>
+                                </div>
+                                <div class="card-body">
+                                    <p>@collection.Forename @collection.Surname</p>
+                                    <p>@collection.AddressLineOne @collection.AddressLineTwo @collection.City, @collection.County. @collection.Postcode</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    @if (exporter != null)
+                    {
+                        <div class="col-md-12">
+                            <div class="vstack gap-4">
+                                <div class="card border" style="overflow:auto;">
+                                    <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                                        <h6 class="card-header-title">Exporter's Details</h6>
+                                        <a href="/Address/Exporter?orderId=@Model.OrderId"><button type="button" class="btn btn-light btn-sm rounded-pill">Edit</button></a>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>@exporter.Forename @exporter.Surname</p>
+                                        <p>@exporter.AddressLineOne @exporter.AddressLineTwo @exporter.City, @exporter.County. @exporter.Postcode</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                    }
+                    <div class="col-md-12">
+                        <div class="vstack gap-4">
+                            <div class="card border" style="overflow:auto;">
+                                <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                                    <h6 class="card-header-title">Receiver's Details</h6>
+                                    <a href="/Address/Index?orderId=@Model.OrderId"><button type="button" class="btn btn-light btn-sm rounded-pill">Edit</button></a>
+                                </div>
+                                <div class="card-body">
+                                    <p>@delivery.Forename @delivery.Surname</p>
+                                    <p>@delivery.AddressLineOne @delivery.AddressLineTwo @delivery.City, @delivery.County. @delivery.Postcode</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>

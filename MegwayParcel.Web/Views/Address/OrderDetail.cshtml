@@ -1,0 +1,337 @@
+﻿@model MegwayParcel.Common.Data.Order
+@using MegwayParcel.Common.Data
+@using Newtonsoft.Json;
+@using System.Text.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+    var collection = Model.Addresses.Where(x => x.TypeId == 1).FirstOrDefault();
+    var exporter = Model.Addresses.Where(x => x.TypeId == 2).FirstOrDefault();
+    var delivery = Model.Addresses.Where(x => x.TypeId == 3).FirstOrDefault();
+    var shipmentResult = JsonConvert.DeserializeObject<ServiceResult>(Model.SelectQuote);
+    var moveResult = JsonConvert.DeserializeObject<ServiceResult>(Model.SelectQuote);
+
+
+    string str = Context.Session.GetString("Setting");
+    CompanySetting setting = null;
+    if (str != null)
+    {
+        setting = JsonConvert.DeserializeObject<CompanySetting>(str);
+    }
+    string val = Context.Session.GetString("LoginObject");
+    Customer customer = null;
+    if (val != null)
+    {
+        customer = JsonConvert.DeserializeObject<Customer>(val);
+    }
+
+    double total = (double)(Model.ShippingCharges + Model.Surcharges + Model.RemoteSurcharges);
+    string logoName = shipmentResult.ServiceName + ".png";
+    var devDetail = Model.DeliveryDetails.FirstOrDefault();
+    BookShipmentOutput_DTO orderResponse = null;
+    LandmarkShipResponse shipOrderResponse = null;
+    CreateLabelResponse moveOrderResponse = null;
+
+
+    if (Model.OrderResponse != null)
+    {
+        if (Model.ServiceId == 1200)
+        {
+            shipOrderResponse = JsonConvert.DeserializeObject<LandmarkShipResponse>(Model.OrderResponse);
+        }
+        else if (Model.ServiceId > 500)
+        {
+            //moveOrderResponse = JsonConvert.DeserializeObject<CreateLabelResponse>(Model.OrderResponse);
+
+            moveOrderResponse = System.Text.Json.JsonSerializer.Deserialize<CreateLabelResponse>(
+                    Model.OrderResponse,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true // Allows case-insensitive matching
+            });
+        }
+        else
+        {
+            orderResponse = JsonConvert.DeserializeObject<BookShipmentOutput_DTO>(Model.OrderResponse);
+        }
+    }
+    BookShipmentOutput_DTO orderErrorResponse = null;
+    LandmarkShipResponse shipOrderErrorResponse = null;
+    CreateLabelResponse moveOrderErrorResponse = null;
+    if (Model.ErrorResponse != null)
+    {
+        if (Model.ServiceId == 1200)
+        {
+            shipOrderErrorResponse = JsonConvert.DeserializeObject<LandmarkShipResponse>(Model.ErrorResponse);
+        }
+        else if (Model.ServiceId > 200 && Model.ServiceId < 210)
+        {
+            moveOrderErrorResponse = JsonConvert.DeserializeObject<CreateLabelResponse>(Model.ErrorResponse);
+        }
+        else
+        {
+            orderErrorResponse = JsonConvert.DeserializeObject<BookShipmentOutput_DTO>(Model.ErrorResponse);
+        }
+
+    }
+    PaymentResponse response = null;
+    if (ViewBag.response == null)
+    {
+        try
+        {
+            response = (PaymentResponse)ViewBag.response;
+        }
+        catch { }
+    }
+}
+<style>
+    td {
+        color: #747579 !important;
+    }
+</style>
+<section class="pt-3">
+    <div class="container">
+        @if (response != null)
+        {
+            @if (response.StatusId == 1)
+            {
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <h3 class="text-success">Your order has been placed successfully</h3>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <a href="@Url.Action("Order", "address")" class="btn btn-success">View Orders</a>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <h3 class="text-danger">Something went wrong with your payment process. Please try again</h3>
+                        <p class="text-danger">Status: @response.TransectionMessage</p>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <a href="@Url.Action("Checkout", "address", new { orderId = Model.OrderId })" class="btn btn-success">Check Out Order</a>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            }
+        }
+
+        <!-- Order Details Section -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="vstack gap-4">
+                    <div class="card border">
+                        <div class="card-header border-bottom">
+                            <h6 class="card-header-title">Detail</h6>
+                        </div>
+                        <div class="card-body" style="overflow:auto;">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p>Reference No: <b>@Model.RefrenceNo</b></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>Payment Status: <b>@(Model.IsPaymentReceived ? "Paid" : "UnPaid")</b></p>
+                                </div>
+                            </div>
+
+                            <!-- Order Response Section -->
+                            @if (orderResponse != null || shipOrderResponse != null || moveOrderResponse != null)
+                            {
+                                @if (orderResponse?.Status == "SUCCESS" || (shipOrderResponse?.Result?.Success == true) || (moveOrderResponse?.TrackingRequestId != 0))
+                                {
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h6>Your Customs Invoice (Packing List)</h6>
+                                            <p class="mb-0">
+                                                Please print off three copies of your Packing List and attach them to your parcel, preferably in an envelope or “document enclosed” wallet for protection.
+                                            </p>
+                                            <h6>Your Shipping Label (Air Waybill)</h6>
+                                            <p class="mb-0">
+                                                Please find your Shipping Label for the above order attached. Please use the thermal labels attachment if you are using a thermal label printer.<br />
+                                                Please print your Shipping Label and securely attach it to your parcel.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-5">
+                                        @if (shipOrderResponse?.Result.Success == true)
+                                        {
+                                            <p class="mb-0">
+                                                <span>@shipOrderResponse?.Result?.ResultMessage</span>
+                                                <br />
+                                                @if (shipOrderResponse.Result.ShipmentLabelLink != null)
+                                                {
+                                                    <label> <b>Shipment Label Link</b></label>
+                                                    <br />
+                                                    <a class="lable-download" href="@shipOrderResponse.Result.ShipmentLabelLink" target="_blank" download="label.pdf">Download</a>
+                                                }
+
+                                            </p>
+                                            @if (shipOrderResponse.Result.Packages?.Count > 0 || shipOrderResponse.Result.Packages != null)
+                                            {
+                                                <table class="table table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Package Refrence</th>
+                                                            <th>Tracking Number</th>
+                                                            <th>Land Mark Tracking Number</th>
+                                                            <th>Download </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in shipOrderResponse?.Result?.Packages)
+                                                        {
+                                                            <tr>
+                                                                @*<td>@item.PackageID</td>*@
+                                                                <td>@item.PackageReference</td>
+                                                                <td>@item.TrackingNumber</td>
+                                                                <td>@item.LandmarkTrackingNumber</td>
+                                                                @*<td>@item.BarcodeData</td>*@
+                                                                <td><a class="lable-download" href="@item.LabelLink" target="_blank" download="label.pdf">Download</a></td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            }
+
+                                        }
+                                        @if (moveOrderResponse?.TrackingRequestId != null)
+                                        {
+                                            <p class="mb-0">
+                                                <span>@moveOrderResponse?.Courier</span>
+                                                <br />
+                                                @if (moveOrderResponse?.Uri != null)
+                                                {
+                                                    <label> <b>Shipment Label Link</b></label>
+                                                    <br />
+                                                    <a class="lable-download" href="@moveOrderResponse?.Uri" target="_blank" download="label.pdf">Download</a>
+                                                    <table class="table table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Package Refrence</th>
+                                                                <th>Download </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                @foreach (var trackingCode in moveOrderResponse.TrackingCodes)
+                                                                {
+                                                            <tr>
+                                                                <td>@trackingCode</td>
+                                                            </tr>
+                                                            }
+
+                                                                <td><a class="lable-download" href="@moveOrderResponse.Uri" target="_blank" download="label.pdf">Download</a></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                }
+                                            </p>
+                                        }
+                                        @if(orderResponse?.Status == "SUCCESS")
+                                        {
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Type</th>
+                                                        <th>Format</th>
+                                                        <th>Label Size</th>
+                                                        <th>Download</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (orderResponse?.Labels != null && orderResponse.Labels?.Count > 0)
+                                                    {
+                                                        <tr>
+                                                            <td>Tracking No</td>
+                                                            <td colspan="3">@orderResponse.Labels.FirstOrDefault().AirWaybillReference</td>
+                                                        </tr>
+                                                        @foreach (var item in orderResponse.Labels)
+                                                        {
+                                                            <tr>
+                                                                <td>@item.LabelRole</td>
+                                                                <td>@item.LabelFormat</td>
+                                                                <td>@item.LabelSize</td>
+                                                                <td><a class="lable-download" href="@item.DownloadURL" target="_blank" download="label.pdf">Download</a></td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    @if (orderResponse.Documents != null && orderResponse.Documents?.Count > 0)
+                                                    {
+                                                        @foreach (var item in orderResponse.Documents)
+                                                        {
+                                                            <tr>
+                                                                <td>@item.DocumentType</td>
+                                                                <td>@item.Format</td>
+                                                                <td></td>
+                                                                <td><a href="@item.DownloadURL" target="_blank" download="label">Download</a></td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        }
+
+                                    </div>
+                                }
+
+                                else
+                                {
+                                    @if (orderErrorResponse != null)
+                                    {
+                                        <h3 class="text-danger">Error</h3>
+                                        @foreach (var item in orderErrorResponse.Notifications)
+                                        {
+                                            <p><b>@item.Severity:</b> @item.Message</p>
+                                        }
+                                    }
+                                    @if (shipOrderErrorResponse != null)
+                                    {
+                                        <h3 class="text-danger">
+                                            Error :
+                                            @shipOrderErrorResponse?.Result?.ResultMessage
+                                        </h3>
+                                    }
+
+                                }
+                            }
+                            @if (Model.OrderStatusId != 5 && (Model.IsPaymentReceived || (customer != null && customer?.Email == "admin@megwayparcels.co.uk")))
+                            {
+                                <a href="/Address/ReBookOrder?orderId=@Model.OrderId">
+                                    <input type="button" class="btn btn-primary rounded-pill" value="Re-Book Order" />
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    $('body').on('click', '.lable-download', function (e) {
+        e.preventDefault();
+
+        window.open(this.href.replace("http://", "https://"));
+    })
+
+</script>

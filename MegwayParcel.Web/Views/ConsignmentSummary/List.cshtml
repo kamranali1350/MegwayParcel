@@ -1,0 +1,87 @@
+﻿@model IEnumerable<MegwayParcel.Common.Data.ConsignmentSummary>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>List</h1>
+
+<p>
+    <a asp-action="Index">Create New</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ConsignmentSummaryId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsCustomsInvoice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContentSummary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReasonForShipment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalGoodsValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingCharges)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalValueForCustoms)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentCategory)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConsignmentSummaryId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsCustomsInvoice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContentSummary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReasonForShipment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalGoodsValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShippingCharges)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalValueForCustoms)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocumentUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocumentCategory)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {  id=item.ConsignmentSummaryId }) |
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

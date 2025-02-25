@@ -1,0 +1,378 @@
+﻿@model MegwayParcel.Common.Data.Order
+@using Newtonsoft.Json;
+@using MegwayParcel.Common.Data
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_WebsiteLayout.cshtml";
+}
+<link href="/css/carries.css" rel="stylesheet" />
+<link href="/css/desktop.css" rel="stylesheet" />
+
+<div class="container" style="background-color: #f6f9fc;">
+    <div class="row">
+        <div class="col-md-12">
+            <h5 class="text-center text-primary"><span>FedEx Express®</span></h5>
+            <div class="ContentPage_Content">
+                <div class="service-information">
+                    <ul class="bullet brandFedEx">
+                        <li><a href="#howitworks" class="scroll">How It Works</a></li>
+                        <li><a href="#weightRestrictions" class="scroll">Size &amp; Weight Restrictions</a></li>
+                        <li><a href="#volumetricWeight" class="scroll">Volumetric Weight</a></li>
+                        <li><a href="#surcharges" class="scroll">Surcharges</a></li>
+                        <li><a href="#prohibited" class="scroll">Prohibited Items</a></li>
+                        <li><a href="#restrictions" class="scroll">Service Restrictions</a></li>
+                        <li><a href="#documentation" class="scroll">Additional Documentation</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <p><a name="generalInfo" id="generalInfo"></a></p>
+                    <h5 class="text-center text-primary"><span>General Information</span></h5>
+                    <p>
+                        <i>FedEx is one of the world's most renowned parcel delivery companies, offering door-to-door express and economy services to over 200 countries around the world.</i><i>
+                            <br>
+                        </i>
+                    </p>
+                    <p>Please see the table below for our FedEx services at a glance:</p>
+                    <table class="standard textLeft responsive carrier-info full">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Suitable for:</th>
+                                <th>Information</th>
+                                <th>UK</th>
+                                <th>Europe</th>
+                                <th style="width:100px;">Rest of World</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><img src="/image/Carries/fedex-priority.png" alt="FedEx International Priority®"></td>
+                                <td>
+                                    <ul class="bullet">
+                                        <li>Documents&nbsp;</li>
+                                        <li>Parcels</li>
+                                    </ul>
+                                </td>
+                                <td class="textLeft">An international express delivery service, provided by one of the world’s largest courier companies.</td>
+                                <td><img alt="N/A" src="/image/Carries/icon-cross-small.png" width="25" height="25"></td>
+                                <td>
+                                    <div class="click hover left tick">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="click hover left tick">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><img src="/image/Carries/fedex-economy.png" alt="FedEx International Economy®"></td>
+                                <td>
+                                    <ul class="bullet">
+                                        <li>Documents</li>
+                                        <li>Parcels</li>
+                                    </ul>
+                                </td>
+                                <td class="textLeft">A day-definite, economy service provided by one of the world’s largest courier companies.</td>
+                                <td><img alt="N/A" src="/image/Carries/icon-cross-small.png" width="25" height="25"></td>
+                                <td>
+                                    <div class="click hover left tick">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="click hover left tick">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><img src="/image/Carries/fedex-priority-freight.png" alt="FedEx International Priority® Freight"></td>
+                                <td>
+                                    <ul class="bullet">
+                                        <li>Pallets</li>
+                                    </ul>
+                                </td>
+                                <td class="textLeft">Next business day delivery to most European addresses and fast delivery worldwide. Delivery to more than 215 countries and territories worldwide.</td>
+                                <td><img alt="N/A" src="/image/Carries/icon-cross-small.png" width="25" height="25"></td>
+                                <td>
+                                    <div class="click hover left tick">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="click hover left tick">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><img src="/image/Carries/fedex-economy-freight.png" alt="FedEx International Economy® Freight"></td>
+                                <td>
+                                    <ul class="bullet">
+                                        <li>Pallets</li>
+                                    </ul>
+                                </td>
+                                <td class="textLeft">Next business day delivery to most European addresses and fast delivery worldwide. Delivery to more than 60 countries and destinations.</td>
+                                <td><img alt="N/A" src="/image/Carries/icon-cross-small.png" width="25" height="25"></td>
+                                <td>
+                                    <div class="click hover left tick">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="click hover left tick">
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 12px;">*For services from our depot, please add 1 working day to your transit time if opting for a collection service.</p>
+                    <p style="margin-top: 12px;">These transit times are provided as a guideline. You can access country-specific transit time estimates for FedEx International Priority® and FedEx International Economy® services <a class="link" href="https://www.fedex.com/ratefinder/home?cc=gb" target="_blank">here</a>.</p>
+                    <p style="margin-top: 12px;">&nbsp;</p>
+                </div>
+                <div>
+                    <p><a name="howitworks" id="howitworks"></a></p>
+                    <h5 class="text-center text-primary">
+                        <span>
+                            How It Works<br>
+                        </span>
+                    </h5>
+                    <p>For most destinations, FedEx is a direct door-to-door service—from your address to your chosen destination.</p>
+                    <p>However, for FedEx International Economy® Freight, and for FedEx International Priority® Freight to certain destinations, parcels are <a class="link" target="_blank" href="/services/warehouse/">shipped from our depot</a>. You have the option of dropping your consignment off at <a class="link" target="_blank" href="/information/depot-locations/">one of our depots</a>, or booking an optional collection from your door.</p>
+                    <p>For these freight services, please add 1 working day to your estimated transit time if booking either an optional collection or an alternative drop-off option, to allow for overnight delivery to our depot. For some postcodes in <a class="link" target="_blank" href="/notifications/tg-collection-postcodes/">London and North West England</a>, we are able to collect ourselves and ship from the depot same day.</p>
+                    <p>Once your shipment has been delivered to our depot, we will process it and forward your parcel to its final destination via our carrier.</p>
+                    <p>Please refer to our documentation page for labelling instructions for each <a class="link" target="_blank" href="/information/documentation/">collection/drop-off option</a>.</p>
+                    <p>If you are not able to print any of your documents, please <a target="_blank" class="link" href="/contact-us/">get in touch</a> and we will be happy to post hard copies to you.</p>
+                </div>
+                <div>
+                    <p><a name="weightRestrictions" id="weightRestrictions"></a></p>
+                    <h5 class="text-center text-primary"><span>Size and Weight Restrictions</span></h5>
+                    <h3 style="text-align:left">Parcel</h3>
+                    <ul class="bullet">
+                        <li><strong style="font-weight: bold;">Maximum weight domestic</strong><strong style="font-weight: bold;">: </strong>45kg per piece</li>
+                        <li><strong>Maximum weight international: </strong>68kg per piece</li>
+                        <li><strong>Maximum length:</strong> 120cm</li>
+                        <li><strong>Maximum 2nd longest side: </strong>70cm</li>
+                        <li><strong>Maximum length plus girth:</strong> 266cm</li>
+                    </ul>
+                    <p>"Length plus girth" is calculated as length plus twice the width and twice the height.</p>
+                    <p><strong>For example</strong>: for a parcel of dimensions&nbsp; 40 x 30 x 20cm:</p>
+                    <p>40 +&nbsp;(2x30) +&nbsp;(2x20) = <strong>140cm</strong></p>
+                    <h3 style="text-align:left">Freight</h3>
+                    <ul class="bullet">
+                        <li><strong>Maximum weight</strong>: 1000 kg (palletised)</li>
+                    </ul>
+                </div>
+                <div>
+                    <p><a name="volumetricWeight" id="volumetricWeight"></a></p>
+                    <h5 class="text-center text-primary"><span>Volumetric Weight</span></h5>
+                    <p>Your shipment will be charged by either <strong style="font-weight: bold;">actual weight</strong> or <strong style="font-weight: bold;">volumetric weight</strong> – whichever is greater.</p>
+                    <p><strong style="font-weight: bold;">Volumetric weight</strong> is a value derived from the size rather than the weight of your parcel and may apply if your parcel is particularly large and contains relatively light items.</p>
+                    <p><strong>FedEx International Priority®</strong> and <strong>FedEx International Economy®</strong>&nbsp;calculate volumetric weight by multiplying the three dimensions of your parcel together and dividing by <strong style="font-weight: bold;">5000</strong>. For freight, the divisor is <strong>6000</strong>.</p>
+                    <p><strong style="font-weight: bold;">For example:</strong></p>
+                    <table class="standard textLeft responsive volumetric">
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Parcel Weight</th>
+                                <th>Actual Weight</th>
+                                <th>Dimensions</th>
+                                <th>Divisor</th>
+                                <th>Volumetric Weight</th>
+                                <th>Chargeable Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><img src="/image/Carries/fedex-priority.png" alt="FedEx International Priority®"></td>
+                                <td>10kg</td>
+                                <td>10kg</td>
+                                <td>50 x 30 x 20cm</td>
+                                <td>5000</td>
+                                <td>5kg</td>
+                                <td>10kg</td>
+                            </tr>
+                            <tr>
+                                <td><img src="/image/Carries/fedex-priority.png" alt="FedEx International Priority®"></td>
+                                <td>10kg</td>
+                                <td>10kg</td>
+                                <td>50 x 60 x 40cm</td>
+                                <td>5000</td>
+                                <td>24kg</td>
+                                <td>24kg</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <p style="margin-top: 12px;"><strong>FedEx International Economy&reg; Freight</strong> and <strong>FedEx International Priority&reg; Freight</strong> calculate volumetric weight by multiplying the three dimensions of your parcel together and dividing by 6000. The above calculations would apply; however the 'divisor' in the calculation would be <strong>6000</strong>.</p> -->
+                </div>
+                <div>
+                    <p><a name="surcharges" id="surcharges"></a></p>
+                    <h5 class="text-center text-primary"><span>Surcharges</span></h5>
+                    <table style="margin-top: 15px" class="standard textLeft responsive carrier-surcharges">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Fee</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Address Change</td>
+                                <td>Applied when either a collection or delivery address has to be amended.</td>
+                                <td>£5.72 per consignment</td>
+                            </tr>
+                            <tr>
+                                <td>Remote Area Surcharge</td>
+                                <td>Applied when the delivery location is defined as remote. Areas are designated as Tier A, B&nbsp;or C - please refer to <a class="link" href="/assets/downloads/FedExRemoteSurcharges.xlsx" target="_blank">this spreadsheet</a> (Excel file - right click, Save As).</td>
+                                <td>Tier A: £3.57 per shipment. Tier B: £0.43 ker kg or £19.32 per shipment (whichever is greater). Tier C: £0.55 per kg or £25.12 per shipment (whichever is greater). This surcharge will be added at time of booking.</td>
+                            </tr>
+                            <tr>
+                                <td>Delivered Taxes Paid (Duty Reversal)&nbsp;Admin Fee</td>
+                                <td>Admin charge administered for billing customs duties and taxes to the shipper rather than the receiver.</td>
+                                <td>£12 per consignment or 2.5% of the total customs charge (whichever is greater)</td>
+                            </tr>
+                            <tr>
+                                <td>Additional Handling (Parcel)</td>
+                                <td>
+                                    <p>Applied if a package is:</p>
+                                    <ul class="bullet">
+                                        <li>greater than 121cm along its longest side</li>
+                                        <li>greater than 76cm along its second-longest side</li>
+                                        <li>greater than 266cm combined length and girth (L+2xW+2xH)</li>
+                                    </ul>
+                                </td>
+                                <td>£55.20 per consignment*</td>
+                            </tr>
+                            <tr>
+                                <td>Additional Handling (Freight)</td>
+                                <td>Applied if unit measures greater than 157cm along its longest side.</td>
+                                <td>£67.97 per shipment</td>
+                            </tr>
+                            <tr>
+                                <td>Non-Stackable</td>
+                                <td>When any piece, skid or pallet in a shipment <a href="/information/packaging/stackable/" target="_blank" class="link">cannot be stacked</a> due to the shape or packaging of the goods.</td>
+                                <td>£157.32 per consignment</td>
+                            </tr>
+                            <tr>
+                                <td>Oversize Charge</td>
+                                <td>Applied to any package that exceeds 243cm in length or 330cm in length and girth (L&nbsp;+&nbsp;2W + 2H).</td>
+                                <td>£67.97 per consignment*</td>
+                            </tr>
+                            <tr>
+                                <td>Return Charge</td>
+                                <td>A surcharge applied for all returns in addition to the shipping cost.</td>
+                                <td>£21 per consignment</td>
+                            </tr>
+                            <tr>
+                                <td>Signature Required</td>
+                                <td>Applies if signature is requested upon delivery to a residential address.</td>
+                                <td>£2.76 per consignment</td>
+                            </tr>
+                            <tr>
+                                <td>Advancement Fee</td>
+                                <td>When importing a shipment, duties and taxes may apply. FedEx may pay these fees in advance on behalf of the customer. A fee applies in addition to customs charges.</td>
+                                <td>2.5% of advanced duties/taxes, with a minimum of £12</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 12px;">
+                        *For multi-piece shipments, if Oversize and Additional Handling (Parcel) both apply, only Oversize will be charged.<span style="color:#0070C0">
+                            <br>
+                        </span>
+                    </p>
+                </div>
+                <div>
+                    <p><a name="prohibited" id="prohibited"></a></p>
+                    <h5 class="text-center text-primary"><span>Prohibited Items</span></h5>
+                    <ul class="bullet">
+                        <li>Our list of hazardous, prohibited and owner’s risk items is available <a class="link" href="/information/dangerous-and-hazardous/" target="_blank">here</a>.</li>
+                        <li>For up to date information specific to FedEx, please <a class="link" title="FedEx Prohibited Items" href="https://www.fedex.com/en-gb/shipping/international-prohibited-items.html" target="_blank">check this page</a>. Please note that prohibited items are subject to vary depending on your delivery destination.&nbsp;</li>
+                        <li>Sending jewellery or watches? Refer to our <a target="_blank" href="/information/dangerous-and-hazardous/jewellery-and-watches/" class="link">Jewellery &amp; Watches</a> information page for carrier specific restrictions.</li>
+                        <li>If you’d like advice on whether or not your items are prohibited, please contact our Customer Services team via <a target="_blank" href="/contact-us/">Live Chat, email</a> or telephone (0345 145 1212 8:00am-6:30pm Mon-Fri, 9:00am-1:00pm Saturdays).</li>
+                    </ul>
+                </div>
+                <div>
+                    <p><a name="restrictions" id="restrictions"></a></p>
+                    <h5 class="text-center text-primary"><span>Service Restrictions</span></h5>
+                    <p>Personal effects cannot be shipped via FedEx to any of the following countries or destinations:</p>
+                    <div class="width33">
+                        <ul class="bullet">
+                            <li>Albania</li>
+                            <li>Andorra</li>
+                            <li>Angola</li>
+                            <li>Australia</li>
+                            <li>Azerbaijan</li>
+                            <li>Bangladesh</li>
+                            <li>Belize</li>
+                            <li>Benin</li>
+                            <li>Brazil</li>
+                            <li>British Virgin Islands</li>
+                            <li>Burkina Faso</li>
+                            <li>Burundi</li>
+                            <li>Cameroon</li>
+                            <li>Cape Verde</li>
+                            <li>Chad</li>
+                            <li>Congo</li>
+                            <li>Costa Rica</li>
+                            <li>Croatia</li>
+                            <li>Czech Republic</li>
+                        </ul>
+                    </div>
+                    <div class="width33" style="width: 25% !important; margin: 0px 1% 0px 1% !important; padding-top: 0px !important; padding-bottom: 0px !important; background-color: transparent !important;">
+                        <ul class="bullet">
+                            <li>Djibouti</li>
+                            <li>Ecuador</li>
+                            <li>Egypt</li>
+                            <li>El Salvador</li>
+                            <li>Eritrea</li>
+                            <li>Estonia</li>
+                            <li>Ethiopia</li>
+                            <li>Finland</li>
+                            <li>French Guiana</li>
+                            <li>Gabon</li>
+                            <li>Gambia</li>
+                            <li>Guadeloupe</li>
+                            <li>Guinea</li>
+                            <li>Iceland</li>
+                            <li>India</li>
+                            <li>Japan</li>
+                            <li>Kazakhstan</li>
+                            <li>Lesotho</li>
+                            <li>Lichtenstein</li>
+                        </ul>
+                    </div>
+                    <div class="width33">
+                        <ul class="bullet">
+                            <li>Malta</li>
+                            <li>Mauritania</li>
+                            <li>Moldova</li>
+                            <li>Montserra</li>
+                            <li>New Zealand</li>
+                            <li>Niger</li>
+                            <li>Norway</li>
+                            <li>Oman</li>
+                            <li>Pakistan</li>
+                            <li>Panama</li>
+                            <li>Paraguay</li>
+                            <li>Portugal</li>
+                            <li>Reunion</li>
+                            <li>Senegal</li>
+                            <li>Seychelles</li>
+                            <li>Slovak Republic</li>
+                            <li>Ukraine</li>
+                            <li>Wallis and Futuna Islands</li>
+                            <li>Yemen</li>
+                        </ul>
+                    </div>
+                    <p><span class="clear"> </span></p>
+                </div>
+                <div>
+                    <p><a name="documentation" id="documentation"></a></p>
+                    <h5 class="text-center text-primary"><span>Additional Documentation</span></h5>
+                    <p>The following documentation links are for additional paperwork that may be required. We will contact you in the event that any of these are needed.</p>
+                    <p>Please note: for any services shipped via our depot, your AWB number will only be available once we have received the shipment at our depot.</p>
+
+                </div>
+                <p>&nbsp;</p>
+            </div>
+        </div>
+    </div>
+
+</div>

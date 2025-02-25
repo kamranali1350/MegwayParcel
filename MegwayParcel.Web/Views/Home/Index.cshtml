@@ -1,8 +1,482 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using MegwayParcel.Common.Data
+@{
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+    ViewData["Title"] = "Cheap UK and International Delivery";
+    List<Country> countries = (List<Country>)ViewBag.contries;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .choices {
+        border: solid 1px;
+        border-radius: 50em;
+    }
+</style>
+
+<!-- =======================
+Main Banner START -->
+<section class="pt-0">
+    <div class="container position-relative">
+        <!-- Bg image -->
+        <div class="rounded-3 p-4 p-sm-5" style="background-image: url(/new-theme/assets/images/bg/2.jpg); background-position: center center; background-repeat: no-repeat; background-size: cover;">
+            <!-- Banner title -->
+            <div class="row justify-content-between pt-0 pb-5">
+                @* <div class="col-md-7 col-lg-8 col-xxl-7 pb-5 mb-0 mb-lg-5">
+                <h1 class="text-white">Life Is Adventure Make The Best Of It</h1>
+                <p class="text-white mb-0">Planning for a trip? we will organize your best trip with the best destination and within the best budgets!</p>
+                </div> *@
+
+                <!-- Produce item START -->
+                <div class="col-md-5 col-lg-4 col-xl-3 mb-3 mb-sm-0" style="opacity:0">
+                    <div class="card shadow p-2 pb-0">
+                        <!-- Offer badge -->
+                        <div class="position-absolute top-0 start-0 mt-n3 ms-n3 z-index-9">
+                            <img src="~/new-theme/assets/images/element/05.svg" class="position-relative h-70px" alt="">
+                            <span class="h5 text-white position-absolute top-50 start-50 translate-middle">40%</span>
+                        </div>
+
+                        <div class="rounded-3 overflow-hidden position-relative">
+                            <!-- Image -->
+                            <img src="~/new-theme/assets/images/category/tour/05.jpg" class="card-img" alt="">
+                            <!-- Overlay -->
+                            <div class="bg-overlay bg-dark opacity-4"></div>
+
+                            <!-- Hover element -->
+                            <div class="card-img-overlay d-flex">
+                                <h6 class="text-white fw-normal mt-auto mb-0">5 Days / 4 Nights</h6>
+                            </div>
+                        </div>
+                        <!-- Card body -->
+                        <div class="card-body px-2">
+                            <!-- Badge and Rating -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <a href="#" class="badge bg-primary bg-opacity-10 text-primary">Adventure</a>
+                                <!-- Rating -->
+                                <h6 class="fw-light m-0"><i class="fa-solid fa-star text-warning me-2"></i>4.5</h6>
+                            </div>
+
+                            <!-- Title -->
+                            <h6 class="card-title"><a href="#">Maldives Sightseeing & Adventure Tour</a></h6>
+
+                            <!-- Badge and Price -->
+                            <div class="d-flex justify-content-between align-items-center mb-0">
+                                <!-- Price -->
+                                <h6 class="text-success mb-0">$385 <span class="fw-light">/person</span></h6>
+                                <span class="text-decoration-line-through mb-0 text-reset">$682</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Produce item END -->
+            </div>
+        </div>
+
+        <!-- Search START -->
+        <div class="row mt-n7">
+            <div class="col-11 mx-auto">
+                <!-- Booking from START -->
+                <form class="bg-mode shadow rounded-3 p-4">
+                    <div class="row g-4 align-items-center">
+
+                        <div class="col-xl-10">
+                            <div class="row g-4">
+                                <!-- Location -->
+                                <div class="col-md-6 col-lg-6">
+                                    <label class="h6 fw-normal mb-0"><i class="bi bi-geo-alt text-primary me-1"></i>Sending From...</label>
+                                    <!-- Input field -->
+                                    <div class="form-border-bottom form-control-transparent form-fs-lg mt-2">
+                                        <select class="form-select js-choice" data-search-enabled="true" id="SendingFrom">
+                                            @foreach (var item in countries)
+                                            {
+                                                if (item.CountryID == 231)
+                                                {
+                                                    <option selected="selected" value="@item.CountryID" data-code="@item.CountryCode">@item.Title</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.CountryID" data-code="@item.CountryCode">@item.Title</option>
+                                                }
+                                            }
+                                        </select>
+                                        <input type="text" id="sendingPostCode" class="form-control rounded-pill" style="border:solid 1px;margin-top: 10px;" placeholder="Postcode" />
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6 col-lg-6">
+                                    <label class="h6 fw-normal mb-0"><i class="bi bi-geo-alt text-primary me-1"></i>Sending To...</label>
+                                    <!-- Input field -->
+                                    <div class="form-border-bottom form-control-transparent form-fs-lg mt-2">
+                                        <select class="form-select js-choice" data-search-enabled="true" id="DeliverTo">
+                                            <option value="0">Select Destination Country</option>
+                                            @foreach (var item in countries)
+                                            {
+                                                <option value="@item.CountryID" data-code="@item.CountryCode">@item.Title</option>
+                                            }
+                                        </select>
+                                        <input type="text" id="deliveryPostCode" class="form-control rounded-pill" style="border:solid 1px; margin-top: 10px;" placeholder="Postcode" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-lg-6">
+                                    <label class="h6 fw-normal mb-0">What are you sending?</label>
+                                    <!-- Input field -->
+                                    <div class="form-border-bottom form-control-transparent form-fs-lg mt-2">
+                                        <select id="no-of-item" class="form-select rounded-pill" style="border:solid 1px;margin-bottom: 10px;" data-search-enabled="true">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                        </select>
+                                        <select id="ItemType" class="form-select js-choice" data-search-enabled="true">
+                                            <option value="Parcel">Parcel</option>
+                                            <option value="Pallet">Pallet</option>
+                                            <option value="Document">Document</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-lg-6">
+                                    <table class="table table-borderless" style="border-radius:25px;" id="orderDetail">
+                                        <thead>
+                                            <tr>
+                                                <th>Weight</th>
+                                                <th>Length</th>
+                                                <th>Width</th>
+                                                <th>Height</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><input type="text" class="rounded-pill form-control Weight" placeholder="kg" /></td>
+                                                <td><input type="text" class="rounded-pill form-control Length" placeholder="cm" /></td>
+                                                <td><input type="text" class="rounded-pill form-control Width" placeholder="cm" /></td>
+                                                <td><input type="text" class="rounded-pill form-control Height" placeholder="cm" /></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Button -->
+                        <div class="col-xl-2">
+                            <div class="d-grid">
+                                <a href="javascript:void(0)" class="btn btn-dark mb-0" onclick="getQuotes();">Get a Quote</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- Booking from END -->
+            </div>
+        </div>
+        <!-- Search END -->
+
+
+    </div>
+</section>
+<!-- =======================
+Main Banner END -->
+<!-- =======================
+Steps START -->
+<section class="pt-0">
+    <div class="container">
+        <div class="row g-4 g-lg-5 justify-content-center">
+            <!-- Step item -->
+            <div class="col-sm-6 col-md-4 text-center position-relative">
+                <!-- SVG decoration -->
+                <figure class="position-absolute top-0 start-100 translate-middle mt-8 d-none d-lg-block">
+                    <svg width="154px" height="83px">
+                        <path class="fill-secondary opacity-4" d="M142.221,83.016 L140.251,81.082 L148.020,73.376 C146.847,73.405 145.665,73.402 144.479,73.353 L144.548,70.637 C145.888,70.692 147.217,70.676 148.535,70.628 L139.384,62.839 L141.165,60.792 L153.787,71.539 L142.221,83.016 ZM131.667,71.378 L132.327,68.751 C134.373,69.284 136.418,69.712 138.402,70.022 L138.015,72.707 C135.938,72.383 133.803,71.936 131.667,71.378 ZM119.489,67.036 L120.594,64.564 C122.531,65.433 124.480,66.221 126.383,66.905 L125.482,69.458 C123.509,68.751 121.493,67.935 119.489,67.036 ZM108.113,60.978 L109.540,58.677 C111.340,59.784 113.170,60.834 114.978,61.800 L113.698,64.186 C111.840,63.193 109.961,62.115 108.113,60.978 ZM99.302,55.005 C98.712,54.567 98.124,54.125 97.540,53.680 L99.203,51.541 C99.776,51.978 100.352,52.412 100.933,52.843 C102.031,53.657 103.148,54.459 104.282,55.243 L102.729,57.461 C101.568,56.659 100.426,55.841 99.302,55.005 ZM87.631,45.617 L89.413,43.574 C91.015,44.943 92.626,46.298 94.258,47.629 L92.525,49.714 C90.877,48.369 89.247,47.000 87.631,45.617 ZM78.063,37.231 L79.883,35.221 L84.635,39.423 L82.823,41.439 L78.063,37.231 ZM68.521,28.905 L70.295,26.853 C71.914,28.227 73.520,29.618 75.118,31.017 L73.310,33.038 C71.724,31.648 70.130,30.268 68.521,28.905 ZM58.688,21.003 L60.328,18.848 C62.036,20.128 63.717,21.440 65.378,22.781 L63.659,24.875 C62.023,23.557 60.369,22.263 58.688,21.003 ZM48.288,13.967 L49.683,11.647 C51.494,12.727 53.321,13.891 55.111,15.108 L53.575,17.340 C51.832,16.155 50.053,15.019 48.288,13.967 ZM38.981,9.077 C38.372,8.799 37.760,8.531 37.146,8.268 L38.204,5.775 C38.838,6.046 39.469,6.325 40.098,6.611 C41.429,7.216 42.746,7.854 44.046,8.521 L42.810,10.930 C41.547,10.283 40.272,9.664 38.981,9.077 ZM25.330,4.320 L25.934,1.679 C27.985,2.168 30.080,2.771 32.161,3.471 L31.314,6.042 C29.311,5.369 27.298,4.791 25.330,4.320 ZM13.076,2.706 L13.084,-0.012 C15.208,0.029 17.387,0.197 19.559,0.487 L19.234,3.180 C17.166,2.905 15.094,2.745 13.076,2.706 ZM0.759,1.270 C2.660,0.821 4.623,0.487 6.593,0.273 L6.939,2.975 C5.080,3.177 3.230,3.493 1.439,3.914 L0.759,1.270 Z" />
+                    </svg>
+                </figure>
+
+                <div class="px-4">
+                    <!-- Image -->
+                    <img src="~/new-theme/assets/images/element/step-3.svg" class="w-150px mb-3" alt="">
+                    <!-- Title -->
+                    <h5>Search Choice</h5>
+                    <p class="mb-0">Total 630+ destinations that we work with</p>
+                </div>
+            </div>
+
+            <!-- Step item -->
+            <div class="col-sm-6 col-md-4 position-relative text-center pt-0 pt-lg-5">
+                <!-- SVG decoration -->
+                <figure class="position-absolute top-100 start-100 translate-middle d-none d-lg-block mt-n9">
+                    <svg class="fill-secondary opacity-4" width="161px" height="79px">
+                        <path d="M158.107,15.463 L157.135,5.449 C156.369,6.347 155.573,7.235 154.736,8.101 L152.599,6.579 C153.544,5.600 154.425,4.592 155.272,3.574 L142.859,6.243 L142.411,3.796 L159.535,0.118 L160.985,15.028 L158.107,15.463 ZM131.614,21.310 C133.615,20.323 135.558,19.284 137.387,18.222 L138.833,20.282 C136.938,21.383 134.927,22.459 132.858,23.479 L131.614,21.310 ZM119.450,26.438 C121.550,25.684 123.624,24.876 125.616,24.039 L126.674,26.293 C124.626,27.153 122.496,27.983 120.340,28.758 L119.450,26.438 ZM107.366,32.761 L106.764,30.352 C107.500,30.158 108.237,29.959 108.974,29.755 C110.367,29.370 111.762,28.963 113.155,28.535 L113.894,30.904 C112.468,31.343 111.042,31.759 109.615,32.153 C108.867,32.359 108.116,32.563 107.366,32.761 ZM93.778,33.405 C95.956,32.941 98.128,32.461 100.295,31.955 L100.806,34.386 C98.616,34.898 96.421,35.383 94.222,35.850 L93.778,33.405 ZM80.657,36.053 L87.229,34.752 L87.633,37.206 L81.049,38.509 L80.657,36.053 ZM67.485,38.736 C69.678,38.262 71.876,37.807 74.074,37.362 L74.484,39.816 C72.299,40.256 70.119,40.708 67.942,41.181 L67.485,38.736 ZM54.349,41.900 C56.526,41.309 58.711,40.754 60.906,40.230 L61.433,42.656 C59.274,43.174 57.122,43.718 54.979,44.301 L54.349,41.900 ZM41.404,46.011 C43.490,45.232 45.654,44.489 47.835,43.801 L48.597,46.164 C46.472,46.834 44.363,47.557 42.331,48.315 L41.404,46.011 ZM30.259,53.613 L28.967,51.468 C29.611,51.137 30.259,50.813 30.912,50.495 C32.293,49.821 33.691,49.176 35.102,48.558 L36.207,50.792 C34.838,51.392 33.483,52.016 32.143,52.670 C31.511,52.978 30.883,53.292 30.259,53.613 ZM17.425,58.480 C19.198,57.202 21.090,55.953 23.052,54.765 L24.549,56.794 C22.662,57.937 20.844,59.138 19.142,60.364 L17.425,58.480 ZM7.428,67.231 C8.888,65.655 10.488,64.107 12.182,62.630 L14.128,64.332 C12.516,65.738 10.995,67.211 9.607,68.707 L7.428,67.231 ZM0.172,77.195 C1.089,75.523 2.140,73.865 3.293,72.267 L5.697,73.469 C4.610,74.977 3.620,76.539 2.755,78.114 L0.172,77.195 ZM149.871,12.613 C148.214,13.999 146.419,15.364 144.535,16.669 L142.867,14.750 C144.671,13.499 146.390,12.194 147.973,10.869 L149.871,12.613 Z" />
+                    </svg>
+                </figure>
+
+                <div class="px-4">
+                    <!-- Image -->
+                    <img src="~/new-theme/assets/images/element/step-2.svg" class="w-150px mb-3" alt="">
+
+                    <!-- Title -->
+                    <h5>Select Destination</h5>
+                    <p class="mb-0">Insipidity the sufficient discretion imprudence</p>
+                </div>
+            </div>
+
+            <!-- Step item -->
+            <div class="col-sm-6 col-md-4 text-center">
+                <div class="px-4">
+                    <!-- Image -->
+                    <img src="~/new-theme/assets/images/element/step-1.svg" class="w-150px mb-3" alt="">
+
+                    <!-- Title -->
+                    <h5>Easy to Book</h5>
+                    <p class="mb-0">With an easy and fast ticket purchase process</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- =======================
+Steps END -->
+
+
+<section>
+    <div class="container">
+        <div class="row">
+            <!-- Client logo START -->
+            <div class="col-12">
+                <div class="p-5">
+                    <!-- Title -->
+                    <h5 class="text-center mb-4 mb-md-5">CHOOSE FROM MOST TRUSTED COURIERS</h5>
+
+                    <!-- Slider START -->
+                    <div class="tiny-slider arrow-round">
+                        <div class="tiny-slider-inner" data-arrow="false" data-autoplay="true" data-edge="2" data-dots="false" data-gutter="80" data-items-xl="5" data-items-lg="4" data-items-md="3" data-items-sm="2" data-items-xs="1">
+                            <!-- Slide item START -->
+                            @* <div class="item"><img src="" alt=""> </div> *@
+                            <div class="item"><img src="/image/partners/megway.png" alt=""> </div>
+                            <div class="item"><img src="/image/partners/FedEx.png" alt=""> </div>
+                            <div class="item"><img src="/image/partners/dhl.png" alt=""> </div>
+                            <div class="item"><img src="/image/partners/evri.png" alt=""> </div>
+                            <div class="item"><img src="/image/partners/ups.png" alt=""> </div>
+                            <div class="item"><img src="/image/partners/dpd.png" alt=""> </div>
+                            <div class="item"><img src="/image/partners/dx.png" alt=""> </div>
+                            <div class="item"><img src="/image/partners/landmark.png" alt=""> </div>
+                            <div class="item"><img src="/image/partners/usps.png" alt=""> </div>
+                            <div class="item"><img src="/image/partners/dtdc.png" alt=""> </div>
+                            <!-- Slide item END -->
+                        </div>
+                    </div>
+                    <!-- Slider END -->
+                </div>
+            </div>
+            <!-- Client logo END -->
+        </div>
+    </div>
+</section>
+<!-- =======================
+Client END -->
+<!-- **************** MAIN CONTENT END **************** -->
+
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-xl">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h4 class="modal-title text-light">Quote</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="myModalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary rounded-pill" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
 </div>
+
+
+<script>
+    $(function () {
+        var $select = $(".no-of-item");
+        for (i = 1; i <= 100; i++) {
+            $select.append($('<option></option>').val(i).html(i))
+        }
+    });
+    $("#SendingFrom").change(function () {
+        let _send = $("#SendingFrom").val();
+        if (_send == 231 || _send == 247 || _send == 272 || _send == 271) {
+            for (var i = 0; i < $("#DeliverTo > option").length; i++) {
+                $($("#DeliverTo > option")[i]).show()
+            }
+        } else {
+            $("#DeliverTo").val(0);
+            for (var i = 0; i < $("#DeliverTo > option").length; i++) {
+                let _val = $($("#DeliverTo > option")[i]).attr("value")
+                if (_val == 231 || _val == 247 || _val == 272 || _val == 271 || _val == 0) {
+                    $($("#DeliverTo > option")[i]).show()
+                } else {
+                    $($("#DeliverTo > option")[i]).hide()
+                }
+            }
+        }
+
+    });
+
+
+
+    //$("#btnGetQuote").click(function() {
+    //    getQuotes();
+    //});
+
+    function getQuotes() {
+        let Consignment = {};
+        Consignment.ItemType = $("#ItemType").val()
+        Consignment.ItemsAreStackable = true;
+        Consignment.ConsignmentSummary = "";
+        Consignment.ConsignmentValue = "";
+        Consignment.Packages = [];
+        let _isValid = true;
+        let _errorMessage = "Kindly fill ";
+        for (var i = 0; i < $("#orderDetail tbody tr").length; i++) {
+            var package = {};
+            var tr = $("#orderDetail tbody tr")[i];
+            package.Weight = $(tr).find(".Weight").val();
+            package.Length = $(tr).find(".Length").val();
+            package.Width = $(tr).find(".Width").val();
+            package.Height = $(tr).find(".Height").val();
+
+            Consignment.Packages.push(package);
+        }
+        let collectionAddress = {};
+
+        collectionAddress.Postcode = $("#sendingPostCode").val();
+        // if (collectionAddress.Postcode == '') {
+        //     _isValid = false;
+        //     _errorMessage += "Sending From Postcode, ";
+        // }
+
+        collectionAddress.Country = {};
+
+        collectionAddress.Country.CountryID = $("#SendingFrom").val();
+        collectionAddress.CountryName = $("#SendingFrom").text();
+        collectionAddress.Country.CountryCode = $("#SendingFrom option:selected").attr('data-code')
+        if (!(collectionAddress.Country.CountryID > 0)) {
+            _isValid = false;
+            _errorMessage += "Sending From, ";
+        }
+        let deliveryAddress = {};
+
+        deliveryAddress.Postcode = $("#deliveryPostCode").val();
+        // if (collectionAddress.Postcode == '') {
+        //     _isValid = false;
+        //     _errorMessage += "Sending To Postcode, ";
+        // }
+        deliveryAddress.Country = {};
+        deliveryAddress.Country.CountryID = $("#DeliverTo").val();
+        deliveryAddress.CountryName = $("#DeliverTo").text();
+        deliveryAddress.Country.CountryCode = $("#DeliverTo option:selected").attr('data-code')
+        if (!(deliveryAddress.Country.CountryID > 0)) {
+            _isValid = false;
+            _errorMessage += "Sending To, ";
+        }
+
+        let shipment = {};
+        shipment.Consignment = Consignment;
+        shipment.CollectionAddress = collectionAddress;
+        shipment.DeliveryAddress = deliveryAddress;
+        shipment.IsSameCountry = false;
+        if ($("#SendingFrom").val() == 231 || $("#SendingFrom").val() == 247 || $("#SendingFrom").val() == 272 || $("#SendingFrom").val() == 271) {
+            if ($("#DeliverTo").val() == 231 || $("#DeliverTo").val() == 247 || $("#DeliverTo").val() == 272 || $("#DeliverTo").val() == 271) {
+                shipment.IsSameCountry = true;
+            }
+        }
+
+        console.log(JSON.stringify(shipment));
+
+        if (!_isValid) {
+            toastr.error(_errorMessage + ' filed(s)', 'Error')
+            return;
+        }
+
+        let queryString = encodeURIComponent(JSON.stringify(shipment));
+
+      
+        // Create a form to submit the data
+        let form = $('<form>', {
+            'action': '/Home/GetQuotes',
+            'method': 'POST',
+            'style': 'display:none;'
+        }).append($('<input>', {
+            'name': 'data',
+            'value': JSON.stringify(shipment),
+            'type': 'hidden'
+        }));
+
+        // Append the form to the body and submit it
+        $('body').append(form);
+        form.submit();
+        $('.overlay').show();
+
+    }
+
+    $("#no-of-item").change(function () {
+        let _noOfItems = parseFloat($("#no-of-item").val());
+
+        var $tableBody = $('#orderDetail').find("tbody");
+        var $trLast = $tableBody.find("tr:last");
+
+        let _addRows = _noOfItems - $('#orderDetail tbody tr').length;
+        for (let i = 0; i < _addRows; i++) {
+            var $trNew = $trLast.clone();
+            $trNew.find("input[type=text], input[type=number], textarea").val("")
+            $trLast.after($trNew);
+        }
+        if (_addRows < 0) {
+            let remove = Math.abs(_addRows);
+            let _totalRows = $('#orderDetail tbody tr').length;
+
+            for (var i = _totalRows; i >= _noOfItems; i--) {
+                let _tr = $('#orderDetail tbody tr')[i];
+                $(_tr).remove();
+            }
+        }
+        //var $tableBody = $('#orderDetail').find("tbody");
+        //var $trLast = $tableBody.find("tr:last");
+        //var $trNew = $trLast.clone();
+        //$trNew.find("input[type=text], input[type=number], textarea").val("")
+        //$trLast.after($trNew);
+    });
+
+    function GetLoginObject() {
+        let _loginObject = null;
+        $.ajax({
+            url: "/Account/GetLoginObject",
+            type: "GET",
+            datatype: "json",
+            async: false,
+            success: function (data) {
+                _loginObject = data;
+                return _loginObject;
+            },
+            beforeSend: function () {
+                $("#waitSpinnerId").show();
+            },
+            error: function (xhr) { // if error occured
+                return _loginObject;
+            },
+            complete: function () {
+                $("#waitSpinnerId").hide();
+            },
+
+        });
+        return _loginObject;
+    }
+</script>

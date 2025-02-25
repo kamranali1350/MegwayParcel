@@ -1,0 +1,43 @@
+﻿@using MegwayParcel.Common
+@using MegwayParcel.Common.Data
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@using System.IO;
+@model GetQuoteOutput_DTO
+@{
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+    ViewData["Title"] = "Error";
+  
+
+}
+<section class="pt-3 bg-body-tertiary">
+    <div class="container">
+        <div class="vstack gap-4">
+            <div class="card border">
+                <!-- Card header -->
+                <div class="card-header border-bottom">
+                    <h5 class="card-header-title">Error <span class="badge bg-danger" style="font-size:12px;" >@Model.Status</span></h5>
+                </div>
+
+                <!-- Card body START -->
+                <div class="card-body">
+                    <div class="row g-3">
+
+                        <ul class="list-group">
+                            @foreach (var notification in Model.Notifications)
+                            {
+                                <li class="list-group-item list-group-item-danger">
+                                    <strong>@notification.Severity:</strong> @notification.Message
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                </div>
+                <!-- Card body END -->
+
+            </div>
+
+        </div>
+    </div>
+</section>

@@ -1,0 +1,333 @@
+﻿@using MegwayParcel.Common;
+@using MegwayParcel.Common.Data
+@model Order
+
+@{
+    ViewData["Title"] = "Exporter Detail";
+    var order = (Order)ViewBag.order;
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+    var exporter = order.ExporterDetails?.FirstOrDefault();
+
+    bool isCommercialShipment = false;
+    bool IsExporterAddressAsCollectionAddress = true;
+    if (exporter != null)
+    {
+        isCommercialShipment = exporter.IsCommercialShipmet;
+        IsExporterAddressAsCollectionAddress = exporter.IsExporterAddressAsCollectionAddress;
+    }
+}
+<link href="~/css/postalcodeautofill.css" rel="stylesheet" />
+<script src="~/js/postalcodeautofill.js"></script>
+
+<section class="pt-3 bg-body-tertiary">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-xl-9">
+                <div class="vstack gap-4">
+                    <form name="sentMessage" id="exporterAddressForm" novalidate="novalidate">
+                        <input asp-for="OrderId" class="form-control" hidden="hidden" />
+                        <input asp-for="ExporterDetails.FirstOrDefault().ExporterDetailId" class="form-control" hidden="hidden" />
+                        <input asp-for="Addresses.FirstOrDefault().AddressId" class="form-control" hidden="hidden" />
+
+                        <!-- Personal info START -->
+                        <div class="card border">
+                            <!-- Card header -->
+                            <div class="card-header border-bottom">
+                                <h4 class="card-header-title">Exporter`s Details</h4>
+                            </div>
+
+                            <!-- Card body START -->
+                            <div class="card-body">
+                                <div class="row">
+                                    <p>
+                                        To help ensure your shipment is accurately declared to customs, we
+                                        need to confirm the exporter details. The exporter is the party who
+                                        is shipping the goods and may not always be the same as the
+                                        collection address.
+                                    </p>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="control-label">
+                                        <input asp-for="ExporterDetails.FirstOrDefault().IsCommercialShipmet" isCommercialShipment />
+                                        Is Commercial Shipmet
+                                    </label>
+                                </div>
+                                <div class="col-md-12">
+
+                                    <label class="control-label">
+                                        <input asp-for="ExporterDetails.FirstOrDefault().IsExporterAddressAsCollectionAddress" checked="checked" />
+                                        Is Exporter Address Same As Collection Address
+                                    </label>
+                                </div>
+                                <!-- Form START -->
+                                <span id="addressSection" style="display:none;">
+                                    <div class="row g-3">
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Forename<span class="text-danger">*</span></label>
+                                            <input asp-for="Addresses.FirstOrDefault().Forename" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Surname<span class="text-danger">*</span></label>
+                                            <input asp-for="Addresses.FirstOrDefault().Surname" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                            <span class="text-danger" data-valmsg-for="Surname" data-valmsg-replace="true"></span>
+
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Email Address<span class="text-danger">*</span></label>
+                                            <input asp-for="Addresses.FirstOrDefault().EmailAddress" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Mobile Number<span class="text-danger">*</span></label>
+                                            <input asp-for="Addresses.FirstOrDefault().MobileNumber" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                        </div>
+
+
+                                    </div>
+                                </span>
+                                <!-- Form END -->
+                            </div>
+                            <!-- Card body END -->
+
+                        </div>
+                        <!-- Personal info END -->
+                        <!-- Update email START -->
+                        <span id="addressSectionDet" style="display:none;">
+                            <br>
+                            <div class="card border">
+                                <!-- Card header -->
+                                <div class="card-header border-bottom">
+                                    <h4 class="card-header-title">Address Details</h4>
+                                </div>
+
+                                <!-- Card body START -->
+                                <div class="card-body">
+                                    <div class="g-3 row">
+                                        <div class="col-md-8">
+                                            <div id="autocomplete-container">
+                                                <svg class="search-icon" viewBox="0 0 16 16">
+                                                    <path d="M3.617 7.083a4.338 4.338 0 1 1 8.676 0 4.338 4.338 0 0 1-8.676 0m4.338-5.838a5.838 5.838 0 1 0 2.162 11.262l2.278 2.279a1 1 0 0 0 1.415-1.414l-1.95-1.95A5.838 5.838 0 0 0 7.955 1.245"
+                                                          fill-rule="evenodd"
+                                                          clip-rule="evenodd"></path>
+                                                </svg>
+
+                                                <input type="text"
+                                                       id="autocomplete-input"
+                                                       placeholder="Type in a UK postal code..."
+                                                       autocomplete="off" />
+                                                <button aria-label="Clear" class="clear-searchButton" type="button">
+                                                    <svg class="clear-icon" viewBox="0 0 24 24">
+                                                        <path d="M7.074 5.754a.933.933 0 1 0-1.32 1.317L10.693 12l-4.937 4.929a.931.931 0 1 0 1.319 1.317l4.938-4.93 4.937 4.93a.933.933 0 0 0 1.581-.662.93.93 0 0 0-.262-.655L13.331 12l4.937-4.929a.93.93 0 0 0-.663-1.578.93.93 0 0 0-.656.261l-4.938 4.93z"></path>
+                                                    </svg>
+                                                </button>
+                                                <ul id="suggestions-list"></ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <br />
+                                            <a href="javascript:void(0)" class="no-link" id="btnEditAddress">enter address manually</a>
+                                        </div>
+
+                                        <div class="col-md-4 addressDetails">
+                                            <label class="form-label">Company Name</label>
+                                            <input asp-for="Addresses.FirstOrDefault().CompanyName" class="form-control" readonly />
+
+                                        </div>
+                                        <div class="col-md-4 addressDetails">
+                                            <label class="form-label">Address Line One</label>
+                                            <input readonly asp-for="Addresses.FirstOrDefault().AddressLineOne" class="form-control" type="text" maxlength="63" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                                        </div>
+                                        <div class="col-md-4 addressDetails">
+                                            <label class="form-label">Address Line Two</label>
+                                            <input readonly asp-for="Addresses.FirstOrDefault().AddressLineTwo" class="form-control" type="text" maxlength="63" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                                        </div>
+                                        <div class="col-md-4 addressDetails">
+                                            <label class="form-label">City<span class="text-danger">*</span></label>
+                                            <input readonly asp-for="Addresses.FirstOrDefault().City" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                        </div>
+                                        <div class="col-md-4 addressDetails">
+                                            <label class="form-label">County<span class="text-danger">*</span></label>
+                                            <input readonly asp-for="Addresses.FirstOrDefault().County" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                        </div>
+                                        <div class="col-md-4 addressDetails">
+                                            <label class="form-label">Postcode<span class="text-danger">*</span></label>
+                                            <input readonly asp-for="Addresses.FirstOrDefault().Postcode" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Telephone Number<span class="text-danger">*</span></label>
+                                            <input asp-for="Addresses.FirstOrDefault().Country" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </span>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Exporter EORI Number<span style="color:red">*</span></label>
+                                    <input asp-for="ExporterDetails.FirstOrDefault().ExporterEorino" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Exporter VAT Number<span style="color:red">*</span></label>
+                                    <input asp-for="ExporterDetails.FirstOrDefault().ExporterVatno" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">IOSS Number<span style="color:red">*</span></label>
+                                    <input asp-for="ExporterDetails.FirstOrDefault().IossNumber" class="form-control" />
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a href="/Address/Index?orderId=@Model.OrderId">
+                                    <input type="button" class="btn btn-danger mb-0" value="Back" />
+                                </a>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <button class="btn btn-primary mb-0" type="submit" id="sendMessageButton">Next</button>
+                            </div>
+                        </div>
+                        <!-- Update email END -->
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-xl-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="vstack gap-4">
+                            <div class="card border">
+                                <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                                    <h6 class="card-header-title">Sender`s Details</h6>
+                                    <a href="/Address/Index?orderId=@Model.OrderId"><button type="button" class="btn btn-light btn-sm rounded-pill">Edit</button></a>
+                                </div>
+                                <div class="card-body">
+                                    <p>@order.Addresses.FirstOrDefault().Forename @order.Addresses.FirstOrDefault().Surname</p>
+                                    <p>@order.Addresses.FirstOrDefault().AddressLineOne @order.Addresses.FirstOrDefault().AddressLineTwo @order.Addresses.FirstOrDefault().City, @order.Addresses.FirstOrDefault().County. @order.Addresses.FirstOrDefault().Postcode</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script src="~/theme/mail/jqBootstrapValidation.min.js"></script>
+<script src="https://sdk.woosmap.com/map/map.js?key=woos-48c80350-88aa-333e-835a-07f4b658a9a4"
+        defer></script>
+<script>
+    $(window).on("load", function () {
+        if ('@IsExporterAddressAsCollectionAddress' == 'False') {
+            $("#IsExporterAddressAsCollectionAddress").attr('checked', false).change();
+
+        }
+        if ('@isCommercialShipment' == 'True') {
+            $("#IsCommercialShipmet").attr('checked', true);
+        }
+    });
+    $("#IsExporterAddressAsCollectionAddress").change(function () {
+        if (this.checked) {
+            $("#addressSection").hide();
+            $("#addressSectionDet").hide();
+
+        } else {
+            $("#addressSection").show();
+            $("#addressSectionDet").show();
+        }
+    })
+    function getFormData($form) {
+        var unindexed_array = $form.serializeArray();
+        var indexed_array = {};
+
+        $.map(unindexed_array, function (n, i) {
+            indexed_array[n['name']] = n['value'];
+        });
+        return indexed_array;
+    }
+    $("#exporterAddressForm input, #exporterAddressForm textarea, #exporterAddressForm select").jqBootstrapValidation({
+        preventSubmit: true,
+        submitError: function ($form, event, errors) {
+            debugger
+        },
+        submitSuccess: function ($form, event) {
+            debugger
+            event.preventDefault();
+            let model = getFormData($form);
+
+            let order = {};
+            order.OrderId = $("#OrderId").val();
+            order.Addresses = [];
+            order.Addresses.push(model);
+
+            order.ExporterDetails = [];
+
+            let exportDetail = {};
+            exportDetail.ExporterDetailId = $("#ExporterDetailId").val();
+            exportDetail.IsCommercialShipmet = $("#IsExporterAddressAsCollectionAddress").is(':checked')
+            exportDetail.IsExporterAddressAsCollectionAddress = $("#IsExporterAddressAsCollectionAddress").is(':checked')
+            exportDetail.ExporterEorino = $("#ExporterEorino").val();
+            exportDetail.ExporterVatno = $("#ExporterVatno").val();
+            order.ExporterDetails.push(exportDetail);
+
+            $this = $("#sendMessageButton");
+            $this.prop("disabled", true);
+
+            $.ajax({
+                url: "/Address/SaveExporter",
+                type: "POST",
+                data: order,
+                cache: false,
+                success: function () {
+    @*if ('@ViewBag.returnUrl'!="") {
+                        window.location.href = "/Address/" + '@ViewBag.returnUrl' + "?orderId=" + $("#OrderId").val();
+                        }*@
+                        window.location.href = "/Address/Delivery?orderId=" + $("#OrderId").val()
+                },
+                error: function () {
+                    $('#success').html("<div class='alert alert-danger'>");
+                    $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                        .append("</button>");
+                    $('#success > .alert-danger').append($("<strong>").text("Sorry " + name + ", it seems that our mail server is not responding. Please try again later!"));
+                    $('#success > .alert-danger').append('</div>');
+                    $('#contactForm').trigger("reset");
+                },
+                complete: function () {
+                    setTimeout(function () {
+                        $this.prop("disabled", false);
+                    }, 1000);
+                }
+            });
+        },
+        filter: function () {
+            return $(this).is(":visible");
+        },
+    });
+    $('#btnEditAddress').click(function () {
+        $('#AddressLineOne').removeAttr('readonly');
+        $('#AddressLineTwo').removeAttr('readonly');
+        $('#City').removeAttr('readonly');
+        $('#County').removeAttr('readonly');
+        $('#Postcode').removeAttr('readonly');
+        $('#CompanyName').removeAttr('readonly');
+
+    });
+
+</script>

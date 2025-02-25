@@ -1,0 +1,73 @@
+﻿@model MegwayParcel.Common.Data.CustomerInvoice
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<h4>CustomerInvoice</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Save">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CustomerInvoiceId" class="control-label"></label>
+                <input asp-for="CustomerInvoiceId" class="form-control" />
+                <span asp-validation-for="CustomerInvoiceId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrderId" class="control-label"></label>
+                <input asp-for="OrderId" class="form-control" />
+                <span asp-validation-for="OrderId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CommodityCode" class="control-label"></label>
+                <input asp-for="CommodityCode" class="form-control" />
+                <span asp-validation-for="CommodityCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductDescription" class="control-label"></label>
+                <input asp-for="ProductDescription" class="form-control" />
+                <span asp-validation-for="ProductDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ValueForCustoms" class="control-label"></label>
+                <input asp-for="ValueForCustoms" class="form-control" />
+                <span asp-validation-for="ValueForCustoms" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalGoodsValue" class="control-label"></label>
+                <input asp-for="TotalGoodsValue" class="form-control" />
+                <span asp-validation-for="TotalGoodsValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShippingCharges" class="control-label"></label>
+                <input asp-for="ShippingCharges" class="form-control" />
+                <span asp-validation-for="ShippingCharges" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalValueForCustoms" class="control-label"></label>
+                <input asp-for="TotalValueForCustoms" class="form-control" />
+                <span asp-validation-for="TotalValueForCustoms" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsAgree" class="control-label"></label>
+                <input asp-for="IsAgree" class="form-control" />
+                <span asp-validation-for="IsAgree" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="List">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

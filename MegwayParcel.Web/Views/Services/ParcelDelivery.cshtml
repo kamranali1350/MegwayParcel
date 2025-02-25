@@ -1,0 +1,15 @@
+﻿@model MegwayParcel.Common.Data.Page
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] ="Service";
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+}
+<section class="pt-0 pt-lg-5">
+    <div class="container" style="background-color: #f6f9fc;">
+
+        @Html.Raw(Model.Detail)
+
+    </div>
+</section>

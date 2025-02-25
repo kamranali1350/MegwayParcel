@@ -1,0 +1,23 @@
+﻿@model MegwayParcel.Admin.Models.LandMarkViewModels.ImportViewModel
+@{
+    ViewData["Title"] = "Import LandMark Prices";
+}
+
+<div class="col-md-6 offset-md-3">
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Import LandMark Prices from Excel</h3>
+        </div>
+        <form asp-action="Import" method="post" enctype="multipart/form-data">
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="excelFile">Select Excel File</label>
+                    <input type="file" class="form-control" id="excelFile" name="excelFile" accept=".xlsx, .xls" required />
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Import</button>
+            </div>
+        </form>
+    </div>
+</div>

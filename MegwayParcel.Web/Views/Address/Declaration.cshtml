@@ -1,0 +1,468 @@
+﻿@model MegwayParcel.Common.Data.Order
+@using MegwayParcel.Web.Models
+@using Newtonsoft.Json;
+@{
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+    ViewData["Title"] = "Customs Declaration";
+
+    List<Country> countries = (List<Country>)ViewBag.contries;
+
+    var quote = JsonConvert.DeserializeObject<Shipment>(Model.RequestQuote);
+    var packageWeight = quote.Consignment.Packages.Sum(item => Convert.ToDecimal(item.Weight ?? "0"));
+
+}
+<style>
+    #orderDetail th, #orderDetail td {
+        vertical-align: middle !important;
+    }
+</style>
+
+<input type="hidden" id="noOfParcel" value="@quote.Consignment.Packages.Count" />
+<input type="hidden" id="parcelWeight" value="@packageWeight" />
+
+<section class="pt-3 bg-body-tertiary">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="fs-4 mb-0"><i class="bi bi-bookmark-heart fa-fw me-1"></i>Customs Declaration</h1>
+            </div>
+        </div>
+        <div class="vstack gap-4">
+            <form id="collectionAddressForm">
+                <div class="card border">
+                    <!-- Card header -->
+                    <div class="card-header border-bottom">
+                        <h4 class="card-header-title">Consignment Summary</h4>
+                    </div>
+
+                    <!-- Card body START -->
+                    <div class="card-body">
+                        <!-- Form START -->
+                        <div class="row g-3">
+                            <input asp-for="OrderId" type="hidden" />
+                            <input asp-for="ConsignmentSummaries.FirstOrDefault().ConsignmentSummaryId" type="hidden" />
+
+
+                            <div class="col-md-4">
+                                <label class="form-label">Content Summary:<span class="text-danger">*</span></label>
+                                <input asp-for="ConsignmentSummaries.FirstOrDefault().ContentSummary" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Reason:<span class="text-danger">*</span></label>
+                                <select asp-for="ConsignmentSummaries.FirstOrDefault().ReasonForShipment" class="form-control" required="required" data-validation-required-message="Fill the required fields">
+                                    <option>Please specify</option>
+                                    <option>Gift</option>
+                                    <option>Intercompany Data</option>
+                                    <option>Sales</option>
+                                    <option>Sample</option>
+                                    <option>Repair</option>
+                                    <option>Return</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Total Goods Value:<span class="text-danger">*</span></label>
+                                <input type="number" asp-for="ConsignmentSummaries.FirstOrDefault().TotalGoodsValue" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Shipping Charges:<span class="text-danger">*</span></label>
+                                <input readonly asp-for="ConsignmentSummaries.FirstOrDefault().ShippingCharges" value="@Model.ShippingCharges" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Total Value for Customs:<span class="text-danger">*</span></label>
+                                <input readonly asp-for="ConsignmentSummaries.FirstOrDefault().TotalValueForCustoms" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                            </div>
+
+
+                        </div>
+                        <!-- Form END -->
+                    </div>
+                    <!-- Card body END -->
+
+                </div>
+
+                @if (!Model.IsSameCountry)
+                {
+                    <div class="card border">
+                        <!-- Card header -->
+                        <div class="card-header border-bottom">
+                            <h4 class="card-header-title">Create invoice for Customs</h4>
+                        </div>
+
+                        <!-- Card body START -->
+                        <div class="card-body">
+                            <!-- Form START -->
+                            <div class="row g-3">
+                                <p>
+                                    Please ensure that you are providing a true and accurate description and value for each item. Customs may refuse your shipment if your descriptions are too vague or if they deem your items under-valued. You can use our Commodity Code Finder to look up the code for each item in your consignment.
+                                </p>
+                                <div class="row" style="overflow:auto;">
+                                    <div class="col-md-12 text-end">
+                                        <input type="button" id="addNewRow" value="Add" class="btn btn-primary rounded-pill" />
+                                    </div>
+                                    <table class="table table-bordered table-hover table-striped table-responsive" id="orderDetail">
+                                        <thead>
+                                            <tr>
+                                                <th>Item No.</th>
+                                                <th>Commodity Code</th>
+                                                <th>Description of Goods/Products</th>
+                                                <th>Country Of Origin</th>
+                                                <th>Number of Items</th>
+                                                <th>Per Item Value</th>
+                                                <th>Per Item Weight</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.CustomerInvoices != null && Model.CustomerInvoices?.Count > 0)
+                                            {
+                                                @foreach (var sum in Model.CustomerInvoices)
+                                                {
+                                                    <tr>
+                                                        <td style="display:none">
+                                                            <input type="text" class="CustomerInvoiceId" hidden="hidden" value="@sum.CustomerInvoiceId" />
+                                                        </td>
+                                                        <td>Item <span class="boxNo">1</span></td>
+                                                        <td>
+                                                            <div class="input-group mb-3">
+                                                                <input type="text" class="form-control CommodityCode" value="@sum.CommodityCode" required="required" data-validation-required-message="Fill the required fields" />
+                                                                <div class="input-group-append">
+                                                                    <span class="input-group-text" style="padding: unset;">
+                                                                        <a href="https://www.trade-tariff.service.gov.uk/find_commodity" target="_blank">
+                                                                            <input type="button" class="btn btn-info btn-sm rounded-pill" value="find">
+                                                                        </a>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td><input type="text" class="form-control ProductDescription" value="@sum.ProductDescription" required="required" data-validation-required-message="Fill the required fields" /></td>
+                                                        <td>
+                                                            @*<input type="number" class="form-control CountryId" />*@
+                                                            <select class="form-control CountryId">
+                                                                @foreach (var item in countries)
+                                                                {
+
+                                                                    if (sum.CountryId == item.CountryID)
+                                                                    {
+                                                                        <option selected value="@item.CountryID" data-code="@item.CountryCode">@item.Title</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@item.CountryID" data-code="@item.CountryCode">@item.Title</option>
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                        <td><input type="number" class="form-control NoOfItems" min="0" required="required" value="@sum.NoOfItems" data-validation-required-message="Fill the required fields" /></td>
+                                                        <td><input type="text" class="form-control PerItemValue" required="required" value="@sum.PerItemValue" data-validation-required-message="Fill the required fields" /></td>
+                                                        <td><input type="text" class="form-control PerItemWeight" required="required" value="@sum.PerItemWeight" data-validation-required-message="Fill the required fields" /></td>
+                                                        <td>
+                                                            <i style="color:red;" class="bi bi-trash delete"></i>
+
+                                                            @* <input type="button" class="btn btn-danger delete rounded-pill" value="Delete" /> *@
+                                                        </td>
+                                                    </tr>
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td style="display:none">
+                                                        <input type="text" class="CustomerInvoiceId" hidden="hidden" />
+                                                    </td>
+
+                                                    <td>Item <span class="boxNo">1</span></td>
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control CommodityCode" required="required" data-validation-required-message="Fill the required fields" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" style="padding: unset;">
+                                                                    <a href="https://www.trade-tariff.service.gov.uk/find_commodity" target="_blank">
+                                                                        <input type="button" class="btn btn-info btn-sm rounded-pill" value="find">
+                                                                    </a>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td><input type="text" class="form-control ProductDescription" required="required" data-validation-required-message="Fill the required fields" /></td>
+                                                    <td>
+                                                        @*<input type="number" class="form-control CountryId" />*@
+                                                        <select class="form-control CountryId">
+                                                            @foreach (var item in countries)
+                                                            {
+                                                                <option value="@item.CountryID" data-code="@item.CountryCode">@item.Title</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <td><input type="number" class="form-control NoOfItems" min="0" required="required" data-validation-required-message="Fill the required fields" /></td>
+                                                    <td><input type="text" class="form-control PerItemValue" required="required" data-validation-required-message="Fill the required fields" /></td>
+                                                    <td>
+                                                        <input type="text" class="form-control PerItemWeight" required="required" data-validation-required-message="Fill the required fields" />
+
+                                                    </td>
+                                                    <td>
+                                                        @* <input type="button" class="btn btn-danger delete rounded-pill" value="Delete" /> *@
+                                                        <i style="color:red;" class="bi bi-trash delete"></i>
+
+                                                    </td>
+                                                </tr>
+
+                                            }
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="4" style="color:red" id="weightExceedId"></td>
+                                                <td colspan="3" align="right">Total Goods Value:</td>
+                                                <td><span id="totalGoodsValue">@Model.CustomerInvoices?.FirstOrDefault()?.TotalGoodsValue</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4" style="color:red" id="totalValueExceedId"></td>
+                                                <td colspan="3" align="right">Shipping Charges:</td>
+                                                <td><span id="shippingCharges">@Model.ShippingCharges</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="7" align="right">Total Value for Customs:</td>
+                                                <td><span id="totalValueOfCustom">@Model.CustomerInvoices?.FirstOrDefault()?.TotalValueForCustoms</span></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <br />
+
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href="/Address/Delivery?orderId=@Model.OrderId">
+                            <input type="button" class="btn btn-danger mb-0" value="Back" />
+                        </a>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <input type="submit" value="Next" class="btn btn-primary mb-0" />
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</section>
+
+
+<script src="~/theme/mail/jqBootstrapValidation.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        // Override Bootstrap validation for number input type to allow decimals
+        $('body').on('input', '.PerItemWeight', function (event) {
+            // Allow: backspace, delete, tab, escape, enter, and .
+            var value = $(this).val();
+
+            // Remove non-digit characters and extra decimal points
+            value = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+
+            // Ensure that there are no more than two decimal places
+            var decimalIndex = value.indexOf('.');
+            if (decimalIndex !== -1 && value.substring(decimalIndex + 1).length > 2) {
+                value = value.substring(0, decimalIndex + 3);
+            }
+
+            // Update input value
+            $(this).val(value);
+
+            let _totalAddedWeight = 0;
+            let incorrectWeightEntered = false;
+
+            $('#orderDetail tbody tr').each(function () {
+                let _weight = $(this).find('.PerItemWeight').val();
+                if (!isNaN(parseFloat(_weight))) {
+                    _totalAddedWeight += parseFloat(_weight);
+                    $('#weightExceedId').text('');
+                } else {
+                    $('#weightExceedId').text('Incorrect weight entered');
+                    incorrectWeightEntered = true;
+                    return false; // break the loop
+                }
+            });
+
+            if (_totalAddedWeight > parseFloat($('#parcelWeight').val())) {
+                $('#weightExceedId').text('The total weight (' + _totalAddedWeight + ' kg) exceeds the total quoted weight (' + $('#parcelWeight').val() + ' kg)');
+            }
+            //Calculate Total amount
+            calculateTotalValue();
+        });
+
+        $('body').on('input', '.PerItemValue', function (event) {
+            // Allow: backspace, delete, tab, escape, enter, and .
+            var value = $(this).val();
+
+            // Remove non-digit characters and extra decimal points
+            value = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+
+            // Ensure that there are no more than two decimal places
+            var decimalIndex = value.indexOf('.');
+            if (decimalIndex !== -1 && value.substring(decimalIndex + 1).length > 2) {
+                value = value.substring(0, decimalIndex + 3);
+            }
+
+            // Update input value
+            $(this).val(value);
+
+            //Calculate Total amount
+            calculateTotalValue();
+        });
+    });
+
+
+
+
+    function getFormData($form) {
+        var unindexed_array = $form.serializeArray();
+        var indexed_array = {};
+
+        $.map(unindexed_array, function (n, i) {
+            indexed_array[n['name']] = n['value'];
+        });
+        return indexed_array;
+    }
+    $("form").submit(function (event) {
+        debugger;
+        event.preventDefault();
+
+    });
+
+    $("#collectionAddressForm input, #collectionAddressForm textarea, #collectionAddressForm select").jqBootstrapValidation({
+        preventSubmit: true,
+        submitError: function ($form, event, errors) {
+            debugger
+        },
+        submitSuccess: function ($form, event) {
+            debugger
+            event.preventDefault();
+            $this = $("#sendMessageButton");
+            $this.prop("disabled", true);
+
+            var model = getFormData($form);
+
+            let isError = false;
+
+            let order = {};
+            order.OrderId = $("#OrderId").val();
+            order.ConsignmentSummaries = [];
+            order.ConsignmentSummaries.push(model);
+
+            if ($('#totalValueExceedId').text() != '' || $('#weightExceedId').text() != '') {
+                isError = true;
+            }
+            order.CustomerInvoices = [];
+            for (var i = 0; i < $("#orderDetail tbody tr").length; i++) {
+                var obj = {};
+                var tr = $("#orderDetail tbody tr")[i];
+                obj.CustomerInvoiceId = $(tr).find(".CustomerInvoiceId").val();
+                obj.CommodityCode = $(tr).find(".CommodityCode").val();
+                obj.ProductDescription = $(tr).find(".ProductDescription").val();
+                obj.CountryId = $(tr).find(".CountryId").val();
+                obj.NoOfItems = $(tr).find(".NoOfItems").val();
+                obj.ValueForCustoms = $(tr).find(".PerItemValue").val();
+                obj.PerItemValue = $(tr).find(".PerItemValue").val();
+                obj.PerItemWeight = $(tr).find(".PerItemWeight").val();
+                obj.TotalGoodsValue = $("#totalGoodsValue").text();
+                obj.ShippingCharges = $("#shippingCharges").text();
+                obj.TotalValueForCustoms = $("#totalValueOfCustom").text();
+                order.CustomerInvoices.push(obj)
+            }
+            if (isError) {
+            } else {
+                $.ajax({
+                    url: "/Address/SaveDeclaration",
+                    type: "POST",
+                    datatype: "json",
+                    data: order,
+                    success: function (data) {
+                        debugger;
+                        window.location.href = "/Address/Detail?orderId=" + $("#OrderId").val()
+                    },
+                    beforeSend: function () {
+                        $("#waitSpinnerId").show();
+                    },
+                    error: function (xhr) { // if error occured
+
+                    },
+                    complete: function () {
+                        $("#waitSpinnerId").hide();
+                    },
+
+                });
+            }
+        },
+        filter: function () {
+            return $(this).is(":visible");
+        },
+    });
+
+    //add row
+    $("#addNewRow").click(function () {
+        let _rowCount = $('#orderDetail').find("tbody tr").length;
+        debugger;
+        if (true) {//(_rowCount < $("#noOfParcel").val()) {
+            _rowCount++;
+            var $tableBody = $('#orderDetail').find("tbody");
+            var $trLast = $tableBody.find("tr:last");
+            var $trNew = $trLast.clone();
+            $trNew.find("input[type=text], input[type=number], textarea").val("")
+            $trNew.find(".boxNo").text(_rowCount);
+            $trLast.after($trNew);
+        } else {
+            alert("you can't add more than selected item");
+        }
+
+    });
+    $("body").on('click', '.delete', function () { //For Delete Row
+        debugger;
+        var thisRow = $(this).closest('tr'); //get clicked button colsest tr or clicked row
+
+        if ($('#orderDetail tbody tr').length == 1) {
+            $(thisRow).find("input[type=text], input[type=number], textarea").val("")
+        } else {
+            $(thisRow).remove(); //remove tr or row
+        }
+
+        //Calculate Total amount
+        calculateTotalValue();
+
+    });
+
+
+
+    $("body").on('keyup change', '.PerItemValue,.NoOfItems', function () {
+        calculateTotalValue();
+    });
+
+    function calculateTotalValue() {
+        var totalAmount = 0;
+        for (var i = 0; i < $("#orderDetail tbody tr").length; i++) {
+            let _tr = $("#orderDetail tbody tr")[i];
+            let _rowTotal = $(_tr).find(".PerItemValue").val() * $(_tr).find(".NoOfItems").val();
+            totalAmount = totalAmount + parseFloat(_rowTotal)
+        }
+        $("#totalGoodsValue").text(totalAmount.toFixed(2));
+        $("#totalValueOfCustom").text((parseFloat(totalAmount) + parseFloat($("#shippingCharges").text())).toFixed(2));
+        if (totalAmount.toFixed(2) > parseFloat($('#TotalGoodsValue').val())) {
+            $('#totalValueExceedId').text('Total goods value should not exceed')
+        } else { $('#totalValueExceedId').text('') }
+    }
+
+    $("body").on('keyup change', '#TotalGoodsValue', function () {
+
+        let goodval = parseFloat($("#TotalGoodsValue").val());
+        let shipping = parseFloat($("#ShippingCharges").val());
+        $("#TotalValueForCustoms").val(parseFloat(goodval) + parseFloat(shipping)).toFixed(2);
+
+    });
+</script>

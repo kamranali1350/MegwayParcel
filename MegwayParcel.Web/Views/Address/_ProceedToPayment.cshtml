@@ -1,0 +1,38 @@
+﻿ @model TakepaymentsGateway.HostedPaymentForm
+<div class="modal-dialog" role="document">
+    <div class="modal-content" style="border: solid 1px;">
+        <div class="modal-header">
+            <h5 class="modal-title bg-google">Confirmation</h5>
+            <button type="button" class="close" onclick="closePaymentModal();" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form method="post" action="@Model.ActionUrl" class="">
+
+            <div class="modal-body">
+                <p>Are you sure you want to proceed payment?</p>
+            </div>
+            <input type="hidden" name="merchantID" value="@Model.MerchantID">
+            <input type="hidden" name="action" value="@Model.TransactionType">
+            <input type="hidden" name="type" value="@Model.Type">
+            <input type="hidden" name="countryCode" value="826">
+            <input type="hidden" name="currencyCode" value="@Model.CurrencyCode">
+            <input type="hidden" name="amount" value="@Model.Amount">
+            <input type="hidden" name="orderRef" value="@Model.OrderRef">
+            <input type="hidden" name="formResponsive" value="@Model.FormResponsive">
+            <input type="hidden" name="transactionUnique" value="@Model.TransactionUnique">
+            <input type="hidden" name="redirectURL" value="@Model.RedirectUrl">
+            <input type="hidden" name="signature" value="@Model.Signature">
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary rounded-pill">Proceed</button>
+                <button type="button" onclick="closePaymentModal();" class="btn btn-secondary rounded-pill" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+<style>
+    .modal-dialog {
+        height: auto !important;
+    }
+
+</style>

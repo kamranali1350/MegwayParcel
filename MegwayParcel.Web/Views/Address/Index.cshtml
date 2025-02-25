@@ -1,0 +1,235 @@
+﻿@model MegwayParcel.Common.Data.Address
+
+@{
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+    ViewData["Title"] = "Index";
+    int IsSameCountry = ((bool)ViewBag.IsSameCountry) ? 1 : 0;
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<link href="~/css/postalcodeautofill.css" rel="stylesheet" />
+<script src="~/js/postalcodeautofill.js"></script>
+<input type="hidden" id="IsSameCountry" value="@IsSameCountry" />
+
+<section class="pt-3 bg-body-tertiary">
+    <div class="container">
+        <div class="vstack gap-4">
+
+            <form name="sentMessage" novalidate="novalidate" id="collectionAddressForm">
+                <!-- Personal info START -->
+                <div class="card border">
+                    <!-- Card header -->
+                    <div class="card-header border-bottom">
+                        <h4 class="card-header-title">Sender's Details</h4>
+                    </div>
+
+                    <!-- Card body START -->
+                    <div class="card-body">
+                        <!-- Form START -->
+                        <div class="row g-3">
+                            <!-- Profile photo -->
+                            <input asp-for="AddressId" hidden="hidden" />
+                            <input asp-for="OrderId" type="hidden" />
+                            <input asp-for="TypeId" type="hidden" />
+
+
+
+                            <div class="col-md-4">
+                                <label class="form-label">Forename<span class="text-danger">*</span></label>
+                                <input asp-for="Forename" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Surname<span class="text-danger">*</span></label>
+                                <input asp-for="Surname" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Email Address<span class="text-danger">*</span></label>
+                                <input asp-for="EmailAddress" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                            </div>
+                           @*  <div class="col-md-4">
+                                <label class="form-label">Telephone Number<span class="text-danger">*</span></label>
+                                <input asp-for="Country" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                            </div> *@
+                            <div class="col-md-4">
+                                <label class="form-label">Mobile Number<span class="text-danger">*</span></label>
+                                <input asp-for="MobileNumber" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                            </div>
+
+
+                        </div>
+                        <!-- Form END -->
+                    </div>
+                    <!-- Card body END -->
+
+                </div>
+                <!-- Personal info END -->
+                <br>
+                <!-- Update email START -->
+                <div class="card border">
+                    <!-- Card header -->
+                    <div class="card-header border-bottom">
+                        <h4 class="card-header-title">Collection Address</h4>
+                    </div>
+
+                    <!-- Card body START -->
+                    <div class="card-body">
+                        <div class="g-3 row">
+                            <div class="col-md-8">
+                                <div id="autocomplete-container">
+                                    <svg class="search-icon" viewBox="0 0 16 16">
+                                        <path d="M3.617 7.083a4.338 4.338 0 1 1 8.676 0 4.338 4.338 0 0 1-8.676 0m4.338-5.838a5.838 5.838 0 1 0 2.162 11.262l2.278 2.279a1 1 0 0 0 1.415-1.414l-1.95-1.95A5.838 5.838 0 0 0 7.955 1.245"
+                                              fill-rule="evenodd"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+
+                                    <input type="text"
+                                           id="autocomplete-input"
+                                           placeholder="Type in a UK postal code..."
+                                           autocomplete="off" />
+                                    <button aria-label="Clear" class="clear-searchButton" type="button">
+                                        <svg class="clear-icon" viewBox="0 0 24 24">
+                                            <path d="M7.074 5.754a.933.933 0 1 0-1.32 1.317L10.693 12l-4.937 4.929a.931.931 0 1 0 1.319 1.317l4.938-4.93 4.937 4.93a.933.933 0 0 0 1.581-.662.93.93 0 0 0-.262-.655L13.331 12l4.937-4.929a.93.93 0 0 0-.663-1.578.93.93 0 0 0-.656.261l-4.938 4.93z"></path>
+                                        </svg>
+                                    </button>
+                                    <ul id="suggestions-list"></ul>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <br />
+                                <a href="javascript:void(0)" class="no-link" id="btnEditAddress">enter address manually</a>
+                            </div>
+
+                            <div class="col-md-4 addressDetails">
+                                <label class="form-label">Company Name</label>
+                                <input asp-for="CompanyName" class="form-control" readonly />
+
+                            </div>
+                            <div class="col-md-4 addressDetails">
+                                <label class="form-label">Address Line One</label>
+                                <input readonly asp-for="AddressLineOne" class="form-control" type="text" maxlength="63" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+
+                            </div>
+                            <div class="col-md-4 addressDetails">
+                                <label class="form-label">Address Line Two</label>
+                                <input readonly asp-for="AddressLineTwo" class="form-control" type="text" maxlength="63" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                            </div>
+                            <div class="col-md-4 addressDetails">
+                                <label class="form-label">City<span class="text-danger">*</span></label>
+                                <input readonly asp-for="City" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+
+                            </div>
+                            <div class="col-md-4 addressDetails">
+                                <label class="form-label">County<span class="text-danger">*</span></label>
+                                <input readonly asp-for="County" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+
+                            </div>
+                            <div class="col-md-4 addressDetails">
+                                <label class="form-label">Postcode<span class="text-danger">*</span></label>
+                                <input readonly asp-for="Postcode" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                            </div>
+                            <div class="col-md-4 addressDetails">
+                                <label class="form-label">Country<span class="text-danger">*</span></label>
+                                <input readonly asp-for="Country" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                            </div>
+
+                            <!-- Button -->
+                            <div class="col-12 text-end">
+                                <button class="btn btn-primary mb-0" type="submit" id="sendMessageButton">
+                                    Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card body END -->
+                <!-- Update email END -->
+            </form>
+
+
+        </div>
+    </div>
+</section>
+
+
+<script src="~/theme/mail/jqBootstrapValidation.min.js"></script>
+@* <script src="https://sdk.woosmap.com/map/map.js?key=woos-48c80350-88aa-333e-835a-07f4b658a9a4"
+        defer></script> *@
+<script>
+    function getFormData($form) {
+        var unindexed_array = $form.serializeArray();
+        var indexed_array = {};
+
+        $.map(unindexed_array, function (n, i) {
+            indexed_array[n['name']] = n['value'];
+        });
+        return indexed_array;
+    }
+    $("#collectionAddressForm input, #collectionAddressForm textarea, #collectionAddressForm select").jqBootstrapValidation({
+        preventSubmit: true,
+        submitError: function ($form, event, errors) {
+            debugger
+        },
+        submitSuccess: function ($form, event) {
+            debugger
+            event.preventDefault();
+            let model = getFormData($form)
+
+
+            $this = $("#sendMessageButton");
+            $this.prop("disabled", true);
+
+            $.ajax({
+                url: "/Address/Save",
+                type: "POST",
+                data: model,
+                cache: false,
+                success: function () {
+                    $('#success').html("<div class='alert alert-success'>");
+                    $('#success > .alert-success').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                        .append("</button>");
+                    $('#success > .alert-success')
+                        .append("<strong>Your message has been sent. </strong>");
+                    $('#success > .alert-success')
+                        .append('</div>');
+
+                    if ($("#IsSameCountry").val() == "0") {
+                        window.location.href = "/Address/Exporter?orderId=" + $("#OrderId").val();
+                    } else {
+                        window.location.href = "/Address/Delivery?orderId=" + $("#OrderId").val();
+                    }
+
+                },
+                error: function () {
+                    $('#success').html("<div class='alert alert-danger'>");
+                    $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                        .append("</button>");
+                    $('#success > .alert-danger').append($("<strong>").text("Sorry " + name + ", it seems that our mail server is not responding. Please try again later!"));
+                    $('#success > .alert-danger').append('</div>');
+                    $('#contactForm').trigger("reset");
+                },
+                complete: function () {
+                    setTimeout(function () {
+                        $this.prop("disabled", false);
+                    }, 1000);
+                }
+            });
+        },
+        filter: function () {
+            return $(this).is(":visible");
+        },
+    });
+
+    $('#btnEditAddress').click(function () {
+        $('#AddressLineOne').removeAttr('readonly');
+        $('#AddressLineTwo').removeAttr('readonly');
+        $('#City').removeAttr('readonly');
+        $('#County').removeAttr('readonly');
+        $('#Postcode').removeAttr('readonly');
+        $('#CompanyName').removeAttr('readonly');
+        $('#Country').removeAttr('readonly');
+
+    });
+</script>
+

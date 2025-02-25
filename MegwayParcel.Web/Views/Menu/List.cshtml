@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MegwayParcel.Common.Data.Menu>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>List</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MenuId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MenuName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ControllerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActionName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MenuId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MenuName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ControllerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.MenuId  }) |
+                @Html.ActionLink("Details", "Details", new { id=item.MenuId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.MenuId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+}
+<style>
+    #serviceId > option {
+        background-color: white !important;
+    }
+</style>
+
+<section class="pt-0 pt-lg-5">
+    <div class="container">
+        <!-- Content START -->
+        <div class="row mb-3">
+            <div class="col-md-10 mx-auto">
+                <h5 style="text-align:center;">TRACK YOUR PARCELS HERE</h5>
+                <p>
+                    You can monitor your parcel's progress with all our carriers online. To track your delivery, enter your tracking number found in your order confirmation email or order history.
+                </p>
+            </div>
+        </div>
+        <div class="row mb-3">
+
+            <div class="col-md-10 mx-auto">
+                <div id="ordertracker-widget"></div>
+            </div>
+        </div>
+
+
+
+    </div>
+</section>
+
+<script src="https://www.ordertracker.com/sdk.js"></script>
+<script>
+    Ordertracker({
+        "id": "667d5e08a049e80378ec9d51",
+        /*
+            If you want to load the tracking status directly instead of showing a tracking form
+            Uncomment the next line & replace YOUR_TRACKING_NUMBER by a valid tracking number
+        */
+        //"trackingNumber": "YOUR_TRACKING_NUMBER"
+    }).render('#ordertracker-widget')
+</script>

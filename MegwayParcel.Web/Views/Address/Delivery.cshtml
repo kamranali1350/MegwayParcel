@@ -1,0 +1,391 @@
+﻿@using MegwayParcel.Common.Data
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@model Order
+
+@{
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+    ViewData["Title"] = "Delivery Address";
+    var order = (Order)ViewBag.order;
+    var collection = order.Addresses.Where(x => x.TypeId == 1).FirstOrDefault();
+    var exporter = order.Addresses.Where(x => x.TypeId == 2).FirstOrDefault();
+    if (exporter == null)
+    {
+        exporter = collection;
+    }
+    var delivery = Model.DeliveryDetails.FirstOrDefault();
+    bool isSignatureRequired = false;
+    if (delivery?.IsSignatureRequired == true)
+    {
+        isSignatureRequired = true;
+    }
+    bool IsResidentialAddress = false;
+    if (delivery?.IsResidentialAddress == true)
+    {
+        IsResidentialAddress = true;
+    }
+
+    double sigPrice = 0;
+    double residentialPrice = 0;
+    var shipmentResult = JsonConvert.DeserializeObject<ServiceResult>(Model.SelectQuote);
+    if (shipmentResult.SignatureRequiredAvailable && shipmentResult?.OptionalExtras?.Count > 0)
+    {
+        var sig = shipmentResult.OptionalExtras.Where(x => x.Code == "SIG").FirstOrDefault();
+        if (sig != null)
+        {
+            sigPrice = sig.Cost;
+        }
+        var residentail = shipmentResult.OptionalExtras.Where(x => x.Code == "RES").FirstOrDefault();
+        if (residentail != null)
+        {
+            residentialPrice = residentail.Cost;
+        }
+    }
+}
+
+<link href="~/css/postalcodeautofill.css" rel="stylesheet" />
+<script src="~/js/postalcodeautofill.js"></script>
+
+
+<section class="pt-3 bg-body-tertiary">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-xl-9">
+                <div class="vstack gap-4">
+                    <form name="sentMessage" id="deliveryAddressForm">
+                        <input asp-for="OrderId" class="form-control" hidden="hidden" />
+                        <input asp-for="DeliveryDetails.FirstOrDefault().DeliveryDetailId" class="form-control" hidden="hidden" />
+                        <input asp-for="Addresses.FirstOrDefault().AddressId" class="form-control" hidden="hidden" />
+
+                        <!-- Personal info START -->
+                        <div class="card border">
+                            <!-- Card header -->
+                            <div class="card-header border-bottom">
+                                <h4 class="card-header-title">Receiver's Details</h4>
+                            </div>
+
+                            <!-- Card body START -->
+                            <div class="card-body">
+                                <!-- Form START -->
+                                <div class="row g-3">
+
+                                    <div class="col-md-4">
+                                        <label class="form-label">Forename<span class="text-danger">*</span></label>
+                                        <input asp-for="Addresses.FirstOrDefault().Forename" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="form-label">Surname<span class="text-danger">*</span></label>
+                                        <input asp-for="Addresses.FirstOrDefault().Surname" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                        <span class="text-danger" data-valmsg-for="Surname" data-valmsg-replace="true"></span>
+
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Email Address<span class="text-danger">*</span></label>
+                                        <input asp-for="Addresses.FirstOrDefault().EmailAddress" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="form-label">Mobile Number<span class="text-danger">*</span></label>
+                                        <input asp-for="Addresses.FirstOrDefault().MobileNumber" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                    </div>
+
+
+                                </div>
+                                <!-- Form END -->
+                            </div>
+                            <!-- Card body END -->
+
+                        </div>
+                        <!-- Personal info END -->
+                        <br>
+                        <!-- Update email START -->
+                        <div class="card border">
+                            <!-- Card header -->
+                            <div class="card-header border-bottom">
+                                <h4 class="card-header-title">Address Details</h4>
+                            </div>
+
+                            <!-- Card body START -->
+                            <div class="card-body">
+                                <div class="g-3 row">
+                                    <div class="col-md-8">
+                                        <div id="autocomplete-container">
+                                            <svg class="search-icon" viewBox="0 0 16 16">
+                                                <path d="M3.617 7.083a4.338 4.338 0 1 1 8.676 0 4.338 4.338 0 0 1-8.676 0m4.338-5.838a5.838 5.838 0 1 0 2.162 11.262l2.278 2.279a1 1 0 0 0 1.415-1.414l-1.95-1.95A5.838 5.838 0 0 0 7.955 1.245"
+                                                      fill-rule="evenodd"
+                                                      clip-rule="evenodd"></path>
+                                            </svg>
+
+                                            <input type="text"
+                                                   id="autocomplete-input"
+                                                   placeholder="Type in a UK postal code..."
+                                                   autocomplete="off" />
+                                            <button aria-label="Clear" class="clear-searchButton" type="button">
+                                                <svg class="clear-icon" viewBox="0 0 24 24">
+                                                    <path d="M7.074 5.754a.933.933 0 1 0-1.32 1.317L10.693 12l-4.937 4.929a.931.931 0 1 0 1.319 1.317l4.938-4.93 4.937 4.93a.933.933 0 0 0 1.581-.662.93.93 0 0 0-.262-.655L13.331 12l4.937-4.929a.93.93 0 0 0-.663-1.578.93.93 0 0 0-.656.261l-4.938 4.93z"></path>
+                                                </svg>
+                                            </button>
+                                            <ul id="suggestions-list"></ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <br />
+                                        <a href="javascript:void(0)" class="no-link" id="btnEditAddress">enter address manually</a>
+                                    </div>
+
+                                    <div class="col-md-4 addressDetails">
+                                        <label class="form-label">Company Name</label>
+                                        <input asp-for="Addresses.FirstOrDefault().CompanyName" class="form-control" readonly />
+
+                                    </div>
+                                    <div class="col-md-4 addressDetails">
+                                        <label class="form-label">Address Line One</label>
+                                        <input readonly asp-for="Addresses.FirstOrDefault().AddressLineOne" class="form-control" type="text" maxlength="63" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                                    </div>
+                                    <div class="col-md-4 addressDetails">
+                                        <label class="form-label">Address Line Two</label>
+                                        <input readonly asp-for="Addresses.FirstOrDefault().AddressLineTwo" class="form-control" type="text" maxlength="63" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                                    </div>
+                                    <div class="col-md-4 addressDetails">
+                                        <label class="form-label">City<span class="text-danger">*</span></label>
+                                        <input readonly asp-for="Addresses.FirstOrDefault().City" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                    </div>
+                                    <div class="col-md-4 addressDetails">
+                                        <label class="form-label">County<span class="text-danger">*</span></label>
+                                        <input readonly asp-for="Addresses.FirstOrDefault().County" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                    </div>
+                                    <div class="col-md-4 addressDetails">
+                                        <label class="form-label">Postcode<span class="text-danger">*</span></label>
+                                        <input readonly asp-for="Addresses.FirstOrDefault().Postcode" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Country<span class="text-danger">*</span></label>
+                                        <input asp-for="Addresses.FirstOrDefault().Country" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                                    </div>
+                                </div>
+
+                                <div class="g-3 row mt-3">
+                                    <div class="col-md-4">
+                                        <label class="control-label">
+                                            <input type="checkbox" asp-for="Addresses.FirstOrDefault().IsAddressResidential" />
+                                            Residential Address
+                                            @if (residentialPrice > 0)
+                                            {
+                                                <span>(£ <span id="residentialPrice">@residentialPrice</span>)</span>
+                                            }
+                                            <span class="text-danger">*</span>
+                                        </label>
+
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="control-label">
+                                            <input type="checkbox" name="IsSignatureRequired" id="IsSignatureRequired" />
+                                            Signature Required
+                                            @if (sigPrice > 0)
+                                            {
+                                                <span>(£ <span id="signaturePrice">@sigPrice</span>)</span>
+                                            }<span class="text-danger">*</span>
+                                        </label>
+                                    </div>
+
+
+
+                                    <div class="col-md-4">
+                                        <label class="control-label">Receiver Tax Id</label>
+                                        <input asp-for="DeliveryDetails.FirstOrDefault().ReceiverTaxId" class="form-control" />
+                                    </div>
+                                </div>
+                                <br />
+                                <!-- Button -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <a href="/Address/@(Model.IsSameCountry?"Index":"Exporter")?orderId=@Model.OrderId">
+                                            <input type="button" class="btn btn-danger mb-0" value="Back" />
+
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <button class="btn btn-primary mb-0" type="submit" id="sendMessageButton">Next</button>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <!-- Card body END -->
+                        <!-- Update email END -->
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-xl-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="vstack gap-4">
+                            <div class="card border">
+                                <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                                    <h6 class="card-header-title">Sender's Details</h6>
+                                    <a href="/Address/Index?orderId=@Model.OrderId"><button type="button" class="btn btn-light btn-sm rounded-pill">Edit</button></a>
+                                </div>
+                                <div class="card-body">
+                                    <p>@collection.Forename @collection.Surname</p>
+                                    <p>@collection.AddressLineOne @collection.AddressLineTwo @collection.City, @collection.County. @collection.Postcode</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @if (!order.IsSameCountry)
+                    {
+                        <div class="col-md-12">
+                            <div class="vstack gap-4">
+                                <div class="card border">
+                                    <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                                        <h6 class="card-header-title">Exporter's Details</h6>
+                                        <a href="/Address/Exporter?orderId=@Model.OrderId"><button type="button" class="btn btn-light btn-sm rounded-pill">Edit</button></a>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>@exporter.Forename @exporter.Surname</p>
+                                        <p>@exporter.AddressLineOne @exporter.AddressLineTwo @exporter.City, @exporter.County. @exporter.Postcode</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+<script src="~/theme/mail/jqBootstrapValidation.min.js"></script>
+<script src="https://sdk.woosmap.com/map/map.js?key=woos-48c80350-88aa-333e-835a-07f4b658a9a4"
+        defer></script>
+<script>
+    $(document).ready(function () {
+        $("#deliveryAddressForm").validate({
+            errorClass: "text-danger",
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().find("[data-valmsg-for='" + element.attr("name") + "']"));
+            }
+        });
+    });
+    $(window).on("load", function () {
+        if ('@isSignatureRequired' == 'True') {
+            $("#IsSignatureRequired").attr('checked', true);
+        }
+        if ('@IsResidentialAddress' == 'True') {
+            $("#IsAddressResidential").attr('checked', true);
+        }
+    });
+    function getFormData($form) {
+        var unindexed_array = $form.serializeArray();
+        var indexed_array = {};
+
+        $.map(unindexed_array, function (n, i) {
+            indexed_array[n['name']] = n['value'];
+        });
+        return indexed_array;
+    }
+    $("#deliveryAddressForm input, #deliveryAddressForm textarea, #deliveryAddressForm select").jqBootstrapValidation({
+        preventSubmit: true,
+        submitError: function ($form, event, errors) {
+            debugger
+        },
+        submitSuccess: function ($form, event) {
+            debugger
+            event.preventDefault();
+            var model = getFormData($form);
+
+            model.IsAddressResidential = $("#IsAddressResidential").is(':checked');
+            let order = {};
+            order.OrderId = $("#OrderId").val();
+            order.Addresses = [];
+            order.Addresses.push(model);
+
+            order.DeliveryDetails = [];
+
+
+
+
+            let delivery = {};
+
+            delivery.DeliveryDetailId = $("#DeliveryDetailId").val();
+            delivery.IsSignatureRequired = $("#IsSignatureRequired").is(':checked');
+            delivery.IsResidentialAddress = $("#IsAddressResidential").is(':checked');
+            delivery.ReceiverTaxId = $("#ReceiverTaxId").val();
+            order.DeliveryDetails.push(delivery);
+
+            let _sigPrice = $("#signaturePrice").text();
+            if (delivery.IsSignatureRequired && _sigPrice != undefined && _sigPrice != '' && _sigPrice != null) {
+                order.SignaturePrice = _sigPrice;
+            } else {
+                order.SignaturePrice = 0;
+            }
+
+            let _resPrice = $("#residentialPrice").text();
+            if (delivery.IsResidentialAddress && _resPrice != undefined && _resPrice != '' && _resPrice != null) {
+                order.ResidentialSurcharge = _resPrice;
+            } else {
+                order.ResidentialSurcharge = 0;
+            }
+
+
+
+            $this = $("#sendMessageButton");
+            $this.prop("disabled", true);
+
+            $.ajax({
+                url: "/Address/SaveDelivery",
+                type: "POST",
+                data: order,
+                cache: false,
+                success: function () {
+                    $('#success').html("<div class='alert alert-success'>");
+                    $('#success > .alert-success').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                        .append("</button>");
+                    $('#success > .alert-success')
+                        .append("<strong>Your message has been sent. </strong>");
+                    $('#success > .alert-success')
+                        .append('</div>');
+                    window.location.href = "/Address/Declaration?orderId=" + $("#OrderId").val();
+
+                },
+                error: function () {
+                    $('#success').html("<div class='alert alert-danger'>");
+                    $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                        .append("</button>");
+                    $('#success > .alert-danger').append($("<strong>").text("Sorry " + name + ", it seems that our mail server is not responding. Please try again later!"));
+                    $('#success > .alert-danger').append('</div>');
+                    $('#contactForm').trigger("reset");
+                },
+                complete: function () {
+                    setTimeout(function () {
+                        $this.prop("disabled", false);
+                    }, 1000);
+                }
+            });
+        },
+        filter: function () {
+            return $(this).is(":visible");
+        },
+    });
+
+    $('#btnEditAddress').click(function () {
+        $('#AddressLineOne').removeAttr('readonly');
+        $('#AddressLineTwo').removeAttr('readonly');
+        $('#City').removeAttr('readonly');
+        $('#County').removeAttr('readonly');
+        $('#Postcode').removeAttr('readonly');
+        $('#CompanyName').removeAttr('readonly');
+
+    });
+</script>
+

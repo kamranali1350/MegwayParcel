@@ -1,0 +1,89 @@
+﻿@model IEnumerable<MegwayParcel.Common.Data.ContactU>
+
+@{
+    ViewData["Title"] = "Contact";
+}
+<table class="table table-bordered" id="myTable">
+    <thead>
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>Message</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input type="hidden" class="contact-us-id" value="@item.ContactUsId" />
+                    <input type="hidden" class="is-read" value="@item.IsRead" val="@item.IsRead" />
+                    <input type="button" class="btn btn-primary btn-IsRead" value="@(item.IsRead==true?"UnRead":"Read")">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Details)
+                </td>
+                <td>
+                    <input type="button" class="btn btn-primary btn-delete" value="Delete">
+                </td>
+                @*<td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+    var thisRow;
+    $("body").on('click', '.btn-delete', function () {
+        thisRow = $(this).closest('tr');
+        let _id = $(thisRow).find('.contact-us-id').val();
+        $.ajax({
+            url: "/Setting/DeleteContact?id=" + _id,
+            type: "GET",
+            datatype: "json",
+            success: function (data) {
+                location.reload();
+            }
+        });
+    });
+    $("body").on('click', '.btn-IsRead', function () {
+        debugger;
+        thisRow = $(this).closest('tr');
+        let _id = $(thisRow).find('.contact-us-id').val();
+        let _isRead = $(thisRow).find('.is-read').val();
+        $.ajax({
+            url: "/Setting/ChangeIsRead?id=" + _id + "&isRead=" + _isRead,
+            type: "GET",
+            datatype: "json",
+            success: function (data) {
+                location.reload();
+            }
+        });
+    });
+
+
+</script>

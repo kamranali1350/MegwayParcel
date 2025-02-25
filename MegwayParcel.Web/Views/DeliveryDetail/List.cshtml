@@ -1,0 +1,57 @@
+﻿@model IEnumerable<MegwayParcel.Common.Data.DeliveryDetail>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>List</h1>
+
+<p>
+    <a asp-action="Index">Create New</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryDetailId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsResidentialAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsSignatureRequired)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReceiverTaxId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryDetailId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsResidentialAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsSignatureRequired)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReceiverTaxId)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {  id=item.DeliveryDetailId  }) |
+                  </td>
+        </tr>
+}
+    </tbody>
+</table>

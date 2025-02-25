@@ -1,0 +1,72 @@
+﻿@model MegwayParcel.Common.Data.User
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Users</h4>
+<hr />
+
+
+<form asp-action="Save">
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <input asp-for="UserId" type="hidden" />
+            <span asp-validation-for="UserId" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label font-weight-bold"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="PhoneNo" class="control-label font-weight-bold"></label>
+                <input asp-for="PhoneNo" class="form-control" />
+                <span asp-validation-for="PhoneNo" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Email" class="control-label font-weight-bold"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Password" class="control-label font-weight-bold"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="RoleId" class="control-label font-weight-bold"></label>
+                <select asp-for="RoleId" asp-items="ViewBag.Roles" class="form-control">
+                    <option value="0">--Select Role--</option>
+                </select>
+                <span asp-validation-for="RoleId" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
+
+
+
+<div>
+    <a asp-action="List">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

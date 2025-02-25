@@ -1,0 +1,173 @@
+﻿@using MegwayParcel.Common
+@using MegwayParcel.Common.Data
+@model IEnumerable<Customer>
+
+@{
+    ViewData["Title"] = "List";
+    var settings = (List<CompanySetting>)ViewBag.settings;
+}
+
+<h1>List</h1>
+<a href="/Account/Register">Create</a>
+<table class="table table-bordered" id="myTable">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.BusinessType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AcountName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ForeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SurName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+           @*  <th>
+                @Html.DisplayNameFor(model => model.TelephoneNumber)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.MobileNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CompanySetting.SettingName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    <input type="hidden" class="customerId" value="@item.CustomerId">
+                    <input type="hidden" class="settingId" value="@item.CompanySettingId">
+                    @Html.DisplayFor(modelItem => item.BusinessType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AcountName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    <span class="foreName">@item.ForeName</span>
+                </td>
+                <td>
+                    <span class="surName">@item.SurName</span>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+               @*  <td>
+                    @Html.DisplayFor(modelItem => item.TelephoneNumber)
+                </td> *@
+                <td>
+                    @Html.DisplayFor(modelItem => item.MobileNo)
+                </td>
+                <td>
+                    <span>@item.CompanySetting?.SettingName</span>
+                </td>
+                <td>
+                    <input type="button" class="btn btn-primary btn-assign-setting" value="Assign Setting">
+                </td>
+                <td>
+                    <a href="/Account/Order/@item.CustomerId">
+                        <input type="button" class="btn btn-info" value="View Oreders">
+                    </a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<!-- Modal -->
+<div class="modal fade" id="assignModal" role="dialog">
+    <div class="modal-dialog">
+        <form id="assignForm">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title">Assign Setting</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="hidden" id="customerId" />
+                                <label>Name</label>
+                                <span class="form-control" id="assignName"></span>
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Setting</label>
+                                <select class="form-control" id="ddlSettingId">
+                                    <option value="0">Select Setting</option>
+                                    @foreach (var item in settings)
+                                    {
+                                        <option value="@item.CompanySettingId">@item.SettingName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning mr-auto" data-dismiss="modal">Close</button>
+                    <button type="submit" id="assignBtn" class="btn btn-primary">Assign</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+
+    $("body").on('click', '.btn-assign-setting', function () {
+        let thisRow = $(this).closest('tr');
+        $("#assignName").text('');
+        let _name = $(thisRow).find(".foreName").text();
+        _name += " " + $(thisRow).find(".surName").text();
+
+        let _settingId = $(thisRow).find(".settingId").val();
+        let _customerId = $(thisRow).find(".customerId").val();
+        $("#assignName").text(_name);
+        $("#customerId").val(_customerId);
+        $("#ddlSettingId").val(_settingId);
+
+        $("#assignModal").modal('show');
+
+    });
+
+    $("#assignForm").submit(function (event) {
+        event.preventDefault();
+
+        let _customerId = $("#customerId").val();
+        let _settingId = $("#ddlSettingId").val();
+
+        $.ajax({
+            url: "/Account/AssignSetting?customerId=" + _customerId + "&settingId=" + _settingId,
+            type: "GET",
+            datatype: "json",
+            success: function (data) {
+                location.reload();
+            }
+
+        });
+
+
+    });
+</script>

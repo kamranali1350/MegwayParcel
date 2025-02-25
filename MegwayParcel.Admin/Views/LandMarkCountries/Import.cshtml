@@ -1,0 +1,45 @@
+﻿@model ImportViewModel
+@{
+    ViewData["Title"] = "Import LandMark Countries From Excel";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title text-center">@ViewData["Title"]</h3>
+            </div>
+            <form asp-action="Import" method="post" enctype="multipart/form-data">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="excelFile">Select Excel File</label>
+                        <input type="file" class="form-control" id="excelFile" name="excelFile" accept=".xlsx, .xls" required />
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            var messageType = "@ViewBag.MessageType";
+            var message = "@ViewBag.Message";
+
+            if (messageType && message) {
+                if (messageType === "success") {
+                    toastr.success(message);
+                } else if (messageType === "error") {
+                    toastr.error(message);
+                }
+            }
+        });
+    </script>
+}

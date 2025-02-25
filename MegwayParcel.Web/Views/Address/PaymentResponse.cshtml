@@ -1,0 +1,59 @@
+﻿@using MegwayParcel.Common.Data
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model PaymentResponse
+@{
+    ViewData["Title"] = "Payment Failed";
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+}
+
+@{
+    if (Model.OrderId == null || string.IsNullOrEmpty(Model.TransectionMessage))
+    {
+        Url.Action("Index", "Home");
+    }
+}
+@if (Model.StatusId == 1)
+{
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8">
+            <h3 class="text-success">Your order has been placed successfuly</h3>
+        </div>
+        <div class="col-md-2">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+            <a href="@Url.Action("Order", "address")" class="btn btn-success">View Orders</a>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8">
+            <h3 class="text-danger">Somthing went wrong with your payment process please try again</h3>
+            <p class="text-danger">Status : @Model.TransectionMessage</p>
+        </div>
+        <div class="col-md-2">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+            <a href="@Url.Action("Checkout", "address",new{orderId= Model.OrderId})" class="btn btn-success">Check Out order</a>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+}

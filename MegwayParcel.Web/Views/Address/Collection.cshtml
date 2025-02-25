@@ -1,0 +1,257 @@
+﻿@model MegwayParcel.Common.Data.Order
+@using MegwayParcel.Common.Data
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+    var collection = Model.Addresses.Where(x => x.TypeId == 1).FirstOrDefault();
+    var delivery = Model.Addresses.Where(x => x.TypeId == 2).FirstOrDefault();
+    var shipmentResult = JsonConvert.DeserializeObject<ServiceResult>(Model.SelectQuote);
+
+    double collAmount = 0;
+    string str = Context.Session.GetString("Setting");
+    CompanySetting setting = null;
+    if (str != null)
+    {
+        setting = JsonConvert.DeserializeObject<CompanySetting>(str);
+    }
+
+    if (setting != null)
+    {
+        collAmount = (double)setting.CollectionAmount;
+    }
+}
+
+<section class="pt-3 bg-body-tertiary">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="fs-4 mb-0"><i class="bi bi-bookmark-heart fa-fw me-1"></i>Collection/Drop-off Options</h1>
+                <p>
+                    Please note that whilst we enjoy very high
+                    success rates, collection times are not guaranteed. We
+                    recommend selecting a larger collection window where possible.
+                </p>
+            </div>
+        </div>
+        <div class="vstack gap-4">
+            <input type="hidden" asp-for="OrderId" />
+            <div class="card border">
+                <div class="card-header border-bottom"><h6>Collection Address</h6></div>
+                <div class="card-body">
+                    <p>
+                        @collection.Forename @collection.Surname,@collection.CompanyName, @collection.AddressLineOne,
+                    </p>
+                    .........................................................................................................................................
+
+                    <div class="row">
+                        @if(!shipmentResult.ServiceName.Contains("Evri 48 Postable C2C") &&
+                       !shipmentResult.ServiceName.Contains("Evri 48 Non POD C2C") &&
+                       !shipmentResult.ServiceName.Contains("Evri 24 Non POD C2C"))
+                        {
+                            <div class="col-md-6">
+                                <h2>Collection Options</h2>
+                                <div class="row">
+                                    @if (shipmentResult.CollectionOptions != null)
+                                    {
+                                        foreach (var item in shipmentResult?.CollectionOptions)
+                                        {
+                                            var collectionVat = collAmount > 0 && item.CollectionCharge > 0 ? (item.CollectionCharge / 100) * collAmount : 0;
+                                            <div class="col-md-12">
+                                                <input name="collectionOption" data-value="@(String.Format("{0:0.00}", (item.CollectionCharge + collectionVat)))" data-CollectionOptionID="@item.CollectionOptionID" type="radio" />&nbsp; @(item.CollectionOptionTitle) (£ @(String.Format("{0:0.00}", (item.CollectionCharge + collectionVat))))
+                                            </div>
+                                        }
+                                    }
+                                    else if (shipmentResult.IsWarehouseService == false)
+                                    {
+                                        <div class="col-md-12">
+                                            <input name="collectionOption" data-value="0" data-CollectionOptionID="-9" type="radio" />&nbsp; Book a collection
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        <div class="col-md-6">
+                            <h2>Drop off Options</h2>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input name="collectionOption" data-value="0" data-CollectionOptionID="-1" type="radio" />
+                                    <b>Megway Parcel Store</b> (free)
+                                    <p>1 Abington Square, Northampton, NN1 4AE. <span>Telephone.</span> 01604-356242</p>
+                                </div>
+
+
+                                @if (shipmentResult.ServiceName.ToLower().Contains("tg international") || shipmentResult.ServiceName.ToLower().Contains("fedex"))
+                                {
+                                    <div class="col-md-12">
+                                        <input name="collectionOption" data-value="0" data-CollectionOptionID="-2" type="radio" />
+                                        <b>FedEx Location</b>
+                                        <p><a href="https://local.fedex.com/en-gb" target="_blank">Click here to find Drop Off near you</a></p>
+                                    </div>
+
+                                }
+                                else if (shipmentResult.ServiceName.ToLower().Contains("tg express") || shipmentResult.ServiceName.ToLower().Contains("dhl"))
+                                {
+                                    <div class="col-md-12">
+                                        <input name="collectionOption" data-value="0" data-CollectionOptionID="-2" type="radio" />
+                                        <b>DHL Location</b>
+                                        <p><a href="https://locator.dhl.com/results?language=en&languageCountryCode=GB&resultUom=mi&light=n&countryCode=GB&clientAppCode=gbwcc&address=NN1+3LB&capability=78,79" target="_blank">Click here to find Drop Off near you</a></p>
+                                    </div>
+                                }
+                                else if (shipmentResult.ServiceName.Contains("Evri 48 Postable C2C") ||
+                                    shipmentResult.ServiceName.Contains("Evri 48 Non POD C2C") ||
+                                    shipmentResult.ServiceName.Contains("Evri 24 Non POD C2C"))
+                                {
+                                    <div class="col-md-12">
+                                        <input name="collectionOption" data-value="0" data-CollectionOptionID="-2" type="radio" />
+                                        <b>EVRI Parcelshop</b>
+                                        <p><a href="https://www.evri.com/find-a-parcelshop" target="_blank">Click here to find Drop Off near you</a></p>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    @if (!shipmentResult.ServiceName.StartsWith("Evri") &&
+                       (!shipmentResult.ServiceName.Contains("48 Postable C2C") ||
+                       !shipmentResult.ServiceName.Contains("48 Non POD C2C") ||
+                       !shipmentResult.ServiceName.Contains("24 Non POD C2C")))
+                    {
+                        <span id="collectionDateDiv">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h6>Collect Date:</h6>
+                                    <input type="date" id="collectionDate" class="form-control" />
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h6>Ready From:</h6>
+                                    <input type="time" id="collectionTime" class="form-control" min="09:00" max="13:00" />
+                                </div>
+                            </div>
+
+                            <p>
+                                Please add 1 working day to your estimated transit time if
+                                booking a collection service.
+                            </p>
+                        </span>
+                    }
+                    <br />
+                    @*<h6>Include the following orders in this collection:</h6>
+        <p>
+        QT-3201887 NN1 4AE (GB) to NN5 7LN (GB)   1.00kg
+        <label class="switch switch-text switch-primary switch-pill"><input type="checkbox" class="switch-input" checked="true"> <span data-on="On" data-off="Off" class="switch-label"></span> <span class="switch-handle"></span></label>
+
+        </p>*@
+
+                    <button type="button" class="btn btn-primary rounded-pill" id="btnConfirm">Confirm</button>
+                    <br /><br />
+                    <p>Goods are normally collected before 6pm.</p>
+                    <br /><br />
+                    <a href="/Address/Basket"><button type="button" class="btn btn-primary rounded-pill">Return to Basket</button></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<script>
+    $("#btnConfirm").click(function () {
+        let _order = {};
+        _order.OrderId = $("#OrderId").val();
+        _order.CollectionDate = $("#collectionDate").val();
+        _order.CollectionTime = $("#collectionTime").val();
+        _order.CollectionOptionId = $('input[name="collectionOption"]:checked').attr('data-collectionoptionid')
+        _order.CollectionCharges = $('input[name="collectionOption"]:checked').attr('data-value')
+        if ($(this).attr('data-collectionoptionid') > 0) {
+            if (_order.CollectionDate == '') {
+                alert('Select Collection Date');
+                return;
+            }
+            if (_order.CollectionTime == '') {
+                alert('Select Collection Time');
+                return;
+            }
+        }
+        if (_order.CollectionOptionId == undefined) {
+            alert('Select collection option');
+            return;
+        }
+
+        $.ajax({
+            url: "/Address/SaveCollection",
+            type: "POST",
+            data: _order,
+            cache: false,
+            success: function () {
+                $('#success').html("<div class='alert alert-success'>");
+                $('#success > .alert-success').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                    .append("</button>");
+                $('#success > .alert-success')
+                    .append("<strong>Your message has been sent. </strong>");
+                $('#success > .alert-success')
+                    .append('</div>');
+                window.location.href = "/Address/Insurance?orderId=" + $("#OrderId").val()
+            },
+            error: function () {
+                $('#success').html("<div class='alert alert-danger'>");
+                $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                    .append("</button>");
+                $('#success > .alert-danger').append($("<strong>").text("Sorry " + name + ", it seems that our mail server is not responding. Please try again later!"));
+                $('#success > .alert-danger').append('</div>');
+                $('#contactForm').trigger("reset");
+            },
+            complete: function () {
+                setTimeout(function () {
+                    $this.prop("disabled", false);
+                }, 1000);
+            }
+        });
+    })
+
+    $('input[type=radio][name=collectionOption]').change(function () {
+        debugger;
+
+        if ($(this).attr('data-collectionoptionid') > 0 || $(this).attr('data-collectionoptionid') == -9) {
+            $('#collectionDateDiv').show();
+        } else {
+            $('#collectionDateDiv').hide();
+        }
+
+    });
+    // $(document).ready(function () {
+    //     // Set the default date to today
+    //     var today = new Date();
+    //     var year = today.getFullYear();
+    //     var month = String(today.getMonth() + 1).padStart(2, '0');
+    //     var day = String(today.getDate()).padStart(2, '0');
+    //     $('#collectionDate').val(`${day}/${month}/${year}`);
+
+    //     // Set the default time to 9 AM
+    //     $('#collectionTime').val("09:00");
+
+    //     $('#collectionTime').on('change', function () {
+    //         const selectedTime = $(this).val();
+    //         const cutoffTime = "13:00";
+    //         const nextDayTime = "09:00";
+
+    //         if (selectedTime >= cutoffTime) {
+    //             const currentDate = new Date($('#collectionDate').val());
+    //             currentDate.setDate(currentDate.getDate() + 1);
+
+    //             const year = currentDate.getFullYear();
+    //             const month = String(currentDate.getDate() + 1).padStart(2, '0');
+    //             const day = String(currentDate.getMonth()).padStart(2, '0');
+
+    //             $('#collectionDate').val(`${day}/${month}/${year}`);
+    //             $('#collectionTime').val(nextDayTime);
+    //         }
+    //     });
+    // });
+
+</script>

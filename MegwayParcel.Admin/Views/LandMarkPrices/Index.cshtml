@@ -1,0 +1,76 @@
+﻿@model IEnumerable<MegwayParcel.Common.Data.LandMarkPrices>
+
+@{
+    ViewData["Title"] = "LandMark Prices";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="text-center">@ViewData["Title"]</h3>
+                </div>
+                <div style="float:right">
+                <a asp-action="Import" class="btn btn-success">Import from Excel</a>
+                <a asp-action="Create" class="btn btn-primary">Create New Prices</a>
+            </div>
+            </div>
+            <!-- /.card-header -->
+     <div class="card-body">
+     <table id="landMarkPricesTable" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>PriceId</th>
+            <th>Weight</th>
+            <th>Price</th>
+            <th>Sort Order</th>
+            <th>IsActive</th>
+            <th>CreatedAt</th>
+            <th>Country</th>
+
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.PriceId</td>
+                <td>@item.Weight</td>
+                <td>@item.Price</td>
+                <td>@item.SortOrder</td>
+                <td>@item.IsActive</td>
+                <td>@item.CreatedAt</td>
+                <td>@item.LandMarkCountries?.Name</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = item.PriceId })" class="btn btn-warning btn-sm">
+                        <i class="fa fa-edit"></i> Edit
+                    </a>
+                    <a href="@Url.Action("Delete", new { id = item.PriceId })" class="btn btn-danger btn-sm">
+                        <i class="fa fa-trash"></i> Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#landMarkPricesTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true
+            });
+        });
+    </script>
+}
+
+
+

@@ -1,0 +1,13 @@
+﻿@model MegwayParcel.Common.Data.Page
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_WebsiteLayout.cshtml";
+}
+<div class="container" style="background-color: #f6f9fc;">
+
+    @Html.Raw(Model.Detail)
+
+</div>

@@ -1,0 +1,564 @@
+﻿@using MegwayParcel.Common
+@using MegwayParcel.Common.Data
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+
+@{
+    string val = Context.Session.GetString("LoginObject");
+    Customer customer = null;
+    if (val != null)
+    {
+        customer = JsonConvert.DeserializeObject<Customer>(val);
+    }
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>@ViewData["Title"] - Megway Parcels</title>
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Megway Parcels" name="keywords">
+    <meta content="Megway is the Faster, Safe and Trusted Logistics Services" name="description">
+
+    <!-- Favicon -->
+
+    <link rel="icon" href="/image/icon.JPG" type="image/icon">
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="~/theme/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    @*<link href="~/theme/css/all.min.css" rel="stylesheet" />*@
+    <!-- Libraries Stylesheet -->
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="~/theme/css/style.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    @*<script src="~/theme/js/jquery-3.4.1.min.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.js"></script>
+
+    <!-- TrustBox script -->
+    <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+    <!-- End TrustBox script -->
+
+    <style>
+        .overlay {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            background: rgba(255,255,255,0.8) url("/image/loader.gif") center no-repeat;
+            background-size: 50px;
+        }
+
+        /* body {
+
+                                                                                        }*/
+        /* Turn off scrollbar when body element has the loading class */
+        body.loading {
+            overflow: hidden;
+            text-align: center;
+        }
+            /* Make spinner image visible when body element has the loading class */
+            body.loading .overlay {
+                display: block;
+            }
+
+        .modal-dialog,
+        .modal-content {
+            /* 100% of window height */
+            height: 95%;
+        }
+
+        .modal-body {
+            /* 100% = dialog height, 120px = header + footer */
+            overflow-y: scroll;
+        }
+
+        td {
+            white-space: pre-wrap !important;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <!-- Topbar Start -->
+    @* <div class="container-fluid bg-dark">
+    <div class="row py-2 px-lg-5">
+    <div class="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
+    <div class="d-inline-flex align-items-center text-white">
+    <small><i class="fa fa-phone-alt mr-2"></i>+012 345 6789</small>
+    <small class="px-3">|</small>
+    <small><i class="fa fa-envelope mr-2"></i>info@example.com</small>
+    </div>
+    </div>
+    <div class="col-lg-6 text-center text-lg-right">
+    <div class="d-inline-flex align-items-center">
+    <a class="text-white px-2" href="">
+    <i class="fab fa-facebook-f"></i>
+    </a>
+    <a class="text-white px-2" href="">
+    <i class="fab fa-twitter"></i>
+    </a>
+    <a class="text-white px-2" href="">
+    <i class="fab fa-linkedin-in"></i>
+    </a>
+    <a class="text-white px-2" href="">
+    <i class="fab fa-instagram"></i>
+    </a>
+    <a class="text-white pl-2" href="">
+    <i class="fab fa-youtube"></i>
+    </a>
+    </div>
+    </div>
+    </div>
+    </div>*@
+    <!-- Topbar End -->
+    <!-- Navbar Start -->
+    <div class="container-fluid p-0">
+        <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-lg-5">
+            <a href="/" class="navbar-brand ml-lg-3">
+                @*<h1 class="m-0 display-5 text-uppercase text-primary"><i class="fa fa-truck mr-2"></i>Faster</h1>*@
+                <img src="/image/logo.JPG" style="width:225px;" />
+            </a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
+                <div class="navbar-nav m-auto py-0">
+                    <a href="/" class="nav-item nav-link active">Home</a>
+                    <a href="/Home/About" class="nav-item nav-link">About</a>
+                    @* <a href="/Home/PrivacyPolicy" class="nav-item nav-link">Privacy Policy</a> *@
+                    <a href="#" class="nav-item nav-link">Services</a>
+                    <a href="#" class="nav-item nav-link">Parcel Store</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Our Carriers</a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a href="/Carrier/Page/DHL" class="dropdown-item">DHL</a>
+                            <a href="/Carrier/Page/DPD" class="dropdown-item">DPD</a>
+                            <a href="/Carrier/Page/DX" class="dropdown-item">DX</a>
+                            <a href="/Carrier/Page/EVRI" class="dropdown-item">EVRI</a>
+                            <a href="/Carrier/Page/FDL" class="dropdown-item">FAST DESPATCH LOGISTICS</a>
+                            <a href="/Carrier/Page/FEDEX" class="dropdown-item">FEDEx</a>
+                            <a href="/Carrier/Page/LMARK" class="dropdown-item">Landmark Global</a>
+                            <a href="/Carrier/Page/TGE" class="dropdown-item">TG Euro Parcel</a>
+                            <a href="/Carrier/Page/" class="dropdown-item">TG Express Direct</a>
+                            <a href="/Carrier/Page/" class="dropdown-item">TG International</a>
+                            <a href="/Carrier/Page/" class="dropdown-item">TNT Express</a>
+                            <a href="/Carrier/Page/" class="dropdown-item">UPS</a>
+                            <a href="/Carrier/Page/" class="dropdown-item">United States Postal Services</a>
+                        </div>
+                    </div>
+                    @* <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
+                    <div class="dropdown-menu rounded-0 m-0">
+                    <a href="blog.html" class="dropdown-item">Blog Grid</a>
+                    <a href="single.html" class="dropdown-item">Blog Detail</a>
+                    </div>
+                    </div>*@
+                    <a href="/Home/Contact" class="nav-item nav-link">Contact Us</a>
+                    <a href="/Home/Tracking" class="nav-item nav-link active" style="background:green !important">Tracking</a>
+
+                    @if (customer != null && customer?.Email == "admin@megwayparcels.co.uk")
+                    {
+                        <a href="/Setting/List" class="nav-item nav-link">Admin</a>
+                    }
+                    @if (customer != null)
+                    {
+                        <a href="/Address/Basket" class="nav-item nav-link"><i class="fa fa-cart-plus"><span class="badge rounded-pill" style="background: #0975c7; color: white; font-size: 12px; background: #ff0000; color: #fff; padding: 1px 5px; vertical-align: super; margin-left: -1px;">@(ViewBag.basketCount)</span></i></a>
+                    }
+                    else
+                    {
+                        <a data-toggle="modal" data-target="#loginModal" class="nav-item nav-link"><i class="fa fa-cart-plus"></i></a>
+                    }
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i></a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            @if (customer != null)
+                            {
+                                if (!string.IsNullOrEmpty(customer.Email))
+                                {
+                                    <a href="/Account/ResetPassword" class="dropdown-item">Reset Password</a>
+                                    <a href="/Account/Profile" class="dropdown-item">Profile</a>
+                                }
+                                <a href="/Address/Order" class="dropdown-item">Orders</a>
+                                <a href="/Account/Logout" class="dropdown-item">Logout</a>
+                            }
+                            else
+                            {
+                                <button type="button" class="dropdown-item" data-toggle="modal" data-target="#loginModal">Login</button>
+                                <a href="/Account/Register/" class="dropdown-item">Register</a>
+                                <a href="/Account/ResetPassword" class="dropdown-item">Reset Password</a>
+                            }
+                        </div>
+                    </div>
+
+
+                </div>
+                @*@if (customer != null)
+                {
+                <a href="/Account/Logout" class="btn btn-primary py-2 px-4 d-none d-lg-block">Logout</a>
+                }
+                else
+                {
+                <a href="/Account/Register" class="rounded-pill btn btn-primary py-2 px-4 d-none d-lg-block">Create</a>
+                <button type="button" class="rounded-pill btn btn-primary py-2 px-4 d-none d-lg-block" data-toggle="modal" data-target="#loginModal">Login</button>
+                }*@
+                @*<a href="" class="btn btn-primary py-2 px-4 d-none d-lg-block">Get A Quote</a>*@
+            </div>
+        </nav>
+    </div>
+
+    <!-- Navbar End -->
+    @RenderBody()
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-white mt-5 py-5 px-sm-3 px-md-5">
+        <div class="row pt-5">
+            <div class="col-lg-7 col-md-6">
+                <div class="row">
+                    <div class="col-md-6 mb-5">
+                        <h3 class="text-primary mb-4">Get In Touch</h3>
+                        <p><i class="fa fa-map-marker-alt mr-2"></i>1 Abington Square, NN1 4AE Northampton, UK</p>
+                        <p><i class="fa fa-phone-alt mr-2"></i>01604-356242</p>
+                        <p><i class="fa fa-envelope mr-2"></i>sales@megwayparcels.co.uk</p>
+                        <div class="d-flex justify-content-start mt-4">
+                            <a class="btn btn-outline-light btn-social mr-2" href="https://twitter.com/megwayparcelsuk"><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-outline-light btn-social mr-2" href="https://www.facebook.com/megwayparcels" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-outline-light btn-social mr-2" href="https://www.linkedin.com/company/megwaylogistics/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                            <a class="btn btn-outline-light btn-social" href="https://www.instagram.com/megwayparcels/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-5">
+                        <h3 class="text-primary mb-4">Quick Links</h3>
+                        <div class="d-flex flex-column justify-content-start">
+                            <a class="text-white mb-2" href="/Home/Index"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                            <a class="text-white mb-2" href="/Home/About"><i class="fa fa-angle-right mr-2"></i>About Us</a>
+                            <a class="text-white mb-2" href="/Home/PrivacyPolicy"><i class="fa fa-angle-right mr-2"></i>Privacy Policy</a>
+
+                            <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Services</a>
+                            <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Parcel Store</a>
+                            <a class="text-white mb-2" href="/Home/Contact"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                            <a class="text-white" href="/SiteMap/Index"><i class="fa fa-angle-right mr-2"></i>Site Map</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-6 mb-5">
+                <h3 class="text-primary mb-4">Newsletter</h3>
+                <p>Megway Parcels is a leading company for delivring parcel in all over the world since last eight years.</p>
+                <div class="w-100">
+                    <div class="input-group">
+                        <input type="text" class="form-control border-light" style="padding: 30px;" placeholder="Your Email Address">
+                        <div class="input-group-append">
+                            <button onclick="window.location.href='@Url.Content("~/Account/Register")'" class="btn btn-primary px-4">Sign Up</button>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="trustpilot-widget" data-locale="en-GB" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="626792754cf4c67c4f46fa95" data-style-height="52px" data-style-width="100%">
+                    <a href="https://uk.trustpilot.com/review/megwayparcels.co.uk" target="_blank" rel="noopener">Trustpilot</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5" style="border-color: #3E3E4E !important;">
+        <div class="row">
+            <div class="col-lg-6 text-center text-md-left mb-3 mb-md-0">
+                <p class="m-0 text-white">
+                    &copy; <a href="#">Megway Parcels</a>. All Rights Reserved.
+
+                    <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                    @*Designed by <a href="https://htmlcodex.com">HTML Codex</a>*@
+                </p>
+            </div>
+            <div class="col-lg-6 text-center text-md-right">
+                <ul class="nav d-inline-flex">
+                    <li class="nav-item">
+                        <a class="nav-link text-white py-0" href="#">Privacy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white py-0" href="#">Terms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white py-0" href="#">FAQs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white py-0" href="#">Help</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+    <div class="overlay"></div>
+
+    <!-- Login Modal Start-->
+    <div class="modal fade" id="loginModal" role="dialog">
+        <div class="modal-dialog">
+            <form id="loginForm">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h4 class="modal-title text-light">Login</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="hidden" id="loginPageReload" />
+                                    <input type="email" id="loginEmail" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" id="loginPassword" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <a href="/Account/ResetPassword">Forget Password / Reset Password?</a>
+                            </div>
+                            @* <div class="col-md-12">
+                                <a href="javascript:void(0)" onclick="openGuestModal();">Login As a Guest?</a>
+                            </div> *@
+                        </div>
+                    </div>
+                    <div class="modal-footer"><button onclick="openGuestModal();" type="button" class="btn btn-warning mr-auto rounded-pill">Continue as guest</button>
+                        <button type="submit" id="loginBtn" class="btn btn-primary rounded-pill">Login</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Login Modal End-->
+    <!-- Login Modal Start-->
+    <div class="modal fade" id="guestLoginModal" role="dialog">
+        <div class="modal-dialog">
+            <form id="guestLoginForm">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h4 class="modal-title text-light">Guest Login</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="hidden" id="guestLoginPageReload" />
+                                    <input type="email" id="guestLoginEmail" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-12" id="emailCodeDiv" style="display:none">
+                                <input type="hidden" id="emailSectionShow" />
+                                <div class="form-group">
+                                    <label>Verification Code</label>
+                                    <input type="text" id="EmailCode" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <a href="javascript:void(0)" onclick="resendVerificationCode();">Resend varification code</a>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning mr-auto rounded-pill" data-dismiss="modal">Close</button>
+                        <button type="submit" id="guestLoginBtn" class="btn btn-primary rounded-pill">Guest Login</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Login Modal End-->
+    <!-- JavaScript Libraries -->
+    @*<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>*@
+    <script src="~/theme/js/bootstrap.bundle.min.js"></script>
+    <script src="~/theme/lib/easing/easing.min.js"></script>
+    <script src="~/theme/lib/waypoints/waypoints.min.js"></script>
+    <script src="~/theme/lib/counterup/counterup.min.js"></script>
+    <script src="~/theme/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <!-- Contact Javascript File -->
+    <script src="~/theme/mail/jqBootstrapValidation.min.js"></script>
+    <script src="~/theme/mail/contact.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Template Javascript -->
+    <script src="~/theme/js/main.js"></script>
+
+    <script>
+        $(document).on({
+            ajaxStart: function () {
+                $("body").addClass("loading");
+            },
+            ajaxStop: function () {
+                $("body").removeClass("loading");
+            }
+        });
+        $("#loginForm").submit(function (event) {
+            event.preventDefault();
+
+            let _login = {};
+
+            _login.Email = $("#loginEmail").val();
+            _login.Password = $("#loginPassword").val();
+
+            $.ajax({
+                url: "/Account/Login",
+                type: "POST",
+                datatype: "json",
+                data: _login,
+                success: function (data) {
+                    if (data.status == 200) {
+                        if ($('#loginPageReload').val() == 1) {
+                            $('#loginModal').modal('hide')
+                        } else {
+                            $('#loginPageReload').val(0)
+                            location.reload();
+                        }
+                    } else {
+                        toastr.error('You have entered incorrect password/email', 'Error')
+                    }
+
+                },
+                beforeSend: function () {
+                    $("#waitSpinnerId").show();
+                },
+                error: function (xhr) { // if error occured
+                    toastr.error('You have entered incorrect password / email', 'Error')
+                },
+                complete: function () {
+                    $("#waitSpinnerId").hide();
+                },
+
+            });
+
+
+        });
+
+        function openGuestModal() {
+            $('#loginModal').modal('hide');
+            $('#guestLoginModal').modal('show');
+            $('#guestLoginEmail').val('');
+            $('#EmailCode').val('');
+            $('#emailCodeDiv').hide();
+            $('#emailSectionShow').val(0)
+        }
+
+        $("#guestLoginForm").submit(function (event) {
+            event.preventDefault();
+            let _login = {};
+            _login.Email = $("#guestLoginEmail").val();
+            let _url = "/Account/GuestLogin";
+            if ($('#emailSectionShow').val() == 1) {
+                _url = "/Account/GuestConfirmEmail";
+                _login.Code = $("#EmailCode").val();
+            }
+            $.ajax({
+                url: _url,
+                type: "POST",
+                datatype: "json",
+                data: _login,
+                success: function (data) {
+                    if (data.status == 200) {
+                        if ($('#emailSectionShow').val() != 1) {
+                            $('#emailCodeDiv').show();
+                            $('#emailSectionShow').val(1);
+                            toastr.success("Verification code send to your email", 'Success')
+                        } else {
+                            if ($('#loginPageReload').val() == 1) {
+                                $('#guestLoginModal').modal('hide')
+                            } else {
+                                $('#loginPageReload').val(0)
+                                location.reload();
+                            }
+                        }
+
+                    } else {
+                        toastr.error('You have entered invalid email', 'Error')
+                    }
+                },
+                beforeSend: function () {
+                    $("#waitSpinnerId").show();
+                },
+                error: function (xhr) { // if error occured
+                    toastr.error('You have entered invalid email', 'Error')
+                },
+                complete: function () {
+                    $("#waitSpinnerId").hide();
+                },
+            });
+
+
+        });
+
+        function resendVerificationCode() {
+            let _login = {};
+            _login.Email = $("#guestLoginEmail").val();
+            _url = "/Account/GuestConfirmEmail";
+            $.ajax({
+                url: _url,
+                type: "POST",
+                datatype: "json",
+                data: _login,
+                success: function (data) {
+                    if (data.status == 200) {
+                        toastr.success("Verification code send to your email", 'Success')
+
+                    } else {
+                        toastr.error('You have entered invalid email', 'Error')
+                    }
+                },
+                beforeSend: function () {
+                    $("#waitSpinnerId").show();
+                },
+                error: function (xhr) { // if error occured
+                    toastr.error('You have entered invalid email', 'Error')
+                },
+                complete: function () {
+                    $("#waitSpinnerId").hide();
+                },
+            });
+        }
+    </script>
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6617b9dea0c6737bd12aaaf2/1hr6as399';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WDMXF5DTK7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-WDMXF5DTK7');
+    </script>
+
+</body>
+</html>

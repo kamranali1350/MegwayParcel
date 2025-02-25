@@ -1,0 +1,161 @@
+﻿@using Microsoft.AspNetCore.Http
+@using MegwayParcel.Common
+@model MegwayParcel.Common.Data.Customer
+@{
+    Layout = "/Views/Shared/_LoginLayout.cshtml";
+}
+
+
+<!-- **************** MAIN CONTENT START **************** -->
+<main>
+
+    <!-- =======================
+    Main Content START -->
+    <section class="vh-xxl-100">
+        <div class="container h-100 d-flex px-0 px-sm-4">
+            <div class="row justify-content-center align-items-center m-auto">
+                <div class="col-12">
+                    <div class="bg-mode shadow rounded-3 overflow-hidden">
+                        <div class="row g-0">
+                            <!-- Vector Image -->
+                            <div class="col-lg-6 d-md-flex align-items-center order-2 order-lg-1">
+                                <div class="p-3 p-lg-5">
+                                    <img src="~/new-theme/assets/images/element/signin.svg" alt="">
+                                </div>
+                                <!-- Divider -->
+                                <div class="vr opacity-1 d-none d-lg-block"></div>
+                            </div>
+
+                            <!-- Information -->
+                            <div class="col-lg-6 order-1">
+                                <div class="p-4 p-sm-6">
+                                    <!-- Logo -->
+                                    <a href="/">
+                                        <img class="h-70px mb-4" src="~/image/logo.jpg" alt="logo">
+
+                                    </a>
+                                    <!-- Title -->
+                                    <h1 class="mb-2 h3">Create new account</h1>
+                                    <p class="mb-0">Already a member?<a href="/Account/Login"> Log in</a></p>
+
+                                    <!-- Form START -->
+                                    <form id="loginForm" class="mt-4 text-start">
+                                        <!-- Email -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Enter email id</label>
+                                            <input asp-for="Email" type="email" class="form-control">
+                                        </div>
+                                        <!-- Password -->
+                                        <div class="mb-3 position-relative">
+                                            <label class="form-label">Enter password</label>
+                                            <input asp-for="Password" class="form-control fakepassword" type="password">
+                                            <span class="position-absolute top-50 end-0 translate-middle-y p-0 mt-3">
+                                                <i class="fakepasswordicon fas fa-eye-slash cursor-pointer p-2"></i>
+                                            </span>
+                                        </div>
+                                        <!-- Confirm Password -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Confirm Password</label>
+                                            <input asp-for="ConfirmPassword" type="password" class="form-control">
+                                        </div>
+                                        <!-- Remember me -->
+                                        <div class="mb-3">
+                                            <input type="checkbox" class="form-check-input" id="rememberCheck">
+                                            <label class="form-check-label" for="rememberCheck">Keep me signed in</label>
+                                        </div>
+                                        <!-- Button -->
+                                        <div><button type="submit" class="btn btn-primary w-100 mb-0">Sign up</button></div>
+
+                                        <!-- Divider -->
+                                        <div class="position-relative my-4">
+                                            <hr>
+                                            <p class="small position-absolute top-50 start-50 translate-middle bg-mode px-1 px-sm-2">Or sign in with</p>
+                                        </div>
+
+
+                                        <!-- Copyright -->
+                                        <div class="text-primary-hover text-body mt-3 text-center"> Copyrights ©2024. Build by <a href="https://megwayparcels.co.uk/" class="text-body-secondary">Megway Parcels</a>.  </div>
+                                    </form>
+                                    <!-- Form END -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- =======================
+    Main Content END -->
+
+</main>
+<!-- **************** MAIN CONTENT END **************** -->
+
+<script>
+    function getFormData($form) {
+        var unindexed_array = $form.serializeArray();
+        var indexed_array = {};
+
+        $.map(unindexed_array, function (n, i) {
+            indexed_array[n['name']] = n['value'];
+        });
+        return indexed_array;
+    }
+
+
+    $("#loginForm").submit(function (event) {
+        event.preventDefault();
+        debugger;
+        let _login = {};
+
+        _login.Email = $("#Email").val();
+        _login.Password = $("#Password").val();
+        _login.ConfirmPassword = $("#ConfirmPassword").val();
+
+        if (_login.Email == "") {
+            toastr.error('enter email address', 'Error');
+            return;
+        }
+        if (_login.Password == "") {
+            toastr.error('enter password', 'Error');
+            return;
+        }
+
+        if (_login.Password != _login.ConfirmPassword) {
+            toastr.error('The password and confirmation password do not match', 'Error');
+            return;
+        }
+
+        $.ajax({
+            url: "/Account/Save",
+            type: "POST",
+            datatype: "json",
+            data: _login,
+            success: function (data) {
+                if (data.status == 201) {
+                    toastr.error(data.message, 'Error')
+                } else if (data.status == 200) {
+                    let pathValue = getQueryStringValue('path');
+                    debugger;
+                    if (pathValue != null) {
+                        window.location.href = pathValue;
+
+                    } else {
+                        window.location.href = '/Account/Profile';
+                    }
+                } else {
+                    toastr.error('You have entered incorrect password/email', 'Error')
+                }
+            },
+            beforeSend: function () {
+                $("#waitSpinnerId").show();
+            },
+            error: function (xhr) { // if error occured
+                toastr.error('You have entered incorrect password / email', 'Error')
+            },
+            complete: function () {
+                $("#waitSpinnerId").hide();
+            },
+        });
+    });
+</script>

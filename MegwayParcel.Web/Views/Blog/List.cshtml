@@ -1,0 +1,59 @@
+﻿@model List<MegwayParcel.Common.Data.Blog>
+
+@{
+
+    ViewData["Title"] = "Index";
+}
+<link rel="stylesheet" type="text/css" href="https://adminlte.io/themes/v3/plugins/summernote/summernote-bs4.min.css" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://adminlte.io/themes/v3/plugins/summernote/summernote-bs4.min.js"></script>
+
+
+<div class="card">
+    <div class="bg-primary card-header text-light d-flex justify-content-between align-items-center">
+        List
+        <a href="/Blog/Create"><button type="button" class="btn btn-light btn-sm rounded-pill">Create</button></a>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered" id="myTable">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Short Detail</th>
+                    <th>Author</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShortDetail)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AuthorName)
+                        </td>
+                        <td>
+                            <a href="/Blog/Edit/@item.BlogId"><input type="button" class="btn btn-primary" value="Edit" /></a>
+                            <a href="/Blog/Delete/@item.BlogId"><input type="button" class="btn btn-danger" value="Delete" /></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+
+
+
+</script>

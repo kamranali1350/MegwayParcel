@@ -1,0 +1,719 @@
+﻿@using MegwayParcel.Common
+@using MegwayParcel.Common.CommonServices
+@using MegwayParcel.Common.Data
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject CommonFunctions function
+@{
+    string val = Context.Session.GetString("LoginObject");
+    Customer customer = null;
+    if (val != null)
+    {
+        customer = JsonConvert.DeserializeObject<Customer>(val);
+    }
+    
+    var pages = function.GetPages();
+    var mainMenu = pages.Where(x => x.ParentId == null || x.ParentId == 0).OrderBy(x=>x.SortOrder).ToList();
+}
+<html lang="en">
+<head>
+    <title>@ViewData["Title"] - Megway Parcels</title>
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="megwayparcels.co.uk">
+
+    <meta content="Megway Parcels" name="keywords">
+    <meta content="Tired of overpriced parcel delivery? Megway Parcels offers secure UK and International shipping without draining your wallet. You're welcome!" name="description">
+
+    <!-- Dark mode -->
+    <script>
+        const storedTheme = localStorage.getItem('theme')
+
+        const getPreferredTheme = () => {
+            if (storedTheme) {
+                return storedTheme
+            }
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        }
+
+        const setTheme = function (theme) {
+            if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-bs-theme', 'dark')
+            } else {
+                document.documentElement.setAttribute('data-bs-theme', theme)
+            }
+        }
+
+        setTheme(getPreferredTheme())
+
+        window.addEventListener('DOMContentLoaded', () => {
+            var el = document.querySelector('.theme-icon-active');
+            if (el != 'undefined' && el != null) {
+                const showActiveTheme = theme => {
+                    const activeThemeIcon = document.querySelector('.theme-icon-active use')
+                    const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
+                    const svgOfActiveBtn = btnToActive.querySelector('.mode-switch use').getAttribute('href')
+
+                    document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                        element.classList.remove('active')
+                    })
+
+                    btnToActive.classList.add('active')
+                    activeThemeIcon.setAttribute('href', svgOfActiveBtn)
+                }
+
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                    if (storedTheme !== 'light' || storedTheme !== 'dark') {
+                        setTheme(getPreferredTheme())
+                    }
+                })
+
+                showActiveTheme(getPreferredTheme())
+
+                document.querySelectorAll('[data-bs-theme-value]')
+                    .forEach(toggle => {
+                        toggle.addEventListener('click', () => {
+                            const theme = toggle.getAttribute('data-bs-theme-value')
+                            localStorage.setItem('theme', theme)
+                            setTheme(theme)
+                            showActiveTheme(theme)
+                        })
+                    })
+
+            }
+        })
+
+
+    </script>
+    <script id="mcjs">!function (c, h, i, m, p) { m = c.createElement(h), p = c.getElementsByTagName(h)[0], m.async = 1, m.src = i, p.parentNode.insertBefore(m, p) }(document, "script", "https://chimpstatic.com/mcjs-connected/js/users/f64ea697b36a4e5e786bcb599/f108c6f5ae21716cdfa291226.js");</script>
+
+    <script id="CookieDeclaration" src="https://consent.cookiebot.com/5f2f78c6-a55f-4508-b8ad-bd6e919a9b5b/cd.js" type="text/javascript" async></script>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="~/new-theme/assets/images/icon.JPG">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Poppins:wght@400;500;700&display=swap">
+
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" type="text/css" href="~/new-theme/assets/vendor/font-awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="~/new-theme/assets/vendor/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="~/new-theme/assets/vendor/choices/css/choices.min.css">
+    <link rel="stylesheet" type="text/css" href="~/new-theme/assets/vendor/flatpickr/css/flatpickr.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/new-theme/assets/vendor/tiny-slider/tiny-slider.css">
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" type="text/css" href="~/new-theme/assets/css/style.css">
+    <!-- TrustBox script -->
+    <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+    <!-- End TrustBox script -->
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+
+    <style>
+
+        .overlay {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            background: rgba(255,255,255,0.8) url("/image/loader.gif") center no-repeat;
+            background-size: 50px;
+        }
+
+        /* body {
+
+                                                                                                                }*/
+        /* Turn off scrollbar when body element has the loading class */
+        body.loading {
+            overflow: hidden;
+            text-align: center;
+        }
+            /* Make spinner image visible when body element has the loading class */
+            body.loading .overlay {
+                display: block;
+            }
+
+    </style>
+</head>
+
+<body>
+    <!-- Header START -->
+    <header class="navbar-light header-sticky">
+        <!-- Logo Nav START -->
+        <nav class="navbar navbar-expand-xl">
+            <div class="container">
+                <!-- Logo START -->
+                <a class="navbar-brand" href="/Home">
+                    <img class="light-mode-item navbar-brand-item" style="height:70px;" src="~/new-theme/assets/images/logo.JPG" alt="logo">
+                    <img class="dark-mode-item navbar-brand-item" style="height:70px;" src="~/new-theme/assets/images/logo.JPG" alt="logo">
+                </a>
+                <!-- Logo END -->
+                <!-- Responsive navbar toggler -->
+                <button class="navbar-toggler ms-auto mx-3 me-xl-0 p-0 p-sm-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-animation">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </button>
+
+                <!-- Main navbar START -->
+
+                <div class="navbar-collapse collapse" id="navbarCategoryCollapse">
+                    <ul class="navbar-nav navbar-nav-scroll nav-pills-primary-soft text-center ms-auto p-2 p-xl-0">
+                        <li class="nav-item"> <a class="nav-link" href="/Home">Get a Quote</a>	</li>
+
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Services</a>
+                            <ul class="dropdown-menu" aria-labelledby="accounntMenu">
+
+                                @foreach (var menu in mainMenu)
+                                {
+                                    var subMenu = pages.Where(x => x.ParentId == menu.PageId).ToList();
+                                    if (subMenu != null && subMenu.Count() > 0)
+                                    {
+                                        
+                                        <li class="dropdown-submenu dropend">
+                                            <a class="dropdown-item dropdown-toggle" href="/Services/ParcelDelivery/@menu.Prefix">@menu.Title</a>
+                                            <ul class="dropdown-menu" data-bs-popper="none">
+                                                @foreach (var sub in subMenu.OrderBy(x => x.SortOrder))
+                                                {
+                                                    <li> <a class="dropdown-item" href="/Services/ParcelDelivery/@sub.Prefix">@sub.Title</a> </li>
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li> <a class="dropdown-item" href="/Services/ParcelDelivery/@menu.Prefix">@menu.Title</a> </li>
+                                    }
+                                }
+
+                            </ul>
+                        </li>
+                        <li class="nav-item"> <a class="nav-link" href="">Parcel Store</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="">Help</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/Home/Tracking">Track a Parcel</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/Blog">Blogs</a></li>
+
+                        @if (customer != null && customer?.Email == "admin@megwayparcels.co.uk")
+                        {
+                            <li class="nav-item"> <a class="nav-link" href="/Setting/List">Admin</a></li>
+                        }
+                    </ul>
+                </div>
+                <!-- Main navbar END -->
+                <!-- Navbar right side START -->
+
+                <ul class="nav flex-row align-items-center list-unstyled ms-xl-auto">
+                    <li class="nav-item ms-2 d-none d-sm-block">
+                        @if (customer != null)
+                        {
+                            <a href="/Address/Basket" class="btn btn-sm btn-primary-soft mb-0"><i class="fa-solid fa-cart-plus me-2"><span class="badge rounded-pill" style="background: #0975c7; color: white; font-size: 12px; background: #ff0000; color: #fff; padding: 1px 5px; vertical-align: super; margin-left: -1px;">@(ViewBag.basketCount)</span></i></a>
+                        }
+                        else
+                        {
+                            <a data-toggle="modal" data-target="#loginModal" onclick="loginAction();" class="btn btn-sm btn-primary-soft mb-0"><i class="fa-solid fa-cart-plus me-2"></i></a>
+                        }
+                    </li>
+                </ul>
+                <ul class="navbar-nav navbar-nav-scroll me-auto">
+                    <!-- Nav item Listing -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="listingMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
+                        <ul class="dropdown-menu" aria-labelledby="listingMenu">
+                            @if (customer != null)
+                            {
+                                if (!string.IsNullOrEmpty(customer.Email))
+                                {
+                                    <li> <a href="/Account/ResetPassword" class="dropdown-item">Reset Password</a></li>
+                                    <li> <a href="/Account/Profile" class="dropdown-item">Profile</a></li>
+                                }
+                                <li><a href="/Address/Order" class="dropdown-item">My Bookings</a></li>
+                                <li> <a href="/Account/Logout" class="dropdown-item">Logout</a></li>
+                            }
+                            else
+                            {
+                                <li><button type="button" class="dropdown-item" data-toggle="modal" onclick="loginAction();" data-target="#loginModal">Login</button></li>
+                                <li><a href="/Account/Register/" class="dropdown-item">Register</a></li>
+                                <li><a href="/Account/ResetPassword" class="dropdown-item">Reset Password</a></li>
+                            }
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <!-- Navbar right side END -->
+
+            </div>
+        </nav>
+        <!-- Logo Nav END -->
+    </header>
+    <!-- Header END -->
+    <!-- **************** MAIN CONTENT START **************** -->
+    <main>
+        @RenderBody()
+    </main>
+    <!-- **************** MAIN CONTENT START **************** -->
+    <!-- =======================
+    Footer START -->
+    <footer class="bg-dark pt-5">
+        <div class="container">
+            <!-- Row START -->
+            <div class="row g-4">
+
+                <!-- Widget 1 START -->
+                <div class="col-lg-3">
+                    <!-- logo -->
+                    <a href="index.html">
+                        <img class="h-40px" src="~/new-theme/assets/images/logo.JPG" alt="logo">
+                    </a>
+                    <p class="my-3 text-body-secondary"><i class="bi bi-geo-alt me-2"></i> 1 Abington Square, NN1 4AE Northampton, UK</p>
+                    <p class="mb-2"><a href="javascript:void(0)" class="text-body-secondary text-primary-hover"><i class="bi bi-telephone me-2"></i>01604-356242</a> </p>
+                    <p class="mb-0"><a href="javascript:void(0)" class="text-body-secondary text-primary-hover"><i class="bi bi-envelope me-2"></i>sales@megwayparcels.co.uk</a></p>
+                </div>
+                <!-- Widget 1 END -->
+                <!-- Widget 2 START -->
+                <div class="col-lg-8 ms-auto">
+                    <div class="row g-4">
+                        <!-- Link block -->
+                        <div class="col-6 col-md-3">
+                            <h5 class="text-white mb-2 mb-md-4">Page</h5>
+                            <ul class="nav flex-column text-primary-hover">
+                                <li class="nav-item"><a class="nav-link text-body-secondary" href="/Home">Get a Quote</a></li>
+                                <li class="nav-item"><a class="nav-link text-body-secondary" href="/Home/About">About Us</a></li>
+                                <li class="nav-item"><a class="nav-link text-body-secondary" href="/Home/Tracking">Track a Parcel</a></li>
+                                <li class="nav-item"><a class="nav-link text-body-secondary" href="/Home/Blog">Blog</a></li>
+                                <li class="nav-item"><a class="nav-link text-body-secondary" href="javascript:void(0)">Help Centre</a></li>
+                                <li class="nav-item"><a class="nav-link text-body-secondary" href="javascript:void(0)">Parcel Store</a></li>
+                                <li class="nav-item"><a class="nav-link text-body-secondary" href="javascript:void(0)">Mailbox Renal</a></li>
+                                <li class="nav-item"><a class="nav-link text-body-secondary" href="/SiteMap/Index">Sitemap</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Link block -->
+                        <div class="col-6 col-md-3">
+                            <h5 class="text-white mb-2 mb-md-4">Quick Link</h5>
+                            <ul class="nav flex-column text-primary-hover">
+                                <li class="nav-item"><a class="nav-link text-body-secondary" href="/Account/Register/">Sign up</a></li>
+                                <li class="nav-item"><a class="nav-link text-body-secondary" href="javascript:void(0)" onclick="loginAction();">Sign in</a></li>
+                                <li class="nav-item"><a class="nav-link text-body-secondary" href="/Home/PrivacyPolicy">Privacy Policy</a></li>
+                                <li class="nav-item"><a class="nav-link text-body-secondary" href="/Home/TermAndCondition">Terms</a></li>
+                                <li class="nav-item"><a class="nav-link text-body-secondary" href="javascript:void(0)">Cookie</a></li>
+                                <li class="nav-item"><a class="nav-link text-body-secondary" href="javascript:void(0)">Support</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Link block -->
+                        <div class="col-6 col-md-6">
+                            <!-- TrustBox widget - Review Collector -->
+                            <div class="trustpilot-widget" data-locale="en-GB" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="626792754cf4c67c4f46fa95" data-style-height="52px" data-style-width="100%">
+                                <a href="https://uk.trustpilot.com/review/megwayparcels.co.uk" target="_blank" rel="noopener">Trustpilot</a>
+                            </div>
+                            <!-- End TrustBox widget -->
+                        </div>
+                    </div>
+                </div>
+                <!-- Widget 2 END -->
+
+            </div><!-- Row END -->
+            <!-- Payment and card -->
+            <div class="row g-4 justify-content-between mt-0 mt-md-2">
+
+                <!-- Payment card -->
+                <div class="col-sm-7 col-md-6 col-lg-4">
+                    <h5 class="text-white mb-2">Payment & Security</h5>
+                    <ul class="list-inline mb-0 mt-3">
+                        @* <li class="list-inline-item"> <a href="javascript:void(0)"><img src="~/new-theme/assets/images/element/paypal.svg" class="h-30px" alt=""></a></li>
+                        <li class="list-inline-item"> <a href="javascript:void(0)"><img src="~/new-theme/assets/images/element/visa.svg" class="h-30px" alt=""></a></li> *@
+                        <li class="list-inline-item"> <a href="javascript:void(0)"><img src="~/new-theme/assets/images/element/mastercard.svg" class="h-30px" alt=""></a></li>
+                        <li class="list-inline-item"> <a href="javascript:void(0)"><img src="~/new-theme/assets/images/element/expresscard.svg" class="h-30px" alt=""></a></li>
+                    </ul>
+                </div>
+
+                <!-- Social media icon -->
+                <div class="col-sm-5 col-md-6 col-lg-3 text-sm-end">
+                    <h5 class="text-white mb-2">Follow us on</h5>
+                    <ul class="list-inline mb-0 mt-3">
+                        <li class="list-inline-item"> <a class="btn btn-sm px-2 bg-facebook mb-0" href="https://www.facebook.com/megwayparcels/" target="_blank"><i class="fab fa-fw fa-facebook-f"></i></a> </li>
+                        <li class="list-inline-item"> <a class="btn btn-sm shadow px-2 bg-instagram mb-0" href="https://www.instagram.com/megwayparcelsnorthampton" target="_blank"><i class="fab fa-fw fa-instagram"></i></a> </li>
+                        <li class="list-inline-item"> <a class="btn btn-sm shadow px-2 bg-twitter mb-0" href="https://x.com/megwayparcelsuk" target="_blank"><i class="fab fa-fw fa-twitter"></i></a> </li>
+                        @* <li class="list-inline-item"> <a class="btn btn-sm shadow px-2 bg-linkedin mb-0" href="javascript:void(0)"><i class="fab fa-fw fa-linkedin-in"></i></a> </li> *@
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <hr class="mt-4 mb-0">
+
+            <!-- Bottom footer -->
+            <div class="row">
+                <div class="container">
+                    <div class="d-lg-flex justify-content-between align-items-center py-3 text-center text-lg-start">
+                        <!-- copyright text -->
+                        <div class="text-body-secondary text-primary-hover"> Copyrights ©2024. Build by <a href="https://megwayparcels.co.uk/" class="text-body-secondary">Megway Parcels</a>. </div>
+                        <!-- copyright links-->
+                        <div class="nav mt-2 mt-lg-0">
+                            <ul class="list-inline text-primary-hover mx-auto mb-0">
+                                <li class="list-inline-item me-0"><a class="nav-link text-body-secondary py-1" href="/Home/PrivacyPolicy">Privacy policy</a></li>
+                                <li class="list-inline-item me-0"><a class="nav-link text-body-secondary py-1" href="/Home/TermAndCondition">Terms and conditions</a></li>
+                                <li class="list-inline-item me-0"><a class="nav-link text-body-secondary py-1 pe-0" href="javascript:void(0)">Refund policy</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- =======================
+    Footer END -->
+    <!-- Back to top -->
+    <div class="back-top"></div>
+
+
+    <!-- Navbar mobile START -->
+    <div class="navbar navbar-mobile">
+        <ul class="navbar-nav">
+            <!-- Nav item Home -->
+            <li class="nav-item">
+                <a class="nav-link active" href="/Home">
+                    <i class="bi bi-house-door fa-fw"></i>
+                    <span class="mb-0 nav-text">Home</span>
+                </a>
+            </li>
+
+            <!-- Nav item My Trips -->
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0)">
+                    <i class="bi bi-wrench fa-fw"></i>
+                    <span class="mb-0 nav-text">Service</span>
+                </a>
+            </li>
+
+            <!-- Nav item Offer -->
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0)">
+                    <i class="bi bi-bag-check fa-fw"></i>
+                    <span class="mb-0 nav-text">Store</span>
+                </a>
+            </li>
+
+            <!-- Nav item Account -->
+            <li class="nav-item">
+                <a class="nav-link" href="/Home/Tracking">
+                    <i class="bi bi-archive fa-fw"></i>
+                    <span class="mb-0 nav-text">Track</span>
+                </a>
+            </li>
+            @if (customer != null && customer?.Email == "admin@megwayparcels.co.uk")
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="/Setting/List">
+                        <i class="bi bi-person-circle fa-fw"></i>
+                        <span class="mb-0 nav-text">Admin</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+    <!-- Navbar mobile END -->
+
+    <div class="overlay"></div>
+
+    <!-- Login Modal Start-->
+    <div class="modal fade" id="loginModal" role="dialog">
+        <div class="modal-dialog">
+            <form id="loginForm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Login</h4>
+                        <button type="button" class="close" onclick="closeLoginModal();" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="hidden" id="loginPageReload" />
+                                    <input type="email" id="loginEmail" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" id="loginPassword" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="font-size:11px;">
+                                New here?
+                                <a href="/Account/Register">Create an account</a> or
+                                <a href="/Account/ResetPassword">Forget Password</a>
+                            </div>
+                            @* <div class="col-md-12">
+                            <a href="javascript:void(0)" onclick="openGuestModal();">Login As a Guest?</a>
+                            </div> *@
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button onclick="openGuestModal();" type="button" class="btn btn-warning mr-auto rounded-pill">Continue as guest</button>
+                        <button type="submit" id="loginBtn" class="btn btn-primary rounded-pill">Login</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Login Modal End-->
+    <!-- Login Modal Start-->
+    <div class="modal fade" id="guestLoginModal" role="dialog">
+        <div class="modal-dialog">
+            <form id="guestLoginForm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Guest Login</h4>
+                        <button type="button" onclick="closeGuestLoginModal();" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="hidden" id="guestLoginPageReload" />
+                                    <input type="email" id="guestLoginEmail" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-12" id="emailCodeDiv" style="display:none">
+                                <input type="hidden" id="emailSectionShow" />
+                                <div class="form-group">
+                                    <label>Verification Code</label>
+                                    <input type="text" id="EmailCode" class="form-control" />
+                                </div>
+                            </div>
+                            @* <div class="col-md-12">
+                            <a href="javascript:void(0)" onclick="resendVerificationCode();">Resend varification code</a>
+                            </div> *@
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning mr-auto rounded-pill" onclick="closeGuestLoginModal();" data-dismiss="modal">Close</button>
+                        <button type="submit" id="guestLoginBtn" class="btn btn-primary rounded-pill">Guest Login</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Login Modal End-->
+    <!-- Bootstrap JS -->
+    <script src="~/new-theme/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Vendors -->
+    <script src="~/new-theme/assets/vendor/choices/js/choices.min.js"></script>
+    <script src="~/new-theme/assets/vendor/flatpickr/js/flatpickr.min.js"></script>
+    <script src="~/new-theme/assets/vendor/tiny-slider/tiny-slider.js"></script>
+    <!-- ThemeFunctions -->
+    <script src="~/new-theme/assets/js/functions.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+
+    <script>
+        function loginAction() {
+            window.location.href = '/Account/Login?path=' + document.location.pathname;
+        }
+        function showLoginModal() {
+            $('#loginModal').modal('show');
+        }
+        function closeLoginModal() {
+            $('#loginModal').modal('hide');
+        }
+        function closeGuestLoginModal() {
+            $('#guestLoginModal').modal('hide');
+        }
+        function showGuestLoginModal() {
+            $('#guestLoginModal').modal('show');
+        }
+
+        $(document).on({
+            ajaxStart: function () {
+                $('.overlay').show();
+            },
+            ajaxStop: function () {
+                $('.overlay').hide()
+            }
+        });
+        function getQueryStringValue(key) {
+            var urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(key);
+        }
+
+
+        $("#loginForm").submit(function (event) {
+            event.preventDefault();
+
+            let _login = {};
+
+            _login.Email = $("#loginEmail").val();
+            _login.Password = $("#loginPassword").val();
+
+            $.ajax({
+                url: "/Account/Login",
+                type: "POST",
+                datatype: "json",
+                data: _login,
+                success: function (data) {
+                    if (data.status == 200) {
+                        let pathValue = getQueryStringValue('path');
+                        $('#loginModal').modal('hide');
+                        // if (pathValue!=null) {
+                        //     window.location.href = pathValue;
+
+                        // } else {
+                        //     window.location.href = '/Home';
+                        // }
+                    } else {
+                        toastr.error('You have entered incorrect password/email', 'Error')
+                    }
+
+                },
+                beforeSend: function () {
+                    $("#waitSpinnerId").show();
+                },
+                error: function (xhr) { // if error occured
+                    toastr.error('You have entered incorrect password / email', 'Error')
+                },
+                complete: function () {
+                    $("#waitSpinnerId").hide();
+                },
+
+            });
+
+
+        });
+
+        function openGuestModal() {
+            $('#loginModal').modal('hide');
+            $('#guestLoginModal').modal('show');
+            $('#guestLoginEmail').val('');
+            $('#EmailCode').val('');
+            $('#emailCodeDiv').hide();
+            $('#emailSectionShow').val(0)
+        }
+
+        $("#guestLoginForm").submit(function (event) {
+            event.preventDefault();
+            let _login = {};
+            _login.Email = $("#guestLoginEmail").val();
+            let _url = "/Account/GuestLogin";
+            // if ($('#emailSectionShow').val() == 1) {
+            //     _url = "/Account/GuestConfirmEmail";
+            //     _login.Code = $("#EmailCode").val();
+            // }
+            $.ajax({
+                url: _url,
+                type: "POST",
+                datatype: "json",
+                data: _login,
+                success: function (data) {
+                    if (data.status == 200) {
+                        $('#guestLoginModal').modal('hide');
+                        // if ($('#emailSectionShow').val() != 1) {
+                        //     $('#emailCodeDiv').show();
+                        //     $('#emailSectionShow').val(1);
+                        //     toastr.success("Verification code send to your email", 'Success')
+                        // } else {
+                        //     if ($('#loginPageReload').val() == 1) {
+                        //         $('#guestLoginModal').modal('hide')
+                        //     } else {
+                        //         $('#loginPageReload').val(0)
+                        //         location.reload();
+                        //     }
+                        // }
+
+                    } else {
+                        toastr.error('You have entered invalid email', 'Error')
+                    }
+                },
+                beforeSend: function () {
+                    $("#waitSpinnerId").show();
+                },
+                error: function (xhr) { // if error occured
+                    toastr.error('You have entered invalid email', 'Error')
+                },
+                complete: function () {
+                    $("#waitSpinnerId").hide();
+                },
+            });
+
+
+        });
+
+        function resendVerificationCode() {
+            let _login = {};
+            _login.Email = $("#guestLoginEmail").val();
+            _url = "/Account/GuestConfirmEmail";
+            $.ajax({
+                url: _url,
+                type: "POST",
+                datatype: "json",
+                data: _login,
+                success: function (data) {
+                    if (data.status == 200) {
+                        toastr.success("Verification code send to your email", 'Success')
+
+                    } else {
+                        toastr.error('You have entered invalid email', 'Error')
+                    }
+                },
+                beforeSend: function () {
+                    $("#waitSpinnerId").show();
+                },
+                error: function (xhr) { // if error occured
+                    toastr.error('You have entered invalid email', 'Error')
+                },
+                complete: function () {
+                    $("#waitSpinnerId").hide();
+                },
+            });
+        }
+    </script>
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6617b9dea0c6737bd12aaaf2/1hr6as399';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WDMXF5DTK7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-WDMXF5DTK7');
+    </script>
+
+</body>
+</html>

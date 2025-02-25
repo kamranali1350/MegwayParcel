@@ -1,0 +1,188 @@
+﻿@model MegwayParcel.Common.Data.Order
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_NewLayout.cshtml";
+}
+<link href="/css/carries.css" rel="stylesheet" />
+<link href="/css/desktop.css" rel="stylesheet" />
+
+<div class="container" style="background-color: #f6f9fc;">
+    <div class="row">
+        <div class="col-md-12">
+            <h5 class="text-center text-primary"><span>DX Courier Service</span></h5>
+            <div class="ContentPage_Content">
+                <div class="sectioned">
+                    <ul class="bullet dx">
+                        <li><a href="#howitworks" class="scroll">How It Works</a></li>
+                        <li><a href="#freeCollections" class="scroll">Free Collections</a></li>
+                        <li><a href="#dx_transit_time_map" class="scroll">Transit Times</a></li>
+                        <li><a class="scroll" href="#tracking">Tracking</a></li>
+                        <li><a class="scroll" href="#weightRestrictions">Size &amp; Weight Restrictions</a></li>
+                        <li><a class="scroll" href="#volumetricWeight">Volumetric Weight</a></li>
+                        <li><a class="scroll" href="#surcharges">Surcharges</a></li>
+                        <li><a class="scroll" href="#prohibited">Service Restrictions / Prohibited Items</a></li>
+                    </ul>
+                    <div>
+                        <p><a id="generalInfo" name="generalInfo"></a></p>
+                        <h5 class="text-center text-primary"><span>General Information</span></h5>
+                        <p>DX offers fully tracked domestic parcel and pallet delivery across the UK. It's unique in offering to carry large or irregularly-shaped items that would not be accepted by most parcel couriers, but is just as suitable for regular deliveries. DX provides photographic proof of delivery.</p>
+                        <p>See the table below for an overview:</p>
+                        <table class="standard textLeft responsive carrier-info full">
+                            <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>Service</th>
+                                    <th>Suitable for:</th>
+                                    <th>Information</th>
+                                    <th>UK</th>
+                                    <th>Europe</th>
+                                    <th>Rest of World</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><img alt="DX" src="/image/Carries/dx.png"></td>
+                                    <td>DX</td>
+                                    <td>
+                                        <ul class="bullet">
+                                            <li>Documents</li>
+                                            <li>Parcels</li>
+                                            <li>Pallets</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <p>Next day tracked service from our depot for parcels up to 25kg and pallets.</p>
+                                    </td>
+                                    <td>
+                                        <div class="click hover left tick">
+                                          
+                                        </div>
+                                    </td>
+                                    <td><img src="/image/Carries/icon-cross-small.png" alt="N/A" width="25" height="25"></td>
+                                    <td><img src="/image/Carries/icon-cross-small.png" alt="N/A" width="25" height="25"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            <span style="color: rgb(255, 0, 0);">
+                                <br>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="div-section>
+                        <p><a id="howitworks" name="howitworks"></a></p>
+                        <h5 class="text-center text-primary"><span>How It Works...</span></h5>
+                        <p>With our DX service, parcels are <a class="link" target="_blank" href="/services/warehouse/">shipped from our depot</a>. You have the option of dropping your consignment off at <a class="link" target="_blank" href="/information/depot-locations/">one of our depots</a>, using one of our collection services, or choosing one of hundreds of DPD or UPS drop-off locations nationwide.</p>
+                        <p>Please add 1 working day to your estimated transit time if booking either an optional collection or an alternative drop-off option, to allow for overnight delivery to our depot. For some postcodes in <a class="link" target="_blank" href="/notifications/tg-collection-postcodes/">London, the East Midlands and North West England</a>, we are able to collect ourselves and ship from the depot same day.</p>
+                        <p>Once your shipment has been delivered to our depot, we will process it and forward your parcel to its final destination via DX.</p>
+                        <p>Please refer to our documentation page for labelling instructions for each <a class="link" target="_blank" href="/information/documentation/">collection/drop-off option</a>.</p>
+                        <p>If you are not able to print any of your documents, please <a target="_blank" class="link" href="/contact-us/">get in touch</a> and we will be happy to post hard copies to you.</p>
+                    </div>
+                    <div>
+                        <p><a id="freeCollections" name="freeCollections"></a></p>
+                        <h5 class="text-center text-primary"><span>Free Collections</span></h5>
+                        <p>We are able to offer free collections in some areas of London, the East Midlands and North West&nbsp;England, in proximity to our depots.</p>
+                    </div>
+
+                    <div class="div-section>
+                        <p><a id="tracking" name="tracking"></a></p>
+                        <h5 class="text-center text-primary">
+                            <span>
+                                Tracking<br>
+                            </span>
+                        </h5>
+                        <p>You can track your parcel by entering your TP- order reference number into our <a class="link" target="_blank" href="/track-shipment/">tracking tool</a>.</p>
+                    </div>
+                    <div>
+                        <p><a id="weightRestrictions" name="weightRestrictions"></a></p>
+                        <h5 class="text-center text-primary"><span>Size and Weight Restrictions</span></h5>
+                        <ul class="bullet">
+                            <li><strong>Maximum parcel weight:</strong> 25kg (actual or volumetric - see <strong>Volumetric Weight</strong> below)</li>
+                            <li><strong>Max length:</strong> 2m</li>
+                            <li><strong>Max no. of pieces:</strong>&nbsp;10</li>
+                        </ul>
+                    </div>
+                    <div class="div-section>
+                        <p><a id="volumetricWeight" name="volumetricWeight"></a></p>
+                        <h5 class="text-center text-primary"><span>Volumetric Weight</span></h5>
+                        <p>Your shipment will be charged by either <strong style="font-weight: bold;">actual weight</strong> or <strong style="font-weight: bold;">volumetric weight</strong> – whichever is greater.</p>
+                        <p><strong style="font-weight: bold;">Volumetric weight </strong>is a value derived from the size rather than the weight of your parcel and may apply if your parcel is particularly large and contains relatively light items.</p>
+                        <p>For this service, we calculate volumetric weight by multiplying the three dimensions of your parcel together and dividing by <strong>5000</strong>.</p>
+                        <p><strong style="font-weight: bold;">For example:</strong></p>
+                        <table class="standard textLeft" style="margin-top: 25px;">
+                            <tbody>
+                                <tr>
+                                    <th>Actual Weight</th>
+                                    <th>Dimensions</th>
+                                    <th>Divisor</th>
+                                    <th>Volumetric Weight</th>
+                                    <th>Chargeable Weight</th>
+                                </tr>
+                                <tr>
+                                    <td>10kg</td>
+                                    <td>50 x 30 x 20cm</td>
+                                    <td>5000</td>
+                                    <td>6kg</td>
+                                    <td>10kg</td>
+                                </tr>
+                                <tr>
+                                    <td>10kg</td>
+                                    <td>50 x 60 x 40cm</td>
+                                    <td>5000</td>
+                                    <td>24kg</td>
+                                    <td>24kg</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <p><a id="surcharges" name="surcharges"></a></p>
+                        <h5 class="text-center text-primary"><span>Surcharges</span></h5>
+                        <p>Consignments that exceed size and weight restrictions will not be shipped from our depot.</p>
+                        <table class="standard textLeft responsive carrier-surcharges" style="margin-top: 15px;">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Fee</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Oversized</td>
+                                    <td>If the parcel is over the maximum weight of 25kg or the maximum length of 2 metres.</td>
+                                    <td>£15</td>
+                                </tr>
+                                <tr>
+                                    <td>Long Items</td>
+                                    <td>For any pieces that are between 1.5m to 2m in length. This will be included in your quoted rate.</td>
+                                    <td>£4.50</td>
+                                </tr>
+                                <tr>
+                                    <td>Data Discrepancy</td>
+                                    <td>If any of the information for your shipment, such as address, needs to be corrected.</td>
+                                    <td>£1.99</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="div-section>
+                        <p><a id="prohibited" name="prohibited"></a></p>
+                        <h5 class="text-center text-primary"><span>Service Restrictions / Prohibited Items</span></h5>
+                        <ul class="bullet">
+                            <li>For prohibited items for this service, please refer to the <a class="link" target="_blank" rel="nofollow" href="https://www.dxdelivery.com/service-terms-conditions">DX website</a> (see excluded goods under 'DX Express Customers - UK')</li>
+                            <li>Please also view our general list of <a href="/information/dangerous-and-hazardous/">hazardous, prohibited and owner’s risk items</a>.</li>
+                            <li>If you’d like advice on whether or not your items are prohibited, please contact our Customer Services team via, email sales@megwayparcels.co.uk or call 01604-356242.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>

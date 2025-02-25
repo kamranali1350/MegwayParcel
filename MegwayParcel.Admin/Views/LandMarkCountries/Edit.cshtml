@@ -1,0 +1,44 @@
+﻿@model LandMarkCountryViewModel
+
+@{
+    ViewData["Title"] = "Edit LandMark Country";
+}
+
+<h1>Edit LandMark Country</h1>
+
+<form asp-action="Edit">
+    <div class="form-group">
+        <label asp-for="CountryId" class="control-label"></label>
+        <input type="number" asp-for="CountryId" name="CountryId" class="form-control" readonly />
+        <span asp-validation-for="CountryId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input type="text" asp-for="Name" name="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ISO" class="control-label"></label>
+        <input type="text" asp-for="ISO" name="ISO" class="form-control" />
+        <span asp-validation-for="ISO" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="SortOrder" class="control-label"></label>
+        <input type="number" asp-for="SortOrder" name="SortOrder" class="form-control" />
+        <span asp-validation-for="SortOrder" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="IsActive" class="control-label"></label>
+        <input type="checkbox" asp-for="IsActive" name="IsActive" class="form-control" />
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

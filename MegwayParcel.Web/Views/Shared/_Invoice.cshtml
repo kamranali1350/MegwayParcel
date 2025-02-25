@@ -1,0 +1,197 @@
+﻿@model MegwayParcel.Common.Data.Order
+@using MegwayParcel.Common.Data
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@using LogisticERP.Web.Models
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+    //var collection = Model.Addresses.Where(x => x.TypeId == 1).FirstOrDefault();
+    //var delivery = Model.Addresses.Where(x => x.TypeId == 3).FirstOrDefault();
+    //var shipmentResult = JsonConvert.DeserializeObject<ServiceResult>(Model.SelectQuote);
+    var orderResponse = JsonConvert.DeserializeObject<BookShipmentOutput_DTO>(Model.OrderResponse);
+    string val = Context.Session.GetString("LoginObject");
+    Customer customer = null;
+    if (val != null)
+    {
+        customer = JsonConvert.DeserializeObject<Customer>(val);
+    }
+    //string logoName = shipmentResult.ServiceName + ".png";
+    string inv = Model.RefrenceNo.Substring(3);
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <table style="border-spacing: 0px 0px;">
+        <tr>
+            <td></td>
+            <td><p style="font-size: 10px; font-family: Helvetica; color: #272324;">Invoice - INV-@inv</p></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><p style="font-size: 10px; font-family: Helvetica; color: #272324; " class="ft11">@customer.AcountName</p></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><p style="font-size: 10px; font-family: Helvetica; color: #272324;"><b>Name and Address</b></p></td>
+            <td></td>
+            <td>
+                @if (Model.OrderDate != null)
+                {
+                    <p style="font-size: 10px; font-family: Helvetica; color: #272324;" class="ft12"><b>Invoice Date:&#160;</b>@Model.OrderDate?.ToString("dd/MM/yyyy hh:mm tt")</p>
+                }
+            </td>
+        </tr>
+        <tr>
+            <td><p style="font-size: 10px; font-family: Helvetica; color: #272324;">@customer.AddForeName @customer.AddSurName<br />@customer.AddLine1, @customer.AddLine2<br />@customer.State, @customer.Postcode</p></td>
+            <td></td>
+            <td><p style="font-size: 10px; font-family: Helvetica; color: #272324; " class="ft12"><b>VAT Number:&#160;</b>@customer.MyVatNumber</p></td>
+        </tr>
+    </table>
+    <table style="border-spacing: 0px 0px;">
+        <thead>
+            <tr>
+                <th style="font-size: 10px; font-family: Helvetica; color: #272324; "><b>Booking Date</b></th>
+                <th style="font-size: 10px; font-family: Helvetica; color: #272324; "><b>Our Reference</b></th>
+                <th style="font-size: 10px; font-family: Helvetica; color: #272324; "><b>Description</b></th>
+                <th style="font-size: 10px; font-family: Helvetica; color: #272324; "><b>Charge, Ex VAT</b></th>
+            </tr>
+
+        </thead>
+        <tbody>
+            <tr>
+                <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">
+                    @if (Model.OrderDate != null)
+                    {
+                        <span>@Model.OrderDate?.ToString("dd/MM/yyyy")</span>
+                    }
+                    else
+                    {
+                        <span>@DateTime.Now.ToString("dd/MM/yyyy")</span>
+                    }
+                </td>
+                <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">@Model.RefrenceNo</td>
+                <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">@orderResponse.OrderInvoice?.InvoiceItems.FirstOrDefault()?.ItemDescription</td>
+                <td style="font-size: 10px; font-family: Helvetica; color: #272324; text-align:center; vertical-align:middle;">£@Model.ShippingCharges</td>
+            </tr>
+            @if (@Model.InsuranceCharges > 0)
+            {
+                <tr>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">
+                        @if (Model.OrderDate != null)
+                        {
+                            <span>@Model.OrderDate?.ToString("dd/MM/yyyy")</span>
+                        }
+                        else
+                        {
+                            <span>@DateTime.Now.ToString("dd/MM/yyyy")</span>
+                        }
+                    </td>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">@Model.RefrenceNo</td>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">Insurable Value: £@Model.InsuranceValue</td>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324; text-align:center; vertical-align:middle;">£@Model.InsuranceCharges</td>
+                </tr>
+            }
+            @if (@Model.Surcharges > 0)
+            {
+                <tr>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">
+                        @if (Model.OrderDate != null)
+                        {
+                            <span>@Model.OrderDate?.ToString("dd/MM/yyyy")</span>
+                        }
+                        else
+                        {
+                            <span>@DateTime.Now.ToString("dd/MM/yyyy")</span>
+                        }
+                    </td>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">@Model.RefrenceNo</td>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">Item Surcharges</td>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324;text-align:center; vertical-align:middle;">£@Model.Surcharges</td>
+                </tr>
+            }
+            @if (@Model.RemoteSurcharges > 0)
+            {
+                <tr>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">
+                        @if (Model.OrderDate != null)
+                        {
+                            <span>@Model.OrderDate?.ToString("dd/MM/yyyy")</span>
+                        }
+                        else
+                        {
+                            <span>@DateTime.Now.ToString("dd/MM/yyyy")</span>
+                        }
+                    </td>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">@Model.RefrenceNo</td>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">Remote Surcharges</td>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324; text-align:center; vertical-align:middle;">£@Model.RemoteSurcharges</td>
+                </tr>
+            }
+            @if (@Model.CollectionCharges > 0)
+            {
+                <tr>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">
+                        @if (Model.OrderDate != null)
+                        {
+                            <span>@Model.OrderDate?.ToString("dd/MM/yyyy")</span>
+                        }
+                        else
+                        {
+                            <span>@DateTime.Now.ToString("dd/MM/yyyy")</span>
+                        }
+                    </td>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">@Model.RefrenceNo</td>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">Collection</td>
+                    <td style="font-size: 10px; font-family: Helvetica; color: #272324;text-align:center; vertical-align:middle;">£@Model.CollectionCharges</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="2"></th>
+                <th style="font-size: 10px; font-family: Helvetica; color: #272324; "><b>Total:</b></th>
+                <th style="font-size: 10px; font-family: Helvetica; color: #272324;text-align:center; vertical-align:middle;"><b>@Model.TotalCharges</b></th>
+            </tr>
+        </tfoot>
+    </table>
+    <table style="border-spacing: 0px 0px;">
+        <tr>
+            <td style="font-size: 10px; font-family: Helvetica; color: #272324; "><b>Bank details:</b></td>
+        </tr>
+        <tr>
+            <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">Megway Parcels Ltd</td>
+        </tr>
+        <tr>
+            <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">AC number: 45874273</td>
+        </tr>
+        <tr>
+            <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">Sort Code: 23-05-80</td>
+        </tr>
+        <tr>
+            <td style="font-size: 10px; font-family: Helvetica; color: #272324; "><b>If you have any queries regarding this invoice, please contact us within 7 days from the date of this invoice.</b></td>
+        </tr>
+        <tr>
+            <td style="font-size: 10px; font-family: Helvetica; color: #272324; ">
+                *Indicates the item is VAT exempt
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

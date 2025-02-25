@@ -1,0 +1,86 @@
+﻿@model IEnumerable<MegwayParcel.Common.Data.CompanySetting>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>List</h1>
+
+<p>
+    <a asp-action="Index">Create New</a>
+</p>
+@if (ViewBag.ErrorMessage != null)
+{
+    <p class="text-danger">@ViewBag.ErrorMessage</p>
+}
+<table class="table table-bordered" id="myTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SettingName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InsuranceCharges)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CollectionAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingPercent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SurchargePercent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RemoteSurchargePercent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VatchargePercent)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SettingName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InsuranceCharges)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CollectionAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShippingPercent)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SurchargePercent)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RemoteSurchargePercent)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VatchargePercent)
+                </td>
+                <td>
+                    <a href="/Setting/Edit/@item.CompanySettingId"><input type="button" class="btn btn-primary" value="Edit" /></a>
+                    <a href="/Setting/Delete/@item.CompanySettingId"><input type="button" class="btn btn-danger" value="Delete" /></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function() {
+        $('#myTable').DataTable();
+    });
+</script>

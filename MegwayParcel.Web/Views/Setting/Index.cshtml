@@ -1,0 +1,68 @@
+﻿@model MegwayParcel.Common.Data.CompanySetting
+
+@{
+
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+    <form action="/Setting/Save" method="post">
+        <div class="row">
+            <input asp-for="CompanySettingId" hidden="hidden" />
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Name<span style="color:red">*</span></label>
+                    <input asp-for="SettingName" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Is Active</label>
+                    <input asp-for="IsActive" class="form-control"  />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Insurance Charges<span style="color:red">*</span></label>
+                    <input type="text" asp-for="InsuranceCharges" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Collection Percent<span style="color:red">*</span></label>
+                    <input type="text" asp-for="CollectionAmount" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Shipping Percent<span style="color:red">*</span></label>
+                    <input type="text" asp-for="ShippingPercent" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Surcharge Percent<span style="color:red">*</span></label>
+                    <input type="text" asp-for="SurchargePercent" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Remote Sur charge Percent<span style="color:red">*</span></label>
+                    <input type="text" asp-for="RemoteSurchargePercent" class="form-control" required="required" data-validation-required-message="Fill the required fields" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Vat charge Percent<span style="color:red">*</span></label>
+                    <input type="text" asp-for="VatchargePercent" class="form-control" />
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Save</button>
+        </div>
+    </form>
+
+</div>
+

@@ -1,0 +1,157 @@
+﻿@model MegwayParcel.Common.Data.Order
+@using Newtonsoft.Json;
+@using MegwayParcel.Common
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_WebsiteLayout.cshtml";
+}
+<link href="/css/carries.css" rel="stylesheet" />
+<link href="/css/desktop.css" rel="stylesheet" />
+
+<div class="container" style="background-color: #f6f9fc;">
+    <div class="row">
+        <div class="col-md-12">
+            <h5 class="text-center text-primary"><span>Evri</span></h5>
+            <div class="ContentPage_Content">
+                <div class="sectioned">
+                    <ul class="bullet">
+                        <li><a href="#howitworks" class="scroll">How It Works</a></li>
+                        <li><a class="scroll" href="#tracking">Tracking</a></li>
+                        <li><a class="scroll" href="#weightRestrictions">Size &amp; Weight Restrictions</a></li>
+                        <li><a class="scroll" href="#surcharges">Surcharges</a></li>
+                        <li><a class="scroll" href="#prohibited">Service Restrictions / Prohibited Items</a></li>
+                    </ul>
+                    <div>
+                        <p><a id="generalInfo" name="generalInfo"></a></p>
+                        <h5 class="text-center text-primary"><span>General Information</span></h5>
+                        <p>Hermes has rebranded and is now known as Evri.</p>
+                        <p>Evri offers low cost parcel delivery across the UK.</p>
+                        <ul class="bullet">
+                            <li>Ideal for both documents and parcels.</li>
+                            <li>Add an optional collection service or drop off at <a class="link" target="_blank" href="/information/depot-locations/">one of our depots</a>.</li>
+                            <li>Single collection cost (more than one shipment per box) for up to 30kg.</li>
+                        </ul>
+                        <p>See the table below for an overview:</p>
+                        <table style="margin-top: 10px;" class="standard textLeft responsive carrier-info full">
+                            <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+                                    <th>Suitable for:</th>
+                                    <th>Information</th>
+                                    <th>Transit times</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                </tr>
+                                <tr>
+                                    <td><img src="/image/Carries/evri-next-day.png" alt="Evri Next Day"></td>
+                                    <td>Evri Next Day</td>
+                                    <td>
+                                        <ul class="bullet">
+                                            <li>Documents</li>
+                                            <li>Parcels</li>
+                                        </ul>
+                                    </td>
+                                    <td class="textLeft">Express parcel service to destinations across the UK.</td>
+                                    <td>1 day from depot*</td>
+                                </tr>
+                                <tr>
+                                    <td><img src="/image/Carries/evri-48-hour.png" alt="Evri 48 Hour"></td>
+                                    <td>Evri 48 Hour</td>
+                                    <td>
+                                        <ul class="bullet">
+                                            <li>Documents</li>
+                                            <li>Parcels</li>
+                                        </ul>
+                                    </td>
+                                    <td class="textLeft">Lower cost parcel service to destinations across the UK.</td>
+                                    <td>2 days from depot*</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            *Please add one working day to your transit time if opting for a collection service. For collections made in <a class="link" target="_blank" href="/notifications/tg-collection-postcodes/">these postcodes</a>, we'll ship from our depot same day.<span style="color: rgb(255, 0, 0);">
+                                <br>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="div-section>
+                        <p><a id="howitworks" name="howitworks"></a></p>
+                        <h5 class="text-center text-primary"><span>How It Works...</span></h5>
+                        <p>With our Evri service, parcels are <a class="link" target="_blank" href="/services/warehouse/">shipped from our depot</a>. You have the option of dropping your consignment off at <a class="link" target="_blank" href="/information/depot-locations/">one of our depots</a>, using one of our collection services, or choosing one of hundreds of DPD or UPS drop-off locations nationwide.</p>
+                        <p>Please add 1 working day to your estimated transit time if booking either an optional collection or an alternative drop-off option, to allow for overnight delivery to our depot. For some postcodes in <a class="link" target="_blank" href="/notifications/tg-collection-postcodes/">London, the East Midlands and North West England</a>, we are able to collect ourselves and ship from the depot same day.</p>
+                        <p>Once your shipment has been delivered to our depot, we will process it and forward your parcel to its final destination via Evri.</p>
+                        <p>Please refer to our documentation page for labelling instructions for each <a class="link" target="_blank" href="/information/documentation/">collection/drop-off option</a>.</p>
+                        <p>If you are not able to print any of your documents, please <a target="_blank" class="link" href="/contact-us/">get in touch</a> and we will be happy to post hard copies to you.</p>
+                    </div>
+                    <div>
+                        <p><a id="tracking" name="tracking"></a></p>
+                        <h5 class="text-center text-primary">
+                            <span>
+                                Tracking<br>
+                            </span>
+                        </h5>
+                        <p>You can track your parcel by entering your TP- order reference number into our <a class="link" target="_blank" href="/track-shipment/">tracking tool</a>.</p>
+                    </div>
+                    <div class="div-section>
+                        <p><a id="weightRestrictions" name="weightRestrictions"></a></p>
+                        <h5 class="text-center text-primary">
+                            <span>Size and Weight Restrictions</span><strong>
+                                <br>
+                            </strong>
+                        </h5>
+                        <ul class="bullet">
+                            <li><strong>Max weight:</strong> 15kg</li>
+                            <li>
+                                <strong>Max length:</strong> 120cm<strong>
+                                    <br>
+                                </strong>
+                            </li>
+                            <li><strong>Max girth</strong> - (sum of two shortest dimensions x 2) +&nbsp;length<strong>:</strong> 225cm</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p><a id="surcharges" name="surcharges"></a></p>
+                        <h5 class="text-center text-primary"><span>Surcharges</span></h5>
+                        <table class="standard responsive carrier-surcharges">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Fee</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Re-Labelling</td>
+                                    <td>For re-labelling your shipment.</td>
+                                    <td>55p</td>
+                                </tr>
+                                <tr>
+                                    <td>Proof of Delivery Signature</td>
+                                    <td>Require the recipient to sign for delivery.</td>
+                                    <td>25p</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>Please note that surcharges on domestic (UK) deliveries are subject to VAT.</p>
+                    </div>
+                    <div class="div-section>
+                        <p><a id="prohibited" name="prohibited"></a></p>
+                        <h5 class="text-center text-primary"><span>Service Restrictions / Prohibited Items</span></h5>
+                        <ul class="bullet">
+                            <li>Evri will not deliver to Amazon locations.</li>
+                            <li>Please refer to Evri's <a href="https://www.evri.com/send-a-parcel/what-i-can-and-cannot-send" target="_blank" rel="nofollow" class="link">list of prohibited items</a>, as well as our own list of <a href="/information/dangerous-and-hazardous/">hazardous, prohibited and owner’s risk items</a>.</li>
+                            <li>If you’d like advice on whether or not your items are prohibited, please contact our Customer Services team via, email sales@megwayparcels.co.uk or call 01604-356242.</li>
+                        </ul>
+                    </div>
+                </div>
+                <p>&nbsp;</p>
+            </div>
+            </>
+        </div>
+
+    </div>
